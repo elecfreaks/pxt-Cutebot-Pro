@@ -1,0 +1,12 @@
+{
+  "Cutebot_Pro.I2CInit": "Init I2C until success",
+  "Cutebot_Pro.PID": "PID control module",
+  "Cutebot_Pro.motorRun": "MOTOR control module",
+  "Cutebot_Pro.mototRun": "Motor control module",
+  "Cutebot_Pro.mototStop": "Motor stop module",
+  "Cutebot_Pro.readPatrol": "Read line-tracking sensor status",
+  "Cutebot_Pro.readSpeed": "Read motor speed",
+  "Cutebot_Pro.readeDistance": "get the revolutions of wheel",
+  "Cutebot_Pro.servoRun": "Servo control module",
+  "Cutebot_Pro.setRGBLight": "Control the color of RGB LED"
+}
