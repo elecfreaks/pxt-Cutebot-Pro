@@ -12,6 +12,17 @@ enum PIN {
     P15 = 21,
 };
 
+
+enum Wheel {
+    //%block="LeftWheel"
+    LeftWheel = 1,
+    //%block="RightWheel"
+    RightWheel = 2,
+    //%block="AllWheel"
+    AllWheel = 3
+}
+
+
 enum Motors {
     //% block="left"
     M1 = 0,
@@ -23,9 +34,9 @@ enum Motors {
 
 enum Motors1 {
     //% block="left"
-    M1 = 0,
+    M1 = 1,
     //% block="right"
-    M2 = 3,
+    M2 = 2,
 }
 
 enum Dir {
@@ -35,13 +46,15 @@ enum Dir {
     CCW = 2
 }
 
-enum Servos {
+enum ServoIndex {
     //% block="S1"
-    S1 = 0,
+    S1 = 1,
     //% block="S2"
-    S2 = 1,
+    S2 = 2,
     //% block="S3"
-    S3 = 2
+    S3 = 3,
+    //% block="S4"
+    S4 = 4
 }
 
 enum RGBLight {
@@ -76,117 +89,364 @@ enum PID {
     ON = 1
 }
 
+enum DistanceUnits {
+    //%block="cm"
+    cm = 0,
+    //%block="ft"
+    ft = 1
+}
 
-//% weight=100  color=#444444   block="Cutebot Pro" icon="\uf067"
+enum Orientation {
+    //%block="advance"
+    advance = 1,
+    //%block="retreat"
+    retreat = 0
+}
+
+
+enum SpeedUnits {
+    //%block="cm/s"
+    cms = 0,
+    //%block="ft/s"
+    fts = 1
+}
+
+enum Turn {
+    //%block="TurnLeft"
+    turnLeft = 0,
+    //%block="TurnRight"
+    turnRight = 1
+}
+
+enum Angle {
+    //%block="45°"
+    angle45 = 0,
+    //%block="90°"
+    angle90 = 1,
+    //%block="135°"
+    angle135 = 2,
+    //%block="180°"
+    angle180 = 3
+}
+
+
+enum TrackbitStateType {
+    //% block="◌ ◌ ◌ ◌" 
+    Tracking_State_0 = 0,
+    //% block="◌ ● ● ◌" 
+    Tracking_State_1 = 6,
+    //% block="◌ ◌ ● ◌" 
+    Tracking_State_2 = 4,
+    //% block="◌ ● ◌ ◌" 
+    Tracking_State_3 = 2,
+
+
+    //% block="● ◌ ◌ ●" 
+    Tracking_State_4 = 9,
+    //% block="● ● ● ●" 
+    Tracking_State_5 = 15,
+    //% block="● ◌ ● ●" 
+    Tracking_State_6 = 13,
+    //% block="● ● ◌ ●" 
+    Tracking_State_7 = 11,
+
+    //% block="● ◌ ◌ ◌" 
+    Tracking_State_8 = 1,
+    //% block="● ● ● ◌" 
+    Tracking_State_9 = 7,
+    //% block="● ◌ ● ◌" 
+    Tracking_State_10 = 5,
+    //% block="● ● ◌ ◌" 
+    Tracking_State_11 = 3,
+
+    //% block="◌ ◌ ◌ ●" 
+    Tracking_State_12 = 8,
+    //% block="◌ ● ● ●" 
+    Tracking_State_13 = 14,
+    //% block="◌ ◌ ● ●" 
+    Tracking_State_14 = 12,
+    //% block="◌ ● ◌ ●" 
+    Tracking_State_15 = 10
+}
+
+enum TrackbitType {
+    //% block="◌" 
+    State_0 = 0,
+    //% block="●" 
+    State_1 = 1
+}
+enum TrackbitChannel {
+    //% block="1"
+    One = 1,
+    //% block="2"
+    Two = 2,
+    //% block="3"
+    Three = 3,
+    //% block="4"
+    Four = 4
+}
+
+enum ServoType {
+    //% block="180°"
+    Servo180 = 1,
+    //% block="270°"
+    Servo270 = 2,
+    //% block="360°"
+    Servo360 = 3,
+}
+
+
+//% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf067"
 namespace Cutebot_Pro {
     let irstate: number;
     let state: number;
+    let i2cAddr: number = 0x08;
     export class Packeta {
         public mye: string;
         public myparam: number;
     }
 
+
     /**
-     *  Init I2C until success
-     */
-    //% weight=100
-    //%block="initialize via I2C until success"
-    export function I2CInit(): void {
-        let Version_v = 0;
-        pins.i2cWriteNumber(0x10, 0x32, NumberFormat.Int8LE);
-        Version_v = pins.i2cReadNumber(0x10, NumberFormat.Int8LE);
-        while (Version_v == 0) {
-            basic.showLeds(`
-                # . . . #
-                . # . # .
-                . . # . .
-                . # . # .
-                # . . . #
-                `, 10)
-            basic.pause(500)
-            basic.clearScreen()
-            pins.i2cWriteNumber(0x10, 0x32, NumberFormat.Int8LE);
-            Version_v = pins.i2cReadNumber(0x10, NumberFormat.Int8LE);
+    * PID ON or OFF
+    */
+    //% block="PID %PID"
+    //% weight=201
+    export function PIDSwitch(pid: PID): void {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x99;
+        buf[1] = 0x00;
+        buf[2] = pid;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
+
+
+
+    /**
+    * TODO: Select a headlights and set the RGB color.
+    * @param R R color value of RGB color, eg: 0
+    * @param G G color value of RGB color, eg: 128
+    * @param B B color value of RGB color, eg: 255
+    */
+    //% inlineInputMode=inline
+    //% blockId=RGB block="Set LED headlights %light color R:%r G:%g B:%b"
+    //% r.min=0 r.max=255
+    //% g.min=0 g.max=255
+    //% b.min=0 b.max=255
+    //% weight=200
+    export function singleheadlights(light: RGBLight, r: number, g: number, b: number): void {
+        let buf = pins.createBuffer(7);
+        if (light == 3) {
+            buf[0] = 0x99;
+            buf[1] = 0x0F;
+            buf[2] = 0x03;
+            buf[3] = r;
+            buf[4] = g;
+            buf[5] = b;
+            buf[6] = 0x88;
+            pins.i2cWriteBuffer(i2cAddr, buf);
         }
-        basic.showLeds(`
-                . . . . .
-                . . . . #
-                . . . # .
-                # . # . .
-                . # . . .
-                `, 10)
-        basic.pause(500)
-        basic.clearScreen()
+        else {
+            if (light == 1) {
+                buf[2] = 0x01;
+            }
+            if (light == 2) {
+                buf[2] = 0x02;
+            }
+            buf[0] = 0x99;
+            buf[1] = 0x0F;
+            buf[3] = r;
+            buf[4] = g;
+            buf[5] = b;
+            buf[6] = 0x88;
+            pins.i2cWriteBuffer(i2cAddr, buf);
+        }
+
     }
 
-    /**
-     * PID control module
-     */
-    //% weight=90
-    //%block="PID switch|%pid"
-    export function PID(pid: PID): void {
-        let buf = pins.createBuffer(2);
-        buf[0] = 0x0A;
-        buf[1] = pid;
-        pins.i2cWriteBuffer(0x10, buf);
-    }
-    /**
-     * Motor control module
-     */
-    //% weight=80
-    //% block="lspeed|%lspeed|rspeed|%rspeed| "
-    //% lspeed.min=-100 lspeed.max=100
-    //% rspeed.min=-100 rspeed.max=100
-    export function mototRun(lspeed: number, rspeed: number): void {
-        let l_speed: number;
-        if (lspeed >= 100) l_speed = 100;
-        else l_speed = lspeed;
-        let r_speed: number;
-        if (rspeed >= 100) r_speed = 100;
-        else r_speed = rspeed;
 
+    /**
+    * TODO: Set LED headlights.
+    */
+    //% block="Set LED headlights %RGBLight color $color"
+    //% color.shadow="colorNumberPicker"
+    //% weight=199
+    export function colorLight(light: RGBLight, color: number) {
+        let r: number, g: number, b: number = 0
         let buf = pins.createBuffer(7)
-        buf[0] = 0x00;
-        buf[1] = 0x01;
-        buf[2] = l_speed;
-        buf[3] = r_speed;
-        buf[4] = 0;
-        buf[5] = 0;
-        buf[6] = 0;
-        pins.i2cWriteBuffer(0x08, buf)
+        r = color >> 16
+        g = (color >> 8) & 0xFF
+        b = color & 0xFF
 
+        buf[0] = 0x99;
+        buf[1] = 0x0F;
+        buf[2] = light;
+        buf[3] = r;
+        buf[4] = g;
+        buf[5] = b;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
     }
+
     /**
-     * Motor stop module
-     */
-    //% weight=75
-    //% block="Motor|%index stop"
-    export function mototStop(index: Motors): void {
-
-        if (index == 1) {
-            let buf = pins.createBuffer(3)
-            buf[0] = 0x00;
-            buf[1] = 0;
-            buf[2] = 0;
-            pins.i2cWriteBuffer(0x10, buf)
-
-        } if (index == 0) {
-            let buf = pins.createBuffer(3)
-            buf[0] = 0x02;
-            buf[1] = 0;
-            buf[2] = 0;
-            pins.i2cWriteBuffer(0x10, buf)
-        }
-        if (index == 3) {
-            let buf = pins.createBuffer(5)
-            buf[0] = 0x00;
-            buf[1] = 0x01;
-            buf[2] = 0;
-            buf[3] = 0;
-            buf[4] = 0;
-            pins.i2cWriteBuffer(0x10, buf)
-        }
+    * Turn off all headlights
+    */
+    //% block="Turn off all headlights"
+    //% weight=198
+    export function TurnOffAllHeadlights(): void {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x99;
+        buf[1] = 0x10;
+        buf[2] = 0x03;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
     }
+
+    /**
+     * Control the car to travel at a specific speed
+     */
+    //% block="Set %Wheel %Orientation speed %speed cm/s"
+    //% speed.min=20 speed.max=50
+    //% weight=197
+    export function CruiseControl(wheel: Wheel, orientation: Orientation, speed: number): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x02;
+        buf[2] = wheel;
+        buf[3] = speed;
+        buf[4] = orientation;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+    }
+
+
+    /**
+     * PWM Control the car to travel at a specific speed
+     */
+    //% block="Set %Wheel speed %speed"
+    //% speed.min=-100 speed.max=100
+    //% weight=197
+    export function PWMCruiseControl(wheel: Wheel, speed: number): void {
+        let i2cBuffer = pins.createBuffer(7)
+        if (speed >= 0) {
+            i2cBuffer[0] = 0x99;
+            i2cBuffer[1] = 0x01;
+            i2cBuffer[2] = wheel;
+            i2cBuffer[3] = 0x01;
+            i2cBuffer[4] = speed;
+            i2cBuffer[5] = 0x00;
+            i2cBuffer[6] = 0x88;
+        }
+        else {
+            i2cBuffer[0] = 0x99;
+            i2cBuffer[1] = 0x01;
+            i2cBuffer[2] = wheel;
+            i2cBuffer[3] = 0x00;
+            i2cBuffer[4] = -speed;
+            i2cBuffer[5] = 0x00;
+            i2cBuffer[6] = 0x88;
+        }
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+    }
+
+
+    /**
+     * Set the car to travel a specific distance
+     */
+    //% weight=196
+    //% block="Set up car %Orientation travel %distance %DistanceUnits"
+    export function DistanceRunning(orientation: Orientation, distance: number, distanceUnits: DistanceUnits): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x03;
+        buf[2] = orientation;
+        buf[3] = distance;
+        buf[4] = distanceUnits;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+    }
+
+
+    /**
+     * Set the trolley to rotate at a specific Angle
+     */
+    //% weight=195
+    //% block="Set up car %Turn Angle %angle"
+    export function TrolleySteering(turn: Turn, angle: Angle): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x04;
+        buf[2] = turn;
+        buf[3] = angle;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+    }
+
+
+
+    /**
+     * Full speed ahead
+     */
+    //% weight=194
+    //%block="FullSpeedAhead"
+    export function FullSpeedAhead(): void {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x99;
+        buf[1] = 0x07;
+        buf[2] = 0x00;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
+    /**
+     * Full astern
+     */
+    //% weight=193
+    //%block="FullAstern"
+    export function FullAstern(): void {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x99;
+        buf[1] = 0x08;
+        buf[2] = 0x00;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
+    /**
+     * Stop immediately
+     */
+    //% weight=192
+    //%block="set %Wheel StopImmediately"
+    export function StopImmediately(wheel: Wheel): void {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x99;
+        buf[1] = 0x09;
+        buf[2] = wheel;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
 
 
 
@@ -194,133 +454,127 @@ namespace Cutebot_Pro {
      * Read motor speed
      */
     //% weight=65
-    //%block="read motor|%index speed"
-    export function readSpeed(index: Motors1): number {
-        let _speed: number, ret = -1;
-        pins.i2cWriteNumber(0x10, 0, NumberFormat.Int8LE)
-        let speed_x = pins.i2cReadBuffer(0x10, 4)
-        if (index == 1) {
-            if ((Math.round(speed_x[1]) < 20) && (Math.round(speed_x[1]) != 0)) {
-                ret = Math.round(speed_x[1]) + 255;
-            } else {
-                ret = Math.round(speed_x[1]);
-            }
-        } else if (index == 2) {
-            if ((Math.round(speed_x[3]) < 20) && (Math.round(speed_x[3]) != 0)) {
-                ret = Math.round(speed_x[3]) + 255;
-            } else {
-                ret = Math.round(speed_x[3]);
-            }
+    //%block="get wheel %Motors1 speed"
+    export function readSpeed(motor: Motors1): number {
+        let speed: number
+        let buf = pins.createBuffer(7)
+        if (motor == 1) {
+            buf[0] = 0x99;
+            buf[1] = 0x05;
+            buf[2] = motor;
+            buf[3] = 0x00;
+            buf[4] = 0x00;
+            buf[5] = 0x00;
+            buf[6] = 0x88;
+            pins.i2cWriteBuffer(i2cAddr, buf);
+            speed = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
         }
-        return ret;
+
+        if (motor == 2)
+            buf[0] = 0x99;
+        buf[1] = 0x05;
+        buf[2] = motor;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+        speed = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        return speed;
     }
+
+
 
     /**
      * Servo control module
      */
     //% weight=40
-    //% block="servo|%index|angle|%angle"
-    //% angle.min=0  angle.max=180
-    export function servoRun(index: Servos, angle: number): void {
+    //% block="set %ServoType index %ServoIndex angle %angle"
+    export function ExtendServoControl(servotype: ServoType, index: ServoIndex, angle: number): void {
+        let angleMap: number
+        if (servotype == 1) {
+            angleMap = Math.map(angle, 0, 180, 0, 180);
+        }
+
+        if (servotype == 2) {
+            angleMap = Math.map(angle, 0, 180, 0, 270);
+        }
+
+        if (servotype == 3) {
+            angleMap = Math.map(angle, 0, 180, 0, 360);
+        }
+
         let buf = pins.createBuffer(7)
-        if (index == 0) {
-            buf[0] = 0x00;
-            buf[1] = 0x04;
-            buf[2] = 0x01;
-            buf[3] = angle;
-            buf[4] = 0;
-            buf[5] = 0;
-            buf[6] = 0;
-            pins.i2cWriteBuffer(0x8, buf);
-        }
-        if (index == 1) {
-            buf[0] = 0x00;
-            buf[1] = 0x04;
-            buf[2] = 0x00;
-            buf[3] = angle;
-            buf[4] = 0;
-            buf[5] = 0;
-            buf[6] = 0;
-            pins.i2cWriteBuffer(0x8, buf);
-        }
-        if (index == 2) {
-            buf[0] = 0x00;
-            buf[1] = 0x04;
-            buf[2] = 0x02;
-            buf[3] = angle;
-            buf[4] = 0;
-            buf[5] = 0;
-            buf[6] = 0;
-            pins.i2cWriteBuffer(0x8, buf);
-        }
+        buf[0] = 0x99;
+        buf[1] = 0x0D;
+        buf[2] = index;
+        buf[3] = angleMap;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
     /**
- * MOTOR control module
- */
+     * continuous servo control 
+     */
+    //% weight=39
+    //% block="set continuous servo %ServoIndex speed %speed"
+    export function ContinuousServoControl(index: ServoIndex, speed: number): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x0E;
+        buf[2] = index;
+        buf[3] = speed;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
+
+
+    /**
+     * MOTOR control module
+     */
     //% weight=40
-    //% block="motor speed|%speed_e"
-    //% speed_e.min=-100  speed_e.max=100
-    export function motorRun(speed_e: number): void {
+    //% block="set motor speed %speed"
+    //% speed.min=-100  speed.max=100
+    export function ExtendMotorControl(speed: number): void {
         let buf = pins.createBuffer(7)
-        buf[0] = 0x00;
-        buf[1] = 0x03;
-        buf[2] = -speed_e;
-        buf[3] = 0;
-        buf[4] = 0;
-        buf[5] = 0;
-        buf[6] = 0;
-        pins.i2cWriteBuffer(0x8, buf);
+        buf[0] = 0x99;
+        buf[1] = 0x0B;
+        if (speed >= 0) {
+            buf[2] = 0x01;
+            buf[3] = speed;
+        }
+
+        if (speed < 0) {
+            buf[2] = 0x00;
+            buf[3] = -speed;
+        }
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
 
     /**
-     * Control the color of RGB LED
+     * extend motor stop
      */
-    //% weight=50
-    //% block="set |%rgbshow color|%color"
-    //% color.min=0  color.max=255
-    export function setRGBLight(rgbshow: RGBLight, color: number): void {
-
-        if (rgbshow == 1) {
-            let buf = pins.createBuffer(2)
-            buf[0] = 0x0B;
-            buf[1] = color;
-            pins.i2cWriteBuffer(0x10, buf);
-        } if (rgbshow == 2) {
-            let buf = pins.createBuffer(2)
-            buf[0] = 0x0C;
-            buf[1] = color;
-            pins.i2cWriteBuffer(0x10, buf);
-        } if (rgbshow == 3) {
-            let buf = pins.createBuffer(3)
-            buf[0] = 0x0B;
-            buf[1] = color;
-            buf[2] = color;
-            pins.i2cWriteBuffer(0x10, buf);
-        }
-
-    }
-
-    /**
-     * Read line-tracking sensor status
-     */
-    //% weight=56
-    //%block="read line-tracking sensor|%patrol"
-    export function readPatrol(patrol: Patrol): number {
-        pins.i2cWriteNumber(0x10, 0x1D, NumberFormat.Int8LE);
-        let patrol_y = pins.i2cReadBuffer(0x10, 1);
-        let mark: number;
-        switch (patrol) {
-            case 1: mark = (patrol_y[0] & 0x04) == 0x04 ? 1 : 0; break;
-            case 2: mark = (patrol_y[0] & 0x02) == 0x02 ? 1 : 0; break;
-            case 3: mark = (patrol_y[0] & 0x08) == 0x08 ? 1 : 0; break;
-            case 4: mark = (patrol_y[0] & 0x10) == 0x10 ? 1 : 0; break;
-            case 5: mark = (patrol_y[0] & 0x01) == 0x01 ? 1 : 0; break;
-            case 6: mark = (patrol_y[0] & 0x20) == 0x20 ? 1 : 0; break;
-        }
-
-        return mark
+    //% weight=40
+    //% block="extend motor stops"
+    export function ExtendMotorStop(): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x0C;
+        buf[2] = 0x00;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
 
@@ -328,18 +582,179 @@ namespace Cutebot_Pro {
      * get the revolutions of wheel
      */
     //% weight=60
-    //%block="get the revolutions of wheel %motor"
-    export function readeDistance(motor: Motors1): string {
-        let distance: number;
-        pins.i2cWriteNumber(0x10, 4, NumberFormat.Int8LE)
-        let speed_x = pins.i2cReadBuffer(0x10, 4)
-        switch (motor) {
-            case 1: distance = ((speed_x[0] << 8 | speed_x[1]) * 10) / 900; break;
-            default: distance = ((speed_x[2] << 8 | speed_x[3]) * 10) / 900; break;
-        }
-        let index = distance.toString().indexOf(".");
-        let x: string = distance.toString().substr(0, index + 3)
-        return x;
-        basic.pause(30)
+    //%block="get the number of turns of the wheel %motor"
+    export function readeDistance(motor: Motors1): number {
+        let cylinderNumber: number;
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x06;
+        buf[2] = motor;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+        basic.pause(10);
+        cylinderNumber = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        return cylinderNumber;
     }
+
+
+    /**
+     * Clear the number of wheel turns
+     */
+    //% weight=60
+    //%block="Clear wheel %motor turn"
+    export function ClearWheelTurn(motor: Motors1): void {
+        let buf = pins.createBuffer(7)
+        buf[0] = 0x99;
+        buf[1] = 0x0A;
+        buf[2] = motor;
+        buf[3] = 0x00;
+        buf[4] = 0x00;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
+
+
+
+    /**
+     * get Offset of the Four-way patrol line sensor
+    */
+    //% weight=20
+    //%block="get Four-way patrol line the number Offset"
+    export function getOffset(): number {
+        let offset: number;
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x14;
+        i2cBuffer[2] = 0x00;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        const offsetLow = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false);
+
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x14;
+        i2cBuffer[2] = 0x01;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+
+        const offsetHigh = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        offset = (offsetHigh << 8) | offsetLow
+        offset = Math.map(offset, 0, 6000, -3000, 3000);
+        return offset;
+    }
+
+
+    /**
+     * Get Grayscale Sensor State
+    */
+    //% weight=20
+    //%block="Grayscale sensor state is %TrackbitStateType"
+    export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x12;
+        i2cBuffer[2] = 0x00;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        const grayscaleSensorState = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        return grayscaleSensorState == state
+    }
+
+    //% weight=19
+    //% block="Trackbit channel %TrackbitChannel is %TrackbitType"
+    export function TrackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
+        let TempVal: number = 0
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x13;
+        i2cBuffer[2] = 0x00;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        TempVal = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        if (state == TrackbitType.State_1)
+            if (TempVal & 1 << channel) {
+                return true
+            }
+            else {
+                return false
+            }
+        else {
+            if (TempVal & 1 << channel) {
+                return false
+            }
+            else {
+                return true
+            }
+        }
+    }
+
+    /**
+    * Get gray value.The range is from 0 to 255.
+    */
+    //% weight=18
+    //% block="Trackbit channel %TrackbitChannel gray value"
+    export function TrackbitgetGray(channel: TrackbitChannel): number {
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x11;
+        i2cBuffer[2] = channel;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        return pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+    }
+
+
+    /**
+    * Read version number
+    */
+    //% weight=1
+    //% block="Read version number"
+    export function ReadVersions(): number {
+        let cutebotProVersionsInteger: number = 0;
+        let cutebotProVersionsDecimal: number = 0;
+
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x15;
+        i2cBuffer[2] = 0x00;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        cutebotProVersionsDecimal = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x15;
+        i2cBuffer[2] = 0x01;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        cutebotProVersionsInteger = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        return cutebotProVersionsInteger + (cutebotProVersionsDecimal * 0.01)
+
+
+    }
+
+
 }
