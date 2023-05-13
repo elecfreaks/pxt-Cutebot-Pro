@@ -59,9 +59,9 @@ enum ServoIndex {
 
 enum RGBLight {
     //%block="RGB_L"
-    RGBL = 1,
+    RGBL = 2,
     //%block="RGB_R"
-    RGBR = 2,
+    RGBR = 1,
     //%block="ALL"
     RGBA = 3
 }
