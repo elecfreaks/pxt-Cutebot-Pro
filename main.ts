@@ -521,15 +521,8 @@ namespace Cutebot_Pro {
     //% weight=39
     //% block="set continuous servo %ServoIndex speed %speed"
     export function ContinuousServoControl(index: ServoIndex, speed: number): void {
-        let buf = pins.createBuffer(7)
-        buf[0] = 0x99;
-        buf[1] = 0x0E;
-        buf[2] = index;
-        buf[3] = speed;
-        buf[4] = 0x00;
-        buf[5] = 0x00;
-        buf[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, buf);
+        speed = Math.map(speed, -100, 100, 0, 180)
+        ExtendServoControl(ServoType.Servo180, index, speed)
     }
 
 
