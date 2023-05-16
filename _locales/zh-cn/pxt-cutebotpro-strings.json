@@ -20,6 +20,8 @@
     "Wheel.AllWheel|block": "全部车轮",
     "Turn.turnLeft|block": "左转",
     "Turn.turnRight|block": "右转",
+    "SonarUnit.Centimeters|block": "厘米",
+    "SonarUnit.Inches|block": "英寸",
     "Cutebot_Pro.ReadVersions|block": "获取版本号",
     "Cutebot_Pro.readSpeed|block": "获取 %Motors1 速度",
     "Cutebot_Pro.PIDSwitch|block": "PID %PID",
@@ -44,5 +46,8 @@
     "Cutebot_Pro.TrackbitgetGray|block": "四路灰度巡线传感器 通道 %TrackbitChannel 灰度值",
     "Cutebot_Pro.getGrayscaleSensorState|block": "四路灰度巡线传感器识别到 %TrackbitStateType",
     "Cutebot_Pro.getOffset|block": "四路灰度巡线传感器偏移量",
-    "Cutebot_Pro.DistanceRunning|block": "设置小车 %Orientation 行驶 %distance %DistanceUnits"
+    "Cutebot_Pro.DistanceRunning|block": "设置小车 %Orientation 行驶 %distance %DistanceUnits",
+    "Cutebot_Pro.IR_Button|block": "红外按钮 %Button 被按下",
+    "Cutebot_Pro.IR_callback|block": "当接收到红外信号",
+    "Cutebot_Pro.ultrasonic|block": "HC-SR04超声波返回%unit距离值"
 }

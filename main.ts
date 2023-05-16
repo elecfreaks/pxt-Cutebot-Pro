@@ -195,6 +195,56 @@ enum ServoType {
     Servo360 = 3,
 }
 
+enum SonarUnit {
+    //% block="cm"
+    Centimeters,
+    //% block="inches"
+    Inches
+}
+
+enum IRButtons {
+    //% blcok="Menu"
+    Menu = 2,
+    //% blcok="Up"
+    Up = 5,
+    //% blcok="Left"
+    Left = 8,
+    //% blcok="Right"
+    Right = 10,
+    //% blcok="Down"
+    Down = 13,
+    //% blcok="OK"
+    OK = 9,
+    //% blcok="Plus"
+    Plus = 4,
+    //% blcok="Minus"
+    Minus = 12,
+    //% blcok="Back"
+    Back = 6,
+    //% block="0"
+    Zero = 14,
+    //% block="1"
+    One = 16,
+    //% block="2"
+    Two = 17,
+    //% block="3"
+    Three = 18,
+    //% block="4"
+    Four = 20,
+    //% block="5"
+    Five = 21,
+    //% block="6"
+    Six = 22,
+    //% block="7"
+    Seven = 24,
+    //% block="8"
+    Eight = 25,
+    //% block="9"
+    Nine = 26
+}
+
+let IR_Val = 0
+let _initEvents = true
 
 //% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf067"
 namespace Cutebot_Pro {
@@ -212,7 +262,7 @@ namespace Cutebot_Pro {
     */
     //% block="PID %PID"
     //% weight=201
-    export function PIDSwitch(pid: PID): void {
+    /*export function PIDSwitch(pid: PID): void {
         let buf = pins.createBuffer(7);
         buf[0] = 0x99;
         buf[1] = 0x00;
@@ -222,7 +272,7 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf);
-    }
+    }*/
 
 
 
@@ -749,5 +799,67 @@ namespace Cutebot_Pro {
 
     }
 
+
+    /**
+        * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
+        * @param Sonarunit two states of ultrasonic module, eg: Centimeters
+        */
+    //% blockId=ultrasonic block="HC-SR04 Sonar unit %unit"
+    //% weight=1
+    export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
+        // send pulse
+        pins.setPull(DigitalPin.P8, PinPullMode.PullNone);
+        pins.digitalWritePin(DigitalPin.P8, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(DigitalPin.P8, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(DigitalPin.P8, 0);
+        // read pulse
+        const d = pins.pulseIn(DigitalPin.P12, PulseValue.High, maxCmDistance * 50);
+        switch (unit) {
+            case SonarUnit.Centimeters:
+                return Math.floor(d * 34 / 2 / 1000);
+            case SonarUnit.Inches:
+                return Math.floor(d * 34 / 2 / 1000 * 0.3937);
+            default:
+                return d;
+        }
+    }
+    
+    //% shim=IRV2::irCode
+    function irCode(): number {
+        return 0;
+    }
+    //% weight=2
+    //% block="On IR receiving"
+    export function IR_callback(handler: () => void) {
+        pins.setPull(DigitalPin.P16, PinPullMode.PullUp)
+        control.onEvent(98, 3500, handler)
+        control.inBackground(() => {
+            while (true) {
+                IR_Val = irCode()
+                if (IR_Val != 0xff00) {
+                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
+                }
+                basic.pause(20)
+            }
+        })
+    }
+    /**
+     * TODO: Get IR value
+     */
+    //% block="IR Button %Button is pressed"
+    //% weight=3
+    export function IR_Button(Button: IRButtons): boolean {
+        return (IR_Val & 0x00ff) == Button
+    }
+    
+    /*function initEvents(): void {
+        if (_initEvents) {
+            pins.setEvents(DigitalPin.P13, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P14, PinEventType.Edge);
+            _initEvents = false;
+        }
+    }*/
 
 }
