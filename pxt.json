@@ -11,6 +11,7 @@
     "files": [
         "README.md",
         "main.ts",
+        "IR.cpp",
         "_locales/zh-cn/pxt-cutebotpro-strings.json"
     ],
     "testFiles": [
@@ -18,7 +19,7 @@
     ],
     "public": true,
     "targetVersions": {
-        "target": "5.0.12",
+        "target": "4.0.18",
         "targetId": "microbit"
     },
     "supportedTargets": [
