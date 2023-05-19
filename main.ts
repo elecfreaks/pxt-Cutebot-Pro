@@ -34,9 +34,9 @@ enum Motors {
 
 enum Motors1 {
     //% block="left"
-    M1 = 1,
+    M1 = 2,
     //% block="right"
-    M2 = 2,
+    M2 = 1,
 }
 
 enum Dir {
@@ -416,6 +416,8 @@ namespace Cutebot_Pro {
     //% block="Set up car %Orientation travel %distance %DistanceUnits"
     export function DistanceRunning(orientation: Orientation, distance: number, distanceUnits: DistanceUnits): void {
         let buf = pins.createBuffer(7)
+        let curtime = 0
+        let oldtime = 0
         buf[0] = 0x99;
         buf[1] = 0x03;
         buf[2] = orientation;
@@ -424,15 +426,28 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
+        oldtime = control.millis()
+        while(1)
+        {
+            curtime = control.millis()
+            if ((curtime - oldtime) == (distance * 1000 / 20 + 600))
+                break
+        }
+        /*
+        basic.pause(distance * 1000 / 20)
+        basic.pause(600)
+        */
     }
 
-
+    
     /**
      * Set the trolley to rotate at a specific Angle
      */
     //% weight=195
     //% block="Set up car %Turn Angle %angle"
     export function TrolleySteering(turn: Turn, angle: Angle): void {
+        let curtime = 0
+        let oldtime = 0
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x04;
@@ -442,6 +457,39 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
+        oldtime = control.millis()
+        if (angle == Angle.angle45)
+        {
+            while (1) {
+                curtime = control.millis()
+                if (curtime - oldtime == 1000)
+                    break
+            }
+        }
+        else if(angle == Angle.angle90)
+        {
+            while (1) {
+                curtime = control.millis()
+                if (curtime - oldtime == 1400)
+                    break
+            }
+        }
+        else if(angle == Angle.angle135)
+        {
+            while (1) {
+                curtime = control.millis()
+                if (curtime - oldtime == 1800)
+                    break
+            }
+        }
+        else
+        {
+            while (1) {
+                curtime = control.millis()
+                if (curtime - oldtime == 2100)
+                    break
+            }
+        }
     }
 
 
