@@ -245,7 +245,7 @@ enum IRButtons {
 
 let IR_Val = 0
 let _initEvents = true
-
+let PidUseFlag = 0
 //% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf067"
 namespace Cutebot_Pro {
     let irstate: number;
@@ -426,17 +426,17 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-        oldtime = control.millis()
+        /*oldtime = control.millis()
         while(1)
         {
             curtime = control.millis()
             if ((curtime - oldtime) == (distance * 1000 / 20 + 600))
                 break
-        }
-        /*
+        }*/
+
         basic.pause(distance * 1000 / 20)
-        basic.pause(600)
-        */
+        basic.pause(800)
+        
     }
 
     
@@ -457,38 +457,42 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-        oldtime = control.millis()
+        //oldtime = control.millis()
         if (angle == Angle.angle45)
         {
-            while (1) {
+            /*while (1) {
                 curtime = control.millis()
                 if (curtime - oldtime == 1000)
                     break
-            }
+            }*/
+            basic.pause(1100)
         }
         else if(angle == Angle.angle90)
         {
-            while (1) {
+            /*while (1) {
                 curtime = control.millis()
                 if (curtime - oldtime == 1400)
                     break
-            }
+            }*/
+            basic.pause(1500)
         }
         else if(angle == Angle.angle135)
         {
-            while (1) {
+            /*while (1) {
                 curtime = control.millis()
                 if (curtime - oldtime == 1800)
                     break
-            }
+            }*/
+            basic.pause(1900)
         }
         else
         {
-            while (1) {
+            /*while (1) {
                 curtime = control.millis()
                 if (curtime - oldtime == 2100)
                     break
-            }
+            }*/
+            basic.pause(2200)
         }
     }
 
@@ -595,11 +599,11 @@ namespace Cutebot_Pro {
         }
 
         if (servotype == 2) {
-            angleMap = Math.map(angle, 0, 180, 0, 270);
+            angleMap = Math.map(angle, 0, 270, 0, 180);
         }
 
         if (servotype == 3) {
-            angleMap = Math.map(angle, 0, 180, 0, 360);
+            angleMap = Math.map(angle, 0, 360, 0, 180);
         }
 
         let buf = pins.createBuffer(7)
@@ -660,8 +664,8 @@ namespace Cutebot_Pro {
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x0C;
-        buf[2] = 0x00;
-        buf[3] = 0x00;
+        buf[2] = 0x02;
+        buf[3] = 0xC8;
         buf[4] = 0x00;
         buf[5] = 0x00;
         buf[6] = 0x88;
