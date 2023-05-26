@@ -783,14 +783,14 @@ namespace Cutebot_Pro {
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         TempVal = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
         if (state == TrackbitType.State_1)
-            if (TempVal & 1 << channel) {
+            if (TempVal & 1 << (channel - 1) ) {
                 return true
             }
             else {
                 return false
             }
         else {
-            if (TempVal & 1 << channel) {
+            if (TempVal & 1 << (channel - 1)) {
                 return false
             }
             else {
