@@ -305,7 +305,7 @@ namespace Cutebot_Pro {
         }
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         basic.pause(1)
-        if (speedL >= 0) {
+        if (speedR >= 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
             i2cBuffer[2] = Wheel.RightWheel;
