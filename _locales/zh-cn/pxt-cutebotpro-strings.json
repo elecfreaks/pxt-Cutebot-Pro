@@ -37,7 +37,7 @@
     "Cutebot_Pro.FullSpeedAhead|block": "全速前进",
     "Cutebot_Pro.FullAstern|block": "全速倒退",
     "Cutebot_Pro.StopImmediately|block": "设置 %Wheel 立刻停车",
-    "Cutebot_Pro.CruiseControl|block": "设置 %wheel 方向为 %Orientation 速度为 %speed 单位 %DistanceUnits",
+    "Cutebot_Pro.CruiseControl|block": "设置左轮速度为 %speedL, 设置右轮速度为 %speedR %SpeedUnits",
     "Cutebot_Pro.PWMCruiseControl|block": "设置左轮速度为 %speedL, 设置右轮速度为 %speedR",
     "Cutebot_Pro.TrolleySteering|block": "设置小车 %Turn 角度 %angle",
     "Cutebot_Pro.TurnOffAllHeadlights|block": "关闭所有LED车头灯",

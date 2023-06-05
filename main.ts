@@ -248,7 +248,7 @@ let _initEvents = true
 let PidUseFlag = 0
 let blocklength = 0
 let distanceUnitsFlag = 0
-//% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf067"
+//% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf48b"
 namespace Cutebot_Pro {
     let irstate: number;
     let state: number;
@@ -304,7 +304,7 @@ namespace Cutebot_Pro {
             i2cBuffer[6] = 0x88;
         }
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        basic.pause(20)
+        basic.pause(1)
         if (speedL >= 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
@@ -680,35 +680,66 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * Control the car to travel at a specific speed
+     * Control the car to travel at a specific speed (speed.min=20cm/s speed.max=50cm/s)
      */
     //% group="PIDContrl"
-    //% block="Set %Wheel %Orientation speed %speed %SpeedUnits"
-    //% speed.min=20 speed.max=50
+    //% block="Set LeftWheel Speed %speed, Set RightWheel Speed %speed %SpeedUnits"
     //% weight=210
-    export function CruiseControl(wheel: Wheel, orientation: Orientation, speed: number, speedUnits: SpeedUnits): void {
+    export function CruiseControl(speedL: number, speedR: number, speedUnits: SpeedUnits): void {
         let buf = pins.createBuffer(7)
-        let tempspeed = 0
+        let orientationL = 0
+        let orientationR = 0
 
-        if (speedUnits == SpeedUnits.cms)
-            tempspeed = speed;
-        else
-            tempspeed = speed * 0.3937;
+        if (speedUnits == SpeedUnits.cms){
+            speedL = speedL;
+            speedR = speedR;
+        }
+        else{
+            speedL = speedL * 0.3937;
+            speedR = speedR * 0.3937;
+        }
+            
+        if(speedL < 0){
+            speedL = -speedL
+            orientationL = Orientation.retreat
+        }else{
+            orientationL = Orientation.advance
+        }
 
-        if (tempspeed > 50)
-            tempspeed = 50;
-        else if (tempspeed != 0 && tempspeed < 20)
-            tempspeed = 20;
+        if (speedR < 0) {
+            speedR = -speedR
+            orientationR = Orientation.retreat
+        }else{
+            orientationR = Orientation.advance
+        }
+
+        if (speedL > 50)
+            speedL = 50;
+        else if (speedL != 0 && speedL < 20)
+            speedL = 20;
+
+        if (speedR > 50)
+            speedR = 50;
+        else if (speedR != 0 && speedR < 20)
+            speedR = 20;
 
         buf[0] = 0x99;
         buf[1] = 0x02;
-        buf[2] = wheel;
-        buf[3] = tempspeed;
-        buf[4] = orientation;
+        buf[2] = Wheel.LeftWheel;
+        buf[3] = speedL;
+        buf[4] = orientationL;
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-
+        basic.pause(1)
+        buf[0] = 0x99;
+        buf[1] = 0x02;
+        buf[2] = Wheel.RightWheel;
+        buf[3] = speedR;
+        buf[4] = orientationR;
+        buf[5] = 0x00;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
     }
 
     /**
