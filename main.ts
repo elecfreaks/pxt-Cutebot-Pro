@@ -708,7 +708,7 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-        
+
     }
 
     /**
