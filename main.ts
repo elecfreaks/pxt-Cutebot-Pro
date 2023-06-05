@@ -92,7 +92,7 @@ enum PID {
 enum DistanceUnits {
     //%block="cm"
     cm = 0,
-    //%block="ft"
+    //%block="in"
     ft = 1
 }
 
