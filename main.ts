@@ -248,11 +248,12 @@ let _initEvents = true
 let PidUseFlag = 0
 let blocklength = 0
 let distanceUnitsFlag = 0
+let fourWayStateValue = 0
 //% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf48b"
 namespace Cutebot_Pro {
     let irstate: number;
     let state: number;
-    let i2cAddr: number = 0x08;
+    let i2cAddr: number = 0x10;
     export class Packeta {
         public mye: string;
         public myparam: number;
@@ -547,8 +548,28 @@ namespace Cutebot_Pro {
     }
 
     /**
-   * get Offset of the Four-way patrol line sensor
-  */
+    * Get Trackbit State Value
+    */
+    //% group="Four-Way"
+    //% weight=270
+    //% block="Get a Trackbit state value"
+    export function Trackbit_get_state_value() {
+        let i2cBuffer = pins.createBuffer(7);
+        i2cBuffer[0] = 0x99;
+        i2cBuffer[1] = 0x12;
+        i2cBuffer[2] = 0x00;
+        i2cBuffer[3] = 0x00;
+        i2cBuffer[4] = 0x00;
+        i2cBuffer[5] = 0x00;
+        i2cBuffer[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        fourWayStateValue = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        basic.pause(5);
+    }
+
+    /**
+    * get Offset of the Four-way patrol line sensor
+    */
     //% group="Four-Way"
     //% weight=250
     //%block="get Four-way patrol line the number Offset"
@@ -580,51 +601,30 @@ namespace Cutebot_Pro {
         return offset;
     }
 
-
     /**
-     * Get Grayscale Sensor State
+    * Get Grayscale Sensor State
     */
     //% group="Four-Way"
     //% weight=260
     //%block="Grayscale sensor state is %TrackbitStateType"
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
-        let i2cBuffer = pins.createBuffer(7);
-        i2cBuffer[0] = 0x99;
-        i2cBuffer[1] = 0x12;
-        i2cBuffer[2] = 0x00;
-        i2cBuffer[3] = 0x00;
-        i2cBuffer[4] = 0x00;
-        i2cBuffer[5] = 0x00;
-        i2cBuffer[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        const grayscaleSensorState = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        return grayscaleSensorState == state
+        return fourWayStateValue == state
     }
+    
 
     //% group="Four-Way"
     //% weight=240
     //% block="Trackbit channel %TrackbitChannel is %TrackbitType"
     export function TrackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
-        let TempVal: number = 0
-        let i2cBuffer = pins.createBuffer(7);
-        i2cBuffer[0] = 0x99;
-        i2cBuffer[1] = 0x13;
-        i2cBuffer[2] = 0x00;
-        i2cBuffer[3] = 0x00;
-        i2cBuffer[4] = 0x00;
-        i2cBuffer[5] = 0x00;
-        i2cBuffer[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        TempVal = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
         if (state == TrackbitType.State_1)
-            if (TempVal & 1 << (channel - 1)) {
+            if (fourWayStateValue & (1 << (channel - 1))) {
                 return true
             }
             else {
                 return false
             }
         else {
-            if (TempVal & 1 << (channel - 1)) {
+            if (fourWayStateValue & (1 << (channel - 1))) {
                 return false
             }
             else {

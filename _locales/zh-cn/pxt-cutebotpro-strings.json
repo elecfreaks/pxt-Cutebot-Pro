@@ -52,6 +52,7 @@
     "Cutebot_Pro.ultrasonic|block": "HC-SR04超声波返回%unit距离值",
     "Cutebot_Pro.SetBlockCnt|block": "设置方块边长为%length %DistanceUnits",
     "Cutebot_Pro.RunBlockCnt|block": "设置小车向前行驶 %cnt 块方块",
+    "Cutebot_Pro.Trackbit_get_state_value|block": "获取一个四路红外巡线传感器的状态值",
     "{id:group}Basic": "基础控制",
     "{id:group}Headlights": "LED车头灯",
     "{id:group}Four-Way": "四路巡线传感器",
