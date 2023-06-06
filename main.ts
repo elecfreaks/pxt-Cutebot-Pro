@@ -564,7 +564,7 @@ namespace Cutebot_Pro {
         i2cBuffer[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         fourWayStateValue = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        basic.pause(5);
+        //basic.pause(5);
     }
 
     /**
