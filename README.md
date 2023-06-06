@@ -1,31 +1,41 @@
 
-> Open this page at [https://elecfreaks.github.io/pxt-cutebotpro/](https://elecfreaks.github.io/pxt-cutebotpro/)
+# Cute:bot Pro Car Package
 
-## Use as Extension
+![](/image.png/)
 
-This repository can be added as an **extension** in MakeCode.
+This library is designed to drive Cutebot Pro, You can get Cutebot Pro here.
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/elecfreaks/pxt-cutebotpro** and import
+https://shop.elecfreaks.com/products/elecfreaks-smart-cutebot-pro-v2-programming-robot-car-for-micro-bit
+## Code Example
+```JavaScript
 
-## Edit this project ![Build status badge](https://github.com/elecfreaks/pxt-cutebotpro/workflows/MakeCode/badge.svg)
+let strip: neopixel.Strip = null
+basic.showLeds(`
+    . . . # .
+    # . # . #
+    # . # . #
+    # . # . #
+    . # . . .
+    `)
+strip = neopixel.create(DigitalPin.P15, 24, NeoPixelMode.RGB)
+strip.showRainbow(1, 360)
+basic.showIcon(IconNames.Heart)
+basic.forever(function () {
+    Cutebot_Pro.PWMCruiseControl(30, 90)
+    basic.pause(1500)
+    Cutebot_Pro.PWMCruiseControl(90, 30)
+    basic.pause(1500)
+})
+basic.forever(function () {
+    strip.rotate(1)
+    basic.pause(100)
+    strip.show()
+})
 
-To edit this repository in MakeCode.
+```
+## Supported targets
+for PXT/microbit
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/elecfreaks/pxt-cutebotpro** and click import
+## License
+MIT
 
-## Blocks preview
-
-This image shows the blocks code from the last commit in master.
-This image may take a few minutes to refresh.
-
-![A rendered view of the blocks](https://github.com/elecfreaks/pxt-cutebotpro/raw/master/.github/makecode/blocks.png)
-
-#### Metadata (used for search, rendering)
-
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
