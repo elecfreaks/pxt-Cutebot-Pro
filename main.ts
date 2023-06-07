@@ -286,7 +286,17 @@ namespace Cutebot_Pro {
     //% weight=340
     export function PWMCruiseControl(speedL: number, speedR: number): void {
         let i2cBuffer = pins.createBuffer(7)
-        if (speedL >= 0) {
+        
+        if (speedL == 0)
+            speedL = 200
+        else
+            Math.map(speedL, 0, 100, 20, 100);
+        if (speedR == 0)
+            speedR = 200
+        else
+            Math.map(speedR, 0, 100, 20, 100);
+    
+        if (speedL > 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
             i2cBuffer[2] = Wheel.LeftWheel;
@@ -305,8 +315,8 @@ namespace Cutebot_Pro {
             i2cBuffer[6] = 0x88;
         }
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        basic.pause(1)
-        if (speedR >= 0) {
+        //basic.pause
+        if (speedR > 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
             i2cBuffer[2] = Wheel.RightWheel;
@@ -731,7 +741,6 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-        basic.pause(1)
         buf[0] = 0x99;
         buf[1] = 0x02;
         buf[2] = Wheel.RightWheel;
