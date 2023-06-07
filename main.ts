@@ -289,12 +289,17 @@ namespace Cutebot_Pro {
         
         if (speedL == 0)
             speedL = 200
-        else
+        else if (speedL > 0)
             Math.map(speedL, 0, 100, 20, 100);
+        else
+            Math.map(speedL, -100, 0, -100, -20);
+        
         if (speedR == 0)
             speedR = 200
-        else
+        else if (speedR > 0)
             Math.map(speedR, 0, 100, 20, 100);
+        else
+            Math.map(speedR, -100, 0, -100, -20);
     
         if (speedL > 0) {
             i2cBuffer[0] = 0x99;
@@ -1000,7 +1005,7 @@ namespace Cutebot_Pro {
     */
     //% weight=1
     //% block="Read version number"
-    export function ReadVersions(): number {
+    export function ReadVersions(): string {
         let cutebotProVersionsInteger: number = 0;
         let cutebotProVersionsDecimal: number = 0;
 
@@ -1024,8 +1029,7 @@ namespace Cutebot_Pro {
         i2cBuffer[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         cutebotProVersionsInteger = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        return cutebotProVersionsInteger + (cutebotProVersionsDecimal * 0.01)
-
-
+        return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal/10) + "." + convertToText(cutebotProVersionsDecimal%10))
+        
     }
 }
