@@ -444,7 +444,7 @@ namespace Cutebot_Pro {
     * 获取编码电机的脉冲数
     */
     export function getPulsenumber(): void {
-        let pulsenumberbuf = pins.createBuffer(8);
+        let pulsenumberbuf = pins.createBuffer(10);
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x16;
@@ -465,6 +465,13 @@ namespace Cutebot_Pro {
         pulsenumberbuf[6] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
         pulsenumberbuf[7] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
         pulseCntR = (pulsenumberbuf[4] << 24) | (pulsenumberbuf[5] << 16) | (pulsenumberbuf[6] << 8) | pulsenumberbuf[7]
+
+        pulsenumberbuf[8] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        if (pulsenumberbuf[8] == 1)
+            pulseCntL = -pulseCntL
+        pulsenumberbuf[9] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        if (pulsenumberbuf[9] == 1)
+            pulseCntR = -pulseCntR
     }
 
     /**    测试--获取两边车轮的编码电机产生的脉冲的数量
@@ -490,7 +497,7 @@ namespace Cutebot_Pro {
         let cylinderNumber: number;
         getPulsenumber()
         if (motor == 1)
-            return Math.floor(pulseCntL * 360 / 1400);
+            return Math.floor( pulseCntL * 360 / 1400 );
         else
             return Math.floor(pulseCntR * 360 / 1400);
     }
@@ -866,7 +873,7 @@ namespace Cutebot_Pro {
     export function TrolleySteering(turn: Turn, angle: Angle): void {
         let curtime = 0
         let oldtime = 0
-        let speed = 30
+        let speed = 40
         let tempcntL = 0
         let tempcntR = 0
 
@@ -923,7 +930,7 @@ namespace Cutebot_Pro {
                 Cutebot_Pro.PWMCruiseControl(speed, -speed)
                 while (1){
                     getPulsenumber()
-                    if (pulseCntL + pulseCntR - tempcntL - tempcntR >= (angle + 1) * 600){
+                    if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600){
                         Cutebot_Pro.PWMCruiseControl(0, 0)
                         break
                     }
@@ -942,7 +949,7 @@ namespace Cutebot_Pro {
                 Cutebot_Pro.PWMCruiseControl(-speed, speed)
                 while (1) {
                     getPulsenumber()
-                    if (pulseCntL + pulseCntR - tempcntL - tempcntR >= (angle + 1) * 600) {
+                    if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
                         Cutebot_Pro.PWMCruiseControl(0, 0)
                         break
                     }
