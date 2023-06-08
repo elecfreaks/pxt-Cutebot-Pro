@@ -923,7 +923,7 @@ namespace Cutebot_Pro {
         }
         else{
             Cutebot_Pro.PWMCruiseControl(0, 0)
-            if (turn == 2){
+            if (turn == 3){
                 getPulsenumber()
                 tempcntL = pulseCntL
                 tempcntR = pulseCntR
@@ -942,7 +942,7 @@ namespace Cutebot_Pro {
                         break*/
                 }
             }
-            else if(turn == 3){
+            else if(turn == 2){
                 getPulsenumber()
                 tempcntL = pulseCntL
                 tempcntR = pulseCntR
