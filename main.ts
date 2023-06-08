@@ -34,9 +34,9 @@ enum Motors {
 
 enum Motors1 {
     //% block="left"
-    M1 = 2,
+    M1 = 1,
     //% block="right"
-    M2 = 1,
+    M2 = 2,
 }
 
 enum Dir {
@@ -115,7 +115,12 @@ enum Turn {
     //%block="TurnLeft"
     turnLeft = 0,
     //%block="TurnRight"
-    turnRight = 1
+    turnRight = 1,
+    //%block="TurnLeftInPlace"
+    turnLeftInPlace = 2,
+    //%block="TurnRightInPlace"
+    turnRightInPlace = 3
+    
 }
 
 enum Angle {
@@ -249,6 +254,8 @@ let PidUseFlag = 0
 let blocklength = 0
 let distanceUnitsFlag = 0
 let fourWayStateValue = 0
+let pulseCntL = 0
+let pulseCntR = 0
 //% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf48b"
 namespace Cutebot_Pro {
     let irstate: number;
@@ -394,7 +401,6 @@ namespace Cutebot_Pro {
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf);
-        basic.pause(20)
     }
 
 
@@ -435,27 +441,62 @@ namespace Cutebot_Pro {
     }
 
     /**
-   * get the revolutions of wheel
-   */
-    //% group="Basic"
-    //% weight=310
-    //%block="get the number of turns of the wheel %motor"
-    export function readeDistance(motor: Motors1): number {
-        let cylinderNumber: number;
+    * 获取编码电机的脉冲数
+    */
+    export function getPulsenumber(): void {
+        let pulsenumberbuf = pins.createBuffer(8);
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
-        buf[1] = 0x06;
-        buf[2] = motor;
+        buf[1] = 0x16;
+        buf[2] = 0x00;
         buf[3] = 0x00;
         buf[4] = 0x00;
         buf[5] = 0x00;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf);
-        basic.pause(10);
-        cylinderNumber = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        return cylinderNumber;
+        pulsenumberbuf[0] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[1] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[2] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[3] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulseCntL = (pulsenumberbuf[0] << 24) | (pulsenumberbuf[1] << 16) | (pulsenumberbuf[2] << 8) | pulsenumberbuf[3]
+
+        pulsenumberbuf[4] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[5] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[6] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulsenumberbuf[7] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        pulseCntR = (pulsenumberbuf[4] << 24) | (pulsenumberbuf[5] << 16) | (pulsenumberbuf[6] << 8) | pulsenumberbuf[7]
     }
 
+    /**    测试--获取两边车轮的编码电机产生的脉冲的数量
+     * Read pulse cnt
+    */
+    export function readPulsenumberTest(motor: Motors1): number {
+        getPulsenumber()
+        if (motor == 1)
+            return pulseCntL;
+        else if (motor == 2)
+            return pulseCntR;
+        else
+            return 0
+    }
+
+    /**
+    * get the revolutions of wheel
+    */
+    //% group="Basic"
+    //% weight=310
+    //%block="get the number of turns of the wheel %motor"
+    export function readeDistance(motor: Motors1): number {
+        let cylinderNumber: number;
+        getPulsenumber()
+        if (motor == 1)
+            return Math.floor(pulseCntL * 360 / 1400);
+        else
+            return Math.floor(pulseCntR * 360 / 1400);
+    }
+
+    
+    
 
     /**
      * Clear the number of wheel turns
@@ -757,7 +798,7 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * Set the car to travel a specific distance
+     * Set the car to travel a specific distance(distance.max=255cm, distance.min=0cm)
      */
     //% group="PIDContrl"
     //% weight=200
@@ -825,48 +866,91 @@ namespace Cutebot_Pro {
     export function TrolleySteering(turn: Turn, angle: Angle): void {
         let curtime = 0
         let oldtime = 0
-        let buf = pins.createBuffer(7)
-        buf[0] = 0x99;
-        buf[1] = 0x04;
-        buf[2] = turn;
-        buf[3] = angle;
-        buf[4] = 0x00;
-        buf[5] = 0x00;
-        buf[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, buf)
-        //oldtime = control.millis()
-        if (angle == Angle.angle45) {
-            /*while (1) {
-                curtime = control.millis()
-                if (curtime - oldtime == 1000)
-                    break
-            }*/
-            basic.pause(1100)
+        let speed = 30
+        let tempcntL = 0
+        let tempcntR = 0
+
+        if (turn < 2){
+            let buf = pins.createBuffer(7)
+            buf[0] = 0x99;
+            buf[1] = 0x04;
+            buf[2] = turn;
+            buf[3] = angle;
+            buf[4] = 0x00;
+            buf[5] = 0x00;
+            buf[6] = 0x88;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            //oldtime = control.millis()
+            if (angle == Angle.angle45) {
+                /*while (1) {
+                    curtime = control.millis()
+                    if (curtime - oldtime == 1000)
+                        break
+                }*/
+                basic.pause(1100)
+            }
+            else if (angle == Angle.angle90) {
+                /*while (1) {
+                    curtime = control.millis()
+                    if (curtime - oldtime == 1400)
+                        break
+                }*/
+                basic.pause(1500)
+            }
+            else if (angle == Angle.angle135) {
+                /*while (1) {
+                    curtime = control.millis()
+                    if (curtime - oldtime == 1800)
+                        break
+                }*/
+                basic.pause(1900)
+            }
+            else {
+                /*while (1) {
+                    curtime = control.millis()
+                    if (curtime - oldtime == 2100)
+                        break
+                }*/
+                basic.pause(2200)
+            }
         }
-        else if (angle == Angle.angle90) {
-            /*while (1) {
-                curtime = control.millis()
-                if (curtime - oldtime == 1400)
-                    break
-            }*/
-            basic.pause(1500)
+        else{
+            Cutebot_Pro.PWMCruiseControl(0, 0)
+            if (turn == 2){
+                getPulsenumber()
+                tempcntL = pulseCntL
+                tempcntR = pulseCntR
+                Cutebot_Pro.PWMCruiseControl(speed, -speed)
+                while (1){
+                    getPulsenumber()
+                    if (pulseCntL + pulseCntR - tempcntL - tempcntR >= (angle + 1) * 600){
+                        Cutebot_Pro.PWMCruiseControl(0, 0)
+                        break
+                    }
+                   /*  if (pulseCntL - tempcntL >= (angle + 1) * 300 - 60)
+                        Cutebot_Pro.StopImmediately(Wheel.LeftWheel)
+                    if (pulseCntR - tempcntR >= (angle + 1) * 300 - 60)
+                        Cutebot_Pro.StopImmediately(Wheel.RightWheel)
+                    if ((pulseCntL - tempcntL >= (angle + 1) * 300 - 60) && (pulseCntR - tempcntR >= (angle + 1) * 300 - 60))
+                        break*/
+                }
+            }
+            else if(turn == 3){
+                getPulsenumber()
+                tempcntL = pulseCntL
+                tempcntR = pulseCntR
+                Cutebot_Pro.PWMCruiseControl(-speed, speed)
+                while (1) {
+                    getPulsenumber()
+                    if (pulseCntL + pulseCntR - tempcntL - tempcntR >= (angle + 1) * 600) {
+                        Cutebot_Pro.PWMCruiseControl(0, 0)
+                        break
+                    }
+                }
+            }
+
         }
-        else if (angle == Angle.angle135) {
-            /*while (1) {
-                curtime = control.millis()
-                if (curtime - oldtime == 1800)
-                    break
-            }*/
-            basic.pause(1900)
-        }
-        else {
-            /*while (1) {
-                curtime = control.millis()
-                if (curtime - oldtime == 2100)
-                    break
-            }*/
-            basic.pause(2200)
-        }
+        
     }
 
 
