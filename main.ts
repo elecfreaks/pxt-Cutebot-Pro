@@ -916,7 +916,7 @@ namespace Cutebot_Pro {
             Cutebot_Pro.PWMCruiseControl(speed, 0)
             while (1) {
                 getPulsenumber()
-                if (Math.abs(pulseCntL - tempcntL) >= (angle + 1) * 1200) {
+                if (Math.abs(pulseCntL - tempcntL) >= (angle + 1) * 600) {
                     Cutebot_Pro.PWMCruiseControl(0, 0)
                     break
                 }
@@ -928,7 +928,7 @@ namespace Cutebot_Pro {
             Cutebot_Pro.PWMCruiseControl(0, speed)
             while (1) {
                 getPulsenumber()
-                if (Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 1200) {
+                if (Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
                     Cutebot_Pro.PWMCruiseControl(0, 0)
                     break
                 }
