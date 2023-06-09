@@ -876,88 +876,64 @@ namespace Cutebot_Pro {
         let speed = 40
         let tempcntL = 0
         let tempcntR = 0
-
-        if (turn < 2){
-            let buf = pins.createBuffer(7)
-            buf[0] = 0x99;
-            buf[1] = 0x04;
-            buf[2] = turn;
-            buf[3] = angle;
-            buf[4] = 0x00;
-            buf[5] = 0x00;
-            buf[6] = 0x88;
-            pins.i2cWriteBuffer(i2cAddr, buf)
-            //oldtime = control.millis()
-            if (angle == Angle.angle45) {
-                /*while (1) {
-                    curtime = control.millis()
-                    if (curtime - oldtime == 1000)
-                        break
-                }*/
-                basic.pause(1100)
-            }
-            else if (angle == Angle.angle90) {
-                /*while (1) {
-                    curtime = control.millis()
-                    if (curtime - oldtime == 1400)
-                        break
-                }*/
-                basic.pause(1500)
-            }
-            else if (angle == Angle.angle135) {
-                /*while (1) {
-                    curtime = control.millis()
-                    if (curtime - oldtime == 1800)
-                        break
-                }*/
-                basic.pause(1900)
-            }
-            else {
-                /*while (1) {
-                    curtime = control.millis()
-                    if (curtime - oldtime == 2100)
-                        break
-                }*/
-                basic.pause(2200)
+    
+        Cutebot_Pro.PWMCruiseControl(0, 0)
+        if (turn == 3){
+            getPulsenumber()
+            tempcntL = pulseCntL
+            tempcntR = pulseCntR
+            Cutebot_Pro.PWMCruiseControl(speed, -speed)
+            while (1){
+                getPulsenumber()
+                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600){
+                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    break
+                }
+                /*  if (pulseCntL - tempcntL >= (angle + 1) * 300 - 60)
+                    Cutebot_Pro.StopImmediately(Wheel.LeftWheel)
+                if (pulseCntR - tempcntR >= (angle + 1) * 300 - 60)
+                    Cutebot_Pro.StopImmediately(Wheel.RightWheel)
+                if ((pulseCntL - tempcntL >= (angle + 1) * 300 - 60) && (pulseCntR - tempcntR >= (angle + 1) * 300 - 60))
+                    break*/
             }
         }
-        else{
-            Cutebot_Pro.PWMCruiseControl(0, 0)
-            if (turn == 3){
+        else if(turn == 2){
+            getPulsenumber()
+            tempcntL = pulseCntL
+            tempcntR = pulseCntR
+            Cutebot_Pro.PWMCruiseControl(-speed, speed)
+            while (1) {
                 getPulsenumber()
-                tempcntL = pulseCntL
-                tempcntR = pulseCntR
-                Cutebot_Pro.PWMCruiseControl(speed, -speed)
-                while (1){
-                    getPulsenumber()
-                    if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600){
-                        Cutebot_Pro.PWMCruiseControl(0, 0)
-                        break
-                    }
-                   /*  if (pulseCntL - tempcntL >= (angle + 1) * 300 - 60)
-                        Cutebot_Pro.StopImmediately(Wheel.LeftWheel)
-                    if (pulseCntR - tempcntR >= (angle + 1) * 300 - 60)
-                        Cutebot_Pro.StopImmediately(Wheel.RightWheel)
-                    if ((pulseCntL - tempcntL >= (angle + 1) * 300 - 60) && (pulseCntR - tempcntR >= (angle + 1) * 300 - 60))
-                        break*/
+                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
+                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    break
                 }
             }
-            else if(turn == 2){
-                getPulsenumber()
-                tempcntL = pulseCntL
-                tempcntR = pulseCntR
-                Cutebot_Pro.PWMCruiseControl(-speed, speed)
-                while (1) {
-                    getPulsenumber()
-                    if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
-                        Cutebot_Pro.PWMCruiseControl(0, 0)
-                        break
-                    }
-                }
-            }
-
         }
-        
+        else if(turn == 1){
+            getPulsenumber()
+            tempcntL = pulseCntL
+            Cutebot_Pro.PWMCruiseControl(speed, 0)
+            while (1) {
+                getPulsenumber()
+                if (Math.abs(pulseCntL - tempcntL) >= (angle + 1) * 1200) {
+                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    break
+                }
+            }
+        }
+        else if(turn == 0){
+            getPulsenumber()
+            tempcntR = pulseCntR
+            Cutebot_Pro.PWMCruiseControl(0, speed)
+            while (1) {
+                getPulsenumber()
+                if (Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 1200) {
+                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    break
+                }
+            }
+        }
     }
 
 
@@ -1094,6 +1070,7 @@ namespace Cutebot_Pro {
     /**
     * Read version number
     */
+    //% group="orther"
     //% weight=1
     //% block="Read version number"
     export function ReadVersions(): string {

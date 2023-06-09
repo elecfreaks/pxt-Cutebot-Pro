@@ -61,5 +61,6 @@
     "{id:group}HC-SR04": "超声波传感器",
     "{id:group}PIDContrl": "PID控制",
     "{id:group}IRservo": "红外线传感器",
-    "{id:group}Extendinterface": "扩展接口"
+    "{id:group}Extendinterface": "扩展接口",
+    "{id:group}orther": "其他"
 }
