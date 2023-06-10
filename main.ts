@@ -93,7 +93,9 @@ enum DistanceUnits {
     //%block="cm"
     cm = 0,
     //%block="in"
-    ft = 1
+    ft = 1,
+    //%block="angle"
+    ag = 2
 }
 
 enum Orientation {
@@ -818,8 +820,10 @@ namespace Cutebot_Pro {
 
         if (distanceUnits == DistanceUnits.cm)
             tempdistance = distance;
-        else
+        else if (distanceUnits == DistanceUnits.ft)
             tempdistance = distance * 0.3937;
+        else if (distanceUnits == DistanceUnits.ag)
+            tempdistance = distance * 51 * Math.PI / 360;
 
         buf[0] = 0x99;
         buf[1] = 0x03;
