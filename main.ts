@@ -811,7 +811,7 @@ namespace Cutebot_Pro {
      */
     //% group="PIDContrl"
     //% weight=200
-    //% block="Set up car %Orientation travel %distance %DistanceUnits"
+    //% block="Set car %Orientation travel %distance %DistanceUnits"
     export function DistanceRunning(orientation: Orientation, distance: number, distanceUnits: DistanceUnits): void {
         let buf = pins.createBuffer(7)
         let curtime = 0
@@ -862,7 +862,7 @@ namespace Cutebot_Pro {
     */
     //% group="PIDContrl"
     //% weight=170
-    //% block="Set up car advance travel %cnt blcok"
+    //% block="Set car advance travel %cnt blcok"
     export function RunBlockCnt(cnt: number): void {
         DistanceRunning(Orientation.advance, blocklength * cnt, distanceUnitsFlag)
     }
@@ -873,7 +873,7 @@ namespace Cutebot_Pro {
      */
     //% group="PIDContrl"
     //% weight=190
-    //% block="Set up car %Turn Angle %angle"
+    //% block="Set car %Turn Angle %angle"
     export function TrolleySteering(turn: Turn, angle: Angle): void {
         let curtime = 0
         let oldtime = 0
