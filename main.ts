@@ -748,7 +748,7 @@ namespace Cutebot_Pro {
      * Control the car to travel at a specific speed (speed.min=20cm/s speed.max=50cm/s)
      */
     //% group="PIDContrl"
-    //% block="Set LeftWheel Speed %speed, Set RightWheel Speed %speed %SpeedUnits"
+    //% block="Set LeftWheel Speed %speedL, Set RightWheel Speed %speedR %SpeedUnits"
     //% weight=210
     export function CruiseControl(speedL: number, speedR: number, speedUnits: SpeedUnits): void {
         let buf = pins.createBuffer(7)
