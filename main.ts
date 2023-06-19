@@ -823,7 +823,7 @@ namespace Cutebot_Pro {
         else if (distanceUnits == DistanceUnits.ft)
             tempdistance = distance * 0.3937;
         else if (distanceUnits == DistanceUnits.ag)
-            tempdistance = distance * 51 * Math.PI / 360;
+            tempdistance = distance * 17  / 360;
 
         buf[0] = 0x99;
         buf[1] = 0x03;
@@ -841,7 +841,7 @@ namespace Cutebot_Pro {
                 break
         }*/
 
-        basic.pause(distance * 1000 / 20)
+        basic.pause(tempdistance * 1000 / 20)
         basic.pause(800)
 
     }
