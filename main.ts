@@ -824,7 +824,7 @@ namespace Cutebot_Pro {
         else if (distanceUnits == DistanceUnits.ft)
             tempdistance = distance * 0.3937;
         else if (distanceUnits == DistanceUnits.ag)
-            tempdistance = distance * 17  / 360;
+            tempdistance = distance * 17 / 360;
 
         buf[0] = 0x99;
         buf[1] = 0x03;
