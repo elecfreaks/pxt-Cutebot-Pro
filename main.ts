@@ -1078,7 +1078,7 @@ namespace Cutebot_Pro {
     /**
     * TODO: Read version number
     */
-    //% group="orther"
+    //% group="other"
     //% weight=1
     //% block="read version number"
     export function ReadVersions(): string {

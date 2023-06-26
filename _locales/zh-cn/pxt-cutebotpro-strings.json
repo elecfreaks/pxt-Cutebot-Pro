@@ -65,5 +65,5 @@
     "{id:group}PIDContrl": "PID控制",
     "{id:group}IRservo": "红外线传感器",
     "{id:group}Extendinterface": "扩展接口",
-    "{id:group}orther": "其他"
+    "{id:group}other": "其他"
 }
