@@ -16,11 +16,11 @@ enum CutebotProPIN {
 
 enum CutebotProWheel {
     //%block="left wheel"
-    leftwheel = 1,
+    LeftWheel = 1,
     //%block="right wheel"
-    rightwheel = 2,
-    //%block="all wheels"
-    allwheel = 3
+    RightWheel = 2,
+    //%block="all wheel"
+    AllWheel = 3
 }
 
 
@@ -92,49 +92,49 @@ enum CutebotProPID {
 
 enum CutebotProDistanceUnits {
     //%block="cm"
-    cm = 0,
+    Cm = 0,
     //%block="inch"
-    ft = 1,
+    Ft = 1,
     //%block="angle"
-    ag = 2
+    Angle = 2
 }
 
 enum CutebotProOrientation {
-    //%block="forward"
-    advance = 1,
+    //%block="advance"
+    Advance = 1,
     //%block="reverse"
-    retreat = 0
+    Retreat = 0
 }
 
 
 enum CutebotProSpeedUnits {
     //%block="cm/s"
-    cms = 0,
+    Cms = 0,
     //%block="inch/s"
-    ins = 1
+    Ins = 1
 }
 
 enum CutebotProTurn {
     //%block="turn left"
-    turnLeft = 0,
+    Left = 0,
     //%block="turn right"
-    turnRight = 1,
+    Right = 1,
     //%block="turn left at place"
-    turnLeftInPlace = 2,
+    LeftInPlace = 2,
     //%block="turn right at place"
-    turnRightInPlace = 3
+    RightInPlace = 3
     
 }
 
 enum CutebotProAngle {
     //%block="45°"
-    angle45 = 0,
+    Angle45 = 0,
     //%block="90°"
-    angle90 = 1,
+    Angle90 = 1,
     //%block="135°"
-    angle135 = 2,
+    Angle135 = 2,
     //%block="180°"
-    angle180 = 3
+    Angle180 = 3
 }
 
 
@@ -200,34 +200,34 @@ enum ServoType {
     //% block="270°"
     Servo270 = 2,
     //% block="360°"
-    Servo360 = 3,
+    Servo360 = 3
 }
 
 enum SonarUnit {
     //% block="cm"
     Centimeters,
-    //% block="inch"
+    //% block="inches"
     Inches
 }
 
-enum IRButtons {
-    //% blcok="Menu"
+enum CutbotProIRButtons {
+    //% block="menu"
     Menu = 2,
-    //% blcok="Up"
+    //% block="up"
     Up = 5,
-    //% blcok="Left"
+    //% block="left"
     Left = 8,
-    //% blcok="Right"
+    //% block="right"
     Right = 10,
-    //% blcok="Down"
+    //% block="down"
     Down = 13,
-    //% blcok="OK"
+    //% block="ok"
     OK = 9,
-    //% blcok="Plus"
+    //% block="plus"
     Plus = 4,
-    //% blcok="Minus"
+    //% block="minus"
     Minus = 12,
-    //% blcok="Back"
+    //% block="back"
     Back = 6,
     //% block="0"
     Zero = 14,
@@ -260,7 +260,7 @@ let fourWayStateValue = 0
 let pulseCntL = 0
 let pulseCntR = 0
 //% weight=100  color=#008C8C   block="Cutebot Pro" icon="\uf48b"
-namespace Cutebot_Pro {
+namespace CutebotPro {
     let irstate: number;
     let state: number;
     let i2cAddr: number = 0x10;
@@ -288,13 +288,13 @@ namespace Cutebot_Pro {
     }*/
 
     /**
-         * TODO: PWM control the car to travel at a specific speed
+         * PWM control the car to travel at a specific speed
          */
     //% group="Basic control"
-    //% block="Set the speed of left wheel at %speedL, set the speed of right wheel at %speedR"
+    //% block="set the speed of left wheel at %speedL, set the speed of right wheel at %speedR"
     //% speed.min=-100 speed.max=100
     //% weight=340
-    export function PWMCruiseControl(speedL: number, speedR: number): void {
+    export function pwmCruiseControl(speedL: number, speedR: number): void {
         let i2cBuffer = pins.createBuffer(7)
         
         if (speedL == 0)
@@ -314,7 +314,7 @@ namespace Cutebot_Pro {
         if (speedL > 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
-            i2cBuffer[2] = CutebotProWheel.leftwheel;
+            i2cBuffer[2] = CutebotProWheel.LeftWheel;
             i2cBuffer[3] = 0x01;
             i2cBuffer[4] = speedL;
             i2cBuffer[5] = 0x00;
@@ -323,7 +323,7 @@ namespace Cutebot_Pro {
         else {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
-            i2cBuffer[2] = CutebotProWheel.leftwheel;
+            i2cBuffer[2] = CutebotProWheel.LeftWheel;
             i2cBuffer[3] = 0x00;
             i2cBuffer[4] = -speedL;
             i2cBuffer[5] = 0x00;
@@ -334,7 +334,7 @@ namespace Cutebot_Pro {
         if (speedR > 0) {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
-            i2cBuffer[2] = CutebotProWheel.rightwheel;
+            i2cBuffer[2] = CutebotProWheel.RightWheel;
             i2cBuffer[3] = 0x01;
             i2cBuffer[4] = speedR;
             i2cBuffer[5] = 0x00;
@@ -343,7 +343,7 @@ namespace Cutebot_Pro {
         else {
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x01;
-            i2cBuffer[2] = CutebotProWheel.rightwheel;
+            i2cBuffer[2] = CutebotProWheel.RightWheel;
             i2cBuffer[3] = 0x00;
             i2cBuffer[4] = -speedR;
             i2cBuffer[5] = 0x00;
@@ -353,12 +353,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Full speed forward
+     * full speed forward
      */
     //% group="Basic control"
     //% weight=360
-    //%block="Full speed forward"
-    export function FullSpeedAhead(): void {
+    //%block="full speed forward"
+    export function fullSpeedAhead(): void {
         let buf = pins.createBuffer(7);
         buf[0] = 0x99;
         buf[1] = 0x07;
@@ -371,12 +371,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Full speed reverse
+     * full speed reverse
      */
     //% group="Basic control"
     //% weight=350
-    //%block="Full speed reverse"
-    export function FullAstern(): void {
+    //%block="full speed reverse"
+    export function fullAstern(): void {
         let buf = pins.createBuffer(7);
         buf[0] = 0x99;
         buf[1] = 0x08;
@@ -389,12 +389,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Stop immediately
+     * stop immediately
      */
     //% group="Basic control"
     //% weight=330
-    //%block="Set %CutebotProWheel to stop immediately"
-    export function StopImmediately(wheel: CutebotProWheel): void {
+    //%block="set %CutebotProMotors to stop immediately"
+    export function stopImmediately(wheel: CutebotProMotors): void {
         let buf = pins.createBuffer(7);
         buf[0] = 0x99;
         buf[1] = 0x09;
@@ -410,11 +410,11 @@ namespace Cutebot_Pro {
 
 
     /**
-     * TODO: Read motor speed
+     * read motor speed
      */
     //% group="Basic control"
     //% weight=320
-    //%block="Get the speed of %CutebotProMotors1"
+    //%block="get the speed of %CutebotProMotors1"
     export function readSpeed(motor: CutebotProMotors1): number {
         let speed: number
         let buf = pins.createBuffer(7)
@@ -446,7 +446,7 @@ namespace Cutebot_Pro {
     /**
     * 获取编码电机的脉冲数
     */
-    export function getPulsenumber(): void {
+    export function pulseNumber(): void {
         let pulsenumberbuf = pins.createBuffer(10);
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
@@ -477,11 +477,11 @@ namespace Cutebot_Pro {
             pulseCntR = -pulseCntR
     }
 
-    /**    测试--获取两边车轮的编码电机产生的脉冲的数量
-     * TODO: Read pulse cnt
+    /**    
+     * obtain the number of pulses produced by the coded motor on both sides of the wheel
     */
     export function readPulsenumberTest(motor: CutebotProMotors1): number {
-        getPulsenumber()
+        pulseNumber()
         if (motor == 1)
             return pulseCntL;
         else if (motor == 2)
@@ -491,14 +491,14 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Get the rotation degrees of wheel
+    * get the rotation degrees of wheel
     */
     //% group="Basic control"
     //% weight=310
-    //%block="Get the rotation degrees of %CutebotProMotors1"
-    export function readdistance(motor: CutebotProMotors1): number {
+    //%block="get the rotation degrees of %CutebotProMotors1"
+    export function readDistance(motor: CutebotProMotors1): number {
         let cylinderNumber: number;
-        getPulsenumber()
+        pulseNumber()
         if (motor == 1)
             return Math.floor( pulseCntL * 360 / 1400 );
         else
@@ -509,12 +509,12 @@ namespace Cutebot_Pro {
     
 
     /**
-     * TODO: Clear the rotation degrees of wheel
+     * clear the rotation degrees of wheel
      */
     //% group="Basic control"
     //% weight=300
-    //%block="Clear the rotation degrees of %CutebotProMotors1"
-    export function ClearWheelTurn(motor: CutebotProMotors1): void {
+    //%block="clear the rotation degrees of %CutebotProMotors1"
+    export function clearWheelTurn(motor: CutebotProMotors1): void {
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x0A;
@@ -528,19 +528,19 @@ namespace Cutebot_Pro {
 
 
     /**
-    * TODO: Select a headlights and set the RGB color.
+    * select a headlights and set the RGB color.
     * @param R R color value of RGB color, eg: 0
     * @param G G color value of RGB color, eg: 128
     * @param B B color value of RGB color, eg: 255
     */
     //% group="LED headlights"
     //% inlineInputMode=inline
-    //% blockId=RGB block="Set the color of the headlights %RGBLight as R:%r G:%g B:%b"
+    //% blockId=RGB block="set the color of the headlights %RGBLight as R:%r G:%g B:%b"
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
     //% weight=280
-    export function singleheadlights(light: RGBLight, r: number, g: number, b: number): void {
+    export function singleHeadlights(light: RGBLight, r: number, g: number, b: number): void {
         let buf = pins.createBuffer(7);
         if (light == 3) {
             buf[0] = 0x99;
@@ -572,10 +572,10 @@ namespace Cutebot_Pro {
 
 
     /**
-    * TODO: Set LED headlights.
+    * set LED headlights.
     */
     //% group="LED headlights"
-    //% block="Set the color of %RGBLight as $color"
+    //% block="set the color of %RGBLight as $color"
     //% color.shadow="colorNumberPicker"
     //% weight=290
     export function colorLight(light: RGBLight, color: number) {
@@ -596,12 +596,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Turn off all the LED lights
+    * turn off all the LED lights
     */
     //% group="LED headlights"
-    //% block="Turn off all the LED lights"
+    //% block="turn off all the LED lights"
     //% weight=270
-    export function TurnOffAllHeadlights(): void {
+    export function turnOffAllHeadlights(): void {
         let buf = pins.createBuffer(7);
         buf[0] = 0x99;
         buf[1] = 0x10;
@@ -614,12 +614,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Get a status value of the 4-way line following sensor
+    * get a status value of the 4-way line following sensor
     */
     //% group="4-way line following sensor "
     //% weight=270
-    //% block="Get a status value of the 4-way line following sensor"
-    export function Trackbit_get_state_value() {
+    //% block="get a status value of the 4-way line following sensor"
+    export function trackbitStateValue() {
         let i2cBuffer = pins.createBuffer(7);
         i2cBuffer[0] = 0x99;
         i2cBuffer[1] = 0x12;
@@ -634,11 +634,11 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: The 4-way line following sensor offset
+    * 4-way line following sensor offset
     */
     //% group="4-way line following sensor "
     //% weight=250
-    //%block="The 4-way line following sensor offset"
+    //%block="4-way line following sensor offset"
     export function getOffset(): number {
         let offset: number;
         let i2cBuffer = pins.createBuffer(7);
@@ -668,22 +668,22 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Get Grayscale Sensor State
+    * get Grayscale Sensor State
     */
     //% group="4-way line following sensor "
     //% weight=260
-    //%block="The 4-way line following sensor recognizes %TrackbitStateType"
+    //%block="4-way line following sensor recognizes %TrackbitStateType"
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
         return fourWayStateValue == state
     }
     
     /**
-    * TODO: Check whether the channel is online
+    * check whether the channel is online
     */
     //% group="4-way line following sensor "
     //% weight=240
-    //% block="The 4-way line following sensor channel %TrackbitChannel recognizes %TrackbitType"
-    export function TrackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
+    //% block="4-way line following sensor channel %TrackbitChannel recognizes %TrackbitType"
+    export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (state == TrackbitType.State_1)
             if (fourWayStateValue & (1 << (channel - 1))) {
                 return true
@@ -702,12 +702,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Get gray value.The range is from 0 to 255.
+    * get gray value.The range is from 0 to 255.
     */
     //% group="4-way line following sensor "
     //% weight=230
-    //% block="The 4-way line following sensor channel %TrackbitChannel gray value"
-    export function TrackbitgetGray(channel: TrackbitChannel): number {
+    //% block="4-way line following sensor channel %TrackbitChannel gray value"
+    export function trackbitgetGray(channel: TrackbitChannel): number {
         let i2cBuffer = pins.createBuffer(7);
         i2cBuffer[0] = 0x99;
         i2cBuffer[1] = 0x11;
@@ -721,11 +721,11 @@ namespace Cutebot_Pro {
     }
 
     /**
-      * TODO: Cars can extend the ultrasonic function to prevent collisions and other functions..
+      * cars can extend the ultrasonic function to prevent collisions and other functions..
       * @param Sonarunit two states of ultrasonic module, eg: Centimeters
       */
     //% group="Ultrasonic sensor"
-    //% blockId=ultrasonic block="Return the distance value %unit from HC-SR04 ultrasonic sensor"
+    //% blockId=ultrasonic block="return the distance value %SonarUnit from HC-SR04 ultrasonic sensor"
     //% weight=220
     export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
         // send pulse
@@ -748,17 +748,17 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Control the car to travel at a specific speed (speed.min=20cm/s speed.max=50cm/s)
+     * control the car to travel at a specific speed (speed.min=20cm/s speed.max=50cm/s)
      */
     //% group="PID Control"
-    //% block="Set the left wheel speed at %speedL, right wheel speed at %speedR %CutebotProSpeedUnits"
+    //% block="set the left wheel speed at %speedL, right wheel speed at %speedR %CutebotProSpeedUnits"
     //% weight=210
-    export function CruiseControl(speedL: number, speedR: number, speedUnits: CutebotProSpeedUnits): void {
+    export function cruiseControl(speedL: number, speedR: number, speedUnits: CutebotProSpeedUnits): void {
         let buf = pins.createBuffer(7)
         let orientationL = 0
         let orientationR = 0
 
-        if (speedUnits == CutebotProSpeedUnits.cms){
+        if (speedUnits == CutebotProSpeedUnits.Cms){
             speedL = speedL;
             speedR = speedR;
         }
@@ -769,16 +769,16 @@ namespace Cutebot_Pro {
             
         if(speedL < 0){
             speedL = -speedL
-            orientationL = CutebotProOrientation.retreat
+            orientationL = CutebotProOrientation.Retreat
         }else{
-            orientationL = CutebotProOrientation.advance
+            orientationL = CutebotProOrientation.Advance
         }
 
         if (speedR < 0) {
             speedR = -speedR
-            orientationR = CutebotProOrientation.retreat
+            orientationR = CutebotProOrientation.Retreat
         }else{
-            orientationR = CutebotProOrientation.advance
+            orientationR = CutebotProOrientation.Advance
         }
 
         if (speedL > 50)
@@ -793,7 +793,7 @@ namespace Cutebot_Pro {
 
         buf[0] = 0x99;
         buf[1] = 0x02;
-        buf[2] = CutebotProWheel.leftwheel;
+        buf[2] = CutebotProWheel.LeftWheel;
         buf[3] = speedL;
         buf[4] = orientationL;
         buf[5] = 0x00;
@@ -801,7 +801,7 @@ namespace Cutebot_Pro {
         pins.i2cWriteBuffer(i2cAddr, buf)
         buf[0] = 0x99;
         buf[1] = 0x02;
-        buf[2] = CutebotProWheel.rightwheel;
+        buf[2] = CutebotProWheel.RightWheel;
         buf[3] = speedR;
         buf[4] = orientationR;
         buf[5] = 0x00;
@@ -810,22 +810,22 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Set the car to travel a specific distance(distance.max=255cm, distance.min=0cm)
+     * set the car to travel a specific distance(distance.max=255cm, distance.min=0cm)
      */
     //% group="PID Control"
     //% weight=200
-    //% block="Set the cart %CutebotProOrientation for %distance %CutebotProDistanceUnits"
-    export function DistanceRunning(orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
+    //% block="set the cart %CutebotProOrientation for %distance %CutebotProDistanceUnits"
+    export function distanceRunning(orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
         let buf = pins.createBuffer(7)
         let curtime = 0
         let oldtime = 0
         let tempdistance = 0
 
-        if (distanceUnits == CutebotProDistanceUnits.cm)
+        if (distanceUnits == CutebotProDistanceUnits.Cm)
             tempdistance = distance;
-        else if (distanceUnits == CutebotProDistanceUnits.ft)
+        else if (distanceUnits == CutebotProDistanceUnits.Ft)
             tempdistance = distance * 0.3937;
-        else if (distanceUnits == CutebotProDistanceUnits.ag)
+        else if (distanceUnits == CutebotProDistanceUnits.Angle)
             tempdistance = distance * 17 / 360;
 
         buf[0] = 0x99;
@@ -850,50 +850,50 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Set block length
+    * set block length
     */
     //% group="PID Control"
     //% weight=180
-    //% block="Set the length of the blocks as %length %CutebotProDistanceUnits"
-    export function SetBlockCnt(length: number, distanceUnits: CutebotProDistanceUnits): void {
+    //% block="set the length of the blocks as %length %CutebotProDistanceUnits"
+    export function setBlockCnt(length: number, distanceUnits: CutebotProDistanceUnits): void {
         blocklength = length
         distanceUnitsFlag = distanceUnits
     }
 
     /**
-    * TODO: Run a specific number of blcok
+    * run a specific number of blcok
     */
     //% group="PID Control"
     //% weight=170
-    //% block="Set the cart forward %cnt blcoks"
-    export function RunBlockCnt(cnt: number): void {
-        DistanceRunning(CutebotProOrientation.advance, blocklength * cnt, distanceUnitsFlag)
+    //% block="set the cart forward %cnt blcoks"
+    export function runBlockCnt(cnt: number): void {
+        distanceRunning(CutebotProOrientation.Advance, blocklength * cnt, distanceUnitsFlag)
     }
 
 
     /**
-     * TODO: Set the trolley to rotate at a specific Angle
+     * set the trolley to rotate at a specific Angle
      */
     //% group="PID Control"
     //% weight=190
-    //% block="Set the cart %CutebotProTurn for angle %CutebotProAngle"
-    export function TrolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
+    //% block="set the cart %CutebotProTurn for angle %CutebotProAngle"
+    export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
         let curtime = 0
         let oldtime = 0
         let speed = 40
         let tempcntL = 0
         let tempcntR = 0
     
-        Cutebot_Pro.PWMCruiseControl(0, 0)
+        pwmCruiseControl(0, 0)
         if (turn == 3){
-            getPulsenumber()
+            pulseNumber()
             tempcntL = pulseCntL
             tempcntR = pulseCntR
-            Cutebot_Pro.PWMCruiseControl(speed, -speed)
+            pwmCruiseControl(speed, -speed)
             while (1){
-                getPulsenumber()
+                pulseNumber()
                 if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600){
-                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    pwmCruiseControl(0, 0)
                     break
                 }
                 /*  if (pulseCntL - tempcntL >= (angle + 1) * 300 - 60)
@@ -905,38 +905,38 @@ namespace Cutebot_Pro {
             }
         }
         else if(turn == 2){
-            getPulsenumber()
+            pulseNumber()
             tempcntL = pulseCntL
             tempcntR = pulseCntR
-            Cutebot_Pro.PWMCruiseControl(-speed, speed)
+            pwmCruiseControl(-speed, speed)
             while (1) {
-                getPulsenumber()
+                pulseNumber()
                 if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
-                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    pwmCruiseControl(0, 0)
                     break
                 }
             }
         }
         else if(turn == 1){
-            getPulsenumber()
+            pulseNumber()
             tempcntL = pulseCntL
-            Cutebot_Pro.PWMCruiseControl(speed, 0)
+            pwmCruiseControl(speed, 0)
             while (1) {
-                getPulsenumber()
+                pulseNumber()
                 if (Math.abs(pulseCntL - tempcntL) >= (angle + 1) * 600) {
-                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    pwmCruiseControl(0, 0)
                     break
                 }
             }
         }
         else if(turn == 0){
-            getPulsenumber()
+            pulseNumber()
             tempcntR = pulseCntR
-            Cutebot_Pro.PWMCruiseControl(0, speed)
+            pwmCruiseControl(0, speed)
             while (1) {
-                getPulsenumber()
+                pulseNumber()
                 if (Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
-                    Cutebot_Pro.PWMCruiseControl(0, 0)
+                    pwmCruiseControl(0, 0)
                     break
                 }
             }
@@ -952,8 +952,8 @@ namespace Cutebot_Pro {
 
     //% group="Infrared sensor"
     //% weight=160
-    //% block="When receiving infrared signals"
-    export function IR_callback(handler: () => void) {
+    //% block="when receiving infrared signals"
+    export function irCallback(handler: () => void) {
         pins.setPull(DigitalPin.P16, PinPullMode.PullUp)
         control.onEvent(98, 3500, handler)
         control.inBackground(() => {
@@ -968,12 +968,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Get IR value
+     * get IR value
      */
     //% group="Infrared sensor"
-    //% block="While pressing infrared button %Button"
+    //% block="while pressing infrared button %Button"
     //% weight=150
-    export function IR_Button(Button: IRButtons): boolean {
+    export function irButton(Button: CutbotProIRButtons): boolean {
         return (IR_Val & 0x00ff) == Button
     }
 
@@ -987,12 +987,12 @@ namespace Cutebot_Pro {
 
 
     /**
-     * TODO: Servo control module
+     * servo control module
      */
     //% group="Expansion port"
     //% weight=120
-    //% block="Set %ServoType servo Sequence %CutebotProServoIndex Angel %angle"
-    export function ExtendServoControl(servotype: ServoType, index: CutebotProServoIndex, angle: number): void {
+    //% block="set %ServoType servo sequence %CutebotProServoIndex angel %angle"
+    export function extendServoControl(servotype: ServoType, index: CutebotProServoIndex, angle: number): void {
         let angleMap: number
         if (servotype == 1) {
             angleMap = Math.map(angle, 0, 180, 0, 180);
@@ -1018,26 +1018,26 @@ namespace Cutebot_Pro {
     }
 
     /**
-     * TODO: Continuous servo control
+     * continuous servo control
      */
     //% group="Expansion port"
     //% weight=110
-    //% block="Set continuous servo %ServoIndex speed at %speed"
-    export function ContinuousServoControl(index: CutebotProServoIndex, speed: number): void {
+    //% block="set continuous servo %CutebotProServoIndex speed at %speed"
+    export function continuousServoControl(index: CutebotProServoIndex, speed: number): void {
         speed = Math.map(speed, -100, 100, 0, 180)
-        ExtendServoControl(ServoType.Servo180, index, speed)
+        extendServoControl(ServoType.Servo180, index, speed)
     }
 
 
 
     /**
-     * TODO: Motor control module
+     * motor control module
      */
     //% group="Expansion port"
     //% weight=140
-    //% block="Set the speed of the expansion motor at %speed"
+    //% block="set the speed of the expansion motor at %speed"
     //% speed.min=-100  speed.max=100
-    export function ExtendMotorControl(speed: number): void {
+    export function extendMotorControl(speed: number): void {
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x0B;
@@ -1058,12 +1058,12 @@ namespace Cutebot_Pro {
 
 
     /**
-     * TODO: Extend motor stop
+     * extend motor stop
      */
     //% group="Expansion port"
     //% weight=130
-    //% block="Stop the expansion motor"
-    export function ExtendMotorStop(): void {
+    //% block="stop the expansion motor"
+    export function extendMotorStop(): void {
         let buf = pins.createBuffer(7)
         buf[0] = 0x99;
         buf[1] = 0x0C;
@@ -1076,12 +1076,12 @@ namespace Cutebot_Pro {
     }
 
     /**
-    * TODO: Read version number
+    * read version number
     */
     //% group="Others"
     //% weight=1
-    //% block="Get the version number"
-    export function ReadVersions(): string {
+    //% block="version number"
+    export function readVersions(): string {
         let cutebotProVersionsInteger: number = 0;
         let cutebotProVersionsDecimal: number = 0;
 
