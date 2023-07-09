@@ -14,16 +14,13 @@ CutebotPro.irCallback(function () {
 input.onButtonPressed(Button.A, function () {
     i += 1
     if (i == 1) {
-        strip.showColor(neopixel.colors(NeoPixelColors.Red))
-        CutebotPro.colorLight(RGBLight.RGBA, 0xff0000)
+        CutebotPro.colorLight(CutebotProRGBLight.RGBA, 0xff0000)
     }
     if (i == 2) {
-        strip.showColor(neopixel.colors(NeoPixelColors.Green))
-        CutebotPro.colorLight(RGBLight.RGBA, 0x00ff00)
+        CutebotPro.colorLight(CutebotProRGBLight.RGBA, 0x00ff00)
     }
     if (i == 3) {
-        strip.showColor(neopixel.colors(NeoPixelColors.Blue))
-        CutebotPro.colorLight(RGBLight.RGBA, 0x0000ff)
+        CutebotPro.colorLight(CutebotProRGBLight.RGBA, 0x0000ff)
         i = 0
     }
 })
@@ -58,7 +55,6 @@ input.onButtonPressed(Button.B, function () {
 let j = 0
 let i = 0
 let k = 0
-let strip: neopixel.Strip = null
 music.setBuiltInSpeakerEnabled(false)
 basic.pause(100)
 CutebotPro.extendServoControl(ServoType.Servo180, CutebotProServoIndex.S1, 0)
@@ -71,7 +67,7 @@ CutebotPro.extendServoControl(ServoType.Servo180, CutebotProServoIndex.S2, 180)
 CutebotPro.extendServoControl(ServoType.Servo180, CutebotProServoIndex.S3, 180)
 CutebotPro.extendServoControl(ServoType.Servo180, CutebotProServoIndex.S4, 180)
 basic.pause(500)
-strip = neopixel.create(DigitalPin.P15, 2, NeoPixelMode.RGB)
+
 k = 0
 i = 0
 j = 0

@@ -58,7 +58,7 @@ enum CutebotProServoIndex {
     S4 = 4
 }
 
-enum RGBLight {
+enum CutebotProRGBLight {
     //%block="left RGB"
     RGBL = 2,
     //%block="right RGB"
@@ -105,7 +105,7 @@ enum CutebotProAngleUnits{
 }
 
 enum CutebotProOrientation {
-    //%block="advance"
+    //%block="forward"
     Advance = 1,
     //%block="reverse"
     Retreat = 0
@@ -549,12 +549,12 @@ namespace CutebotPro {
     */
     //% group="LED headlights"
     //% inlineInputMode=inline
-    //% blockId=RGB block="set LED headlights %RGBLight color to R:%r G:%g B:%b"
+    //% blockId=RGB block="set LED headlights %CutebotProRGBLight color to R:%r G:%g B:%b"
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
     //% weight=280
-    export function singleHeadlights(light: RGBLight, r: number, g: number, b: number): void {
+    export function singleHeadlights(light: CutebotProRGBLight, r: number, g: number, b: number): void {
         let buf = pins.createBuffer(7);
         if (light == 3) {
             buf[0] = 0x99;
@@ -589,10 +589,10 @@ namespace CutebotPro {
     * set LED headlights.
     */
     //% group="LED headlights"
-    //% block="set LED headlights %RGBLight color to $color"
+    //% block="set LED headlights %CutebotProRGBLight color to $color"
     //% color.shadow="colorNumberPicker"
     //% weight=290
-    export function colorLight(light: RGBLight, color: number) {
+    export function colorLight(light: CutebotProRGBLight, color: number) {
         let r: number, g: number, b: number = 0
         let buf = pins.createBuffer(7)
         r = color >> 16
