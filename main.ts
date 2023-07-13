@@ -484,11 +484,15 @@ namespace CutebotPro {
         pulseCntR = (pulsenumberbuf[4] << 24) | (pulsenumberbuf[5] << 16) | (pulsenumberbuf[6] << 8) | pulsenumberbuf[7]
 
         pulsenumberbuf[8] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        if (pulsenumberbuf[8] == 1)
+        if (pulsenumberbuf[8] == 1){
             pulseCntL = -pulseCntL
+        }
+            
         pulsenumberbuf[9] = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        if (pulsenumberbuf[9] == 1)
+        if (pulsenumberbuf[9] == 1){
             pulseCntR = -pulseCntR
+        }
+            
     }
 
     /**    
@@ -869,37 +873,150 @@ namespace CutebotPro {
     //% weight=200
     //% block="set %CutebotProWheel rotation %angle %CutebotProAngleUnits"
     export function angleRunning(orientation: CutebotProWheel, angle: number, angleUnits: CutebotProAngleUnits): void {
-        let buf = pins.createBuffer(7)
-        let curtime = 0
-        let oldtime = 0
-        let tempangle = 0
-        pwmCruiseControl(0, 0)
-        if (angleUnits == CutebotProAngleUnits.Angle)
-            tempangle = angle * 17 / 360;
-        else if (angleUnits == CutebotProAngleUnits.Circle)
-            tempangle = angle * 17;
+        let D_Value = 0
+        let I_Value = 0
+        let P_Value = 0
+        let temp = 0
+        let curvalue = 0
+        let expect = 0
+        let value = 0
+        let Derr = 0
+        let Ierr = 0
+        let Perr = 0
+        let prev = 0
+        let curerr = 0
+        let D = 0
+        let I = 0
+        let P = 0
 
-        while(1)
+        P = 1.188
+        I = 0.5
+        D = 4.43
+        curerr = 0
+        prev = 0
+        Perr = 0
+        Ierr = 0
+        Derr = 0
+        value = 0
+
+        if (angleUnits == CutebotProAngleUnits.Angle)
+            expect = angle
+        else
+            expect = angle * 360
+
+        if (angle >= 0)
         {
-            pulseNumber()
-            if (orientation == CutebotProWheel.LeftWheel){
-                pwmCruiseControl(30, 0)
-                if (tempangle == pulseCntL * 360 / 1400)
-                    break 
+            if (orientation == CutebotProWheel.LeftWheel)
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M1)
+            else
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+
+            temp = curvalue + expect
+            while (true) {
+                if (orientation == CutebotProWheel.LeftWheel)
+                    curvalue = CutebotPro.readDistance(CutebotProMotors1.M1)
+                else
+                    curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+
+                curerr = temp - curvalue
+                Perr = curerr
+                Derr = curerr - prev
+                Ierr = curerr + Ierr
+                P_Value = P * Perr
+                if (P_Value >= 25) {
+                    P_Value = 25
+                }
+                I_Value = I * Ierr
+                if (I_Value > 18) {
+                    I_Value = 18
+                }
+                D_Value = D * Derr
+                if (D_Value > 40) {
+                    D_Value = 40
+                }
+                value = P_Value + (I_Value + D_Value)
+                if (curerr <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    value = 0
+                    break;
+                }
+                if (value > 40) {
+                    value = 40
+                }
+                if (value < 10) {
+                    value = 0
+                }
+
+                if (orientation == CutebotProWheel.LeftWheel)
+                    CutebotPro.pwmCruiseControl(value, 0)
+                else if (orientation == CutebotProWheel.RightWheel)
+                    CutebotPro.pwmCruiseControl(0, value)
+                else
+                    CutebotPro.pwmCruiseControl(value, value)
+
+                prev = curerr
+                basic.pause(10)
             }
-            else if(orientation == CutebotProWheel.RightWheel){
-                pwmCruiseControl(0, 30)
-                if (tempangle == pulseCntR * 360 / 1400)
-                    break
+            CutebotPro.pwmCruiseControl(0, 0)
+        }
+        else{
+            if (orientation == CutebotProWheel.LeftWheel)
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M1)
+            else
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+
+            temp = curvalue
+            while (true) {
+                if (orientation == CutebotProWheel.LeftWheel)
+                    curvalue = CutebotPro.readDistance(CutebotProMotors1.M1)
+                else
+                    curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+
+                curerr = Math.abs(expect) - Math.abs(curvalue - temp)
+                Perr = curerr
+                Derr = curerr - prev
+                Ierr = curerr + Ierr
+                P_Value = P * Perr
+                if (P_Value >= 25) {
+                    P_Value = 25
+                }
+                I_Value = I * Ierr
+                if (I_Value > 18) {
+                    I_Value = 18
+                }
+                D_Value = D * Derr
+                if (D_Value > 40) {
+                    D_Value = 40
+                }
+                value = P_Value + (I_Value + D_Value)
+                if (curerr <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    value = 0
+                    break;
+                }
+                if (value > 40) {
+                    value = 40
+                }
+                if (value < 10) {
+                    value = 0
+                }
+
+                if (orientation == CutebotProWheel.LeftWheel)
+                    CutebotPro.pwmCruiseControl(-value, 0)
+                else if (orientation == CutebotProWheel.RightWheel)
+                    CutebotPro.pwmCruiseControl(0, -value)
+                else
+                    CutebotPro.pwmCruiseControl(-value, -value)
+
+                prev = curerr
+                basic.pause(10)
             }
-            else{
-                pwmCruiseControl(30, 30)
-                if ((tempangle == pulseCntR * 360 / 1400) && (tempangle == pulseCntL * 360 / 1400))
-                    break
-            }
+            CutebotPro.pwmCruiseControl(0, 0)
 
         }
-        pwmCruiseControl(0, 0)
+        
+       
+
         return
     }
 
@@ -932,12 +1049,124 @@ namespace CutebotPro {
     //% weight=190
     //% block="set car %CutebotProTurn for angle %CutebotProAngle"
     export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
-        let curtime = 0
-        let oldtime = 0
-        let speed = 40
-        let tempcntL = 0
-        let tempcntR = 0
-    
+        let D_Value = 0
+        let I_Value = 0
+        let P_Value = 0
+        let temp = 0
+        let curvalue = 0
+        let expect = 0
+        let value = 0
+        let Derr = 0
+        let Ierr = 0
+        let Perr = 0
+        let prev = 0
+        let curerr = 0
+        let D = 0
+        let I = 0
+        let P = 0
+
+        P = 1.188
+        I = 0.5
+        D = 4.43
+        curerr = 0
+        prev = 0
+        Perr = 0
+        Ierr = 0
+        Derr = 0
+        value = 0
+
+        if (turn == CutebotProTurn.Left) {
+            angleRunning(CutebotProWheel.RightWheel, ((angle + 1) * 150 + 2), CutebotProAngleUnits.Angle)
+        }
+        else if (turn == CutebotProTurn.Right) {
+            angleRunning(CutebotProWheel.LeftWheel, ((angle + 1) * 150 + 2), CutebotProAngleUnits.Angle)
+        }
+        else if (turn == CutebotProTurn.LeftInPlace) {
+            
+            expect = ((angle + 1) * 76)
+            curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+            temp = curvalue
+            while (true) {
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+                curerr = Math.abs(expect) - Math.abs(curvalue - temp)
+                Perr = curerr
+                Derr = curerr - prev
+                Ierr = curerr + Ierr
+                P_Value = P * Perr
+                if (P_Value >= 25) {
+                    P_Value = 25
+                }
+                I_Value = I * Ierr
+                if (I_Value > 18) {
+                    I_Value = 18
+                }
+                D_Value = D * Derr
+                if (D_Value > 40) {
+                    D_Value = 40
+                }
+                value = P_Value + (I_Value + D_Value)
+                if (curerr <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    value = 0
+                    break;
+                }
+                if (value > 40) {
+                    value = 40
+                }
+                if (value < 10) {
+                    value = 0
+                }
+                CutebotPro.pwmCruiseControl(-value, value)
+
+                prev = curerr
+                basic.pause(10)
+            }
+            CutebotPro.pwmCruiseControl(0, 0)
+        }
+        else if (turn == CutebotProTurn.RightInPlace) {
+            expect = ((angle + 1) * 76)
+            curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+            temp = curvalue
+            while (true) {
+                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
+                curerr = Math.abs(expect) - Math.abs(curvalue - temp)
+                Perr = curerr
+                Derr = curerr - prev
+                Ierr = curerr + Ierr
+                P_Value = P * Perr
+                if (P_Value >= 25) {
+                    P_Value = 25
+                }
+                I_Value = I * Ierr
+                if (I_Value > 18) {
+                    I_Value = 18
+                }
+                D_Value = D * Derr
+                if (D_Value > 40) {
+                    D_Value = 40
+                }
+                value = P_Value + (I_Value + D_Value)
+                if (curerr <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    value = 0
+                    break;
+                }
+                if (value > 40) {
+                    value = 40
+                }
+                if (value < 10) {
+                    value = 0
+                }
+                CutebotPro.pwmCruiseControl(value, -value)
+
+                prev = curerr
+                basic.pause(10)
+            }
+            CutebotPro.pwmCruiseControl(0, 0)
+        }
+
+        /*temp = radius * 2 * 1400 * (angle + 1) / (8 * 51)
+
         pwmCruiseControl(0, 0)
         if (turn == 3){
             pulseNumber()
@@ -946,16 +1175,10 @@ namespace CutebotPro {
             pwmCruiseControl(speed, -speed)
             while (1){
                 pulseNumber()
-                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600){
+                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= temp){
                     pwmCruiseControl(0, 0)
                     break
                 }
-                /*  if (pulseCntL - tempcntL >= (angle + 1) * 300 - 60)
-                    Cutebot_Pro.StopImmediately(Wheel.LeftWheel)
-                if (pulseCntR - tempcntR >= (angle + 1) * 300 - 60)
-                    Cutebot_Pro.StopImmediately(Wheel.RightWheel)
-                if ((pulseCntL - tempcntL >= (angle + 1) * 300 - 60) && (pulseCntR - tempcntR >= (angle + 1) * 300 - 60))
-                    break*/
             }
         }
         else if(turn == 2){
@@ -965,7 +1188,7 @@ namespace CutebotPro {
             pwmCruiseControl(-speed, speed)
             while (1) {
                 pulseNumber()
-                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
+                if (Math.abs(pulseCntL - tempcntL) + Math.abs(pulseCntR - tempcntR) >= temp) {
                     pwmCruiseControl(0, 0)
                     break
                 }
@@ -977,7 +1200,7 @@ namespace CutebotPro {
             pwmCruiseControl(speed, 0)
             while (1) {
                 pulseNumber()
-                if (Math.abs(pulseCntL - tempcntL) >= (angle + 1) * 600) {
+                if (Math.abs(pulseCntL - tempcntL) >= temp) {
                     pwmCruiseControl(0, 0)
                     break
                 }
@@ -989,12 +1212,12 @@ namespace CutebotPro {
             pwmCruiseControl(0, speed)
             while (1) {
                 pulseNumber()
-                if (Math.abs(pulseCntR - tempcntR) >= (angle + 1) * 600) {
+                if (Math.abs(pulseCntR - tempcntR) >= temp) {
                     pwmCruiseControl(0, 0)
                     break
                 }
             }
-        }
+        }*/
     }
 
 
