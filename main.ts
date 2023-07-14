@@ -889,9 +889,9 @@ namespace CutebotPro {
         let I = 0
         let P = 0
 
-        P = 1.188
+        P = 1.158
         I = 0.5
-        D = 4.43
+        D = 3.51
         curerr = 0
         prev = 0
         Perr = 0
@@ -923,12 +923,12 @@ namespace CutebotPro {
                 Derr = curerr - prev
                 Ierr = curerr + Ierr
                 P_Value = P * Perr
-                if (P_Value >= 25) {
-                    P_Value = 25
+                if (P_Value >= 27) {
+                    P_Value = 27
                 }
                 I_Value = I * Ierr
-                if (I_Value > 18) {
-                    I_Value = 18
+                if (I_Value > 17) {
+                    I_Value = 17
                 }
                 D_Value = D * Derr
                 if (D_Value > 40) {
@@ -977,12 +977,12 @@ namespace CutebotPro {
                 Derr = curerr - prev
                 Ierr = curerr + Ierr
                 P_Value = P * Perr
-                if (P_Value >= 25) {
-                    P_Value = 25
+                if (P_Value >= 27) {
+                    P_Value = 27
                 }
                 I_Value = I * Ierr
-                if (I_Value > 18) {
-                    I_Value = 18
+                if (I_Value > 17) {
+                    I_Value = 17
                 }
                 D_Value = D * Derr
                 if (D_Value > 40) {
@@ -1052,28 +1052,40 @@ namespace CutebotPro {
         let D_Value = 0
         let I_Value = 0
         let P_Value = 0
-        let temp = 0
-        let curvalue = 0
+        let tempL = 0
+        let tempR = 0
+        let curvalueL = 0
+        let curvalueR = 0
         let expect = 0
-        let value = 0
+        let valueL = 0
+        let valueR = 0
         let Derr = 0
-        let Ierr = 0
+        let IerrL = 0
+        let IerrR = 0
         let Perr = 0
-        let prev = 0
-        let curerr = 0
+        let prevL = 0
+        let prevR = 0
+        let curerrL = 0
+        let curerrR = 0
+        let flagL = 0
+        let flagR = 0
         let D = 0
         let I = 0
         let P = 0
 
-        P = 1.188
+        P = 1.158
         I = 0.5
-        D = 4.43
-        curerr = 0
-        prev = 0
+        D = 3.51
+        prevL = 0
+        prevR = 0
+        curerrL = 0
+        curerrR = 0
         Perr = 0
-        Ierr = 0
+        IerrL = 0
+        IerrR = 0
         Derr = 0
-        value = 0
+        valueL = 0
+        valueR = 0
 
         if (turn == CutebotProTurn.Left) {
             angleRunning(CutebotProWheel.RightWheel, ((angle + 1) * 150 + 2), CutebotProAngleUnits.Angle)
@@ -1083,86 +1095,170 @@ namespace CutebotPro {
         }
         else if (turn == CutebotProTurn.LeftInPlace) {
             
-            expect = ((angle + 1) * 76)
-            curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
-            temp = curvalue
+            expect = (angle + 1) * 75
+            curvalueL = CutebotPro.readDistance(CutebotProMotors1.M1)
+            curvalueR = CutebotPro.readDistance(CutebotProMotors1.M2)
+            tempL = curvalueL
+            tempR = curvalueR
             while (true) {
-                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
-                curerr = Math.abs(expect) - Math.abs(curvalue - temp)
-                Perr = curerr
-                Derr = curerr - prev
-                Ierr = curerr + Ierr
-                P_Value = P * Perr
-                if (P_Value >= 25) {
-                    P_Value = 25
+                if(flagR == 0)
+                {
+                    curvalueR = CutebotPro.readDistance(CutebotProMotors1.M2)
+                    curerrR = Math.abs(expect) - Math.abs(curvalueR - tempR)
+                    Perr = curerrR
+                    Derr = curerrR - prevR
+                    IerrR = curerrR + IerrR
+                    P_Value = P * Perr
+                    if (P_Value >= 27) {
+                        P_Value = 27
+                    }
+                    I_Value = I * IerrR
+                    if (I_Value > 17) {
+                        I_Value = 17
+                    }
+                    D_Value = D * Derr
+                    if (D_Value > 40) {
+                        D_Value = 40
+                    }
+                    valueR = P_Value + (I_Value + D_Value)
+                    prevR = curerrR
                 }
-                I_Value = I * Ierr
-                if (I_Value > 18) {
-                    I_Value = 18
+                if(flagL == 0)
+                {
+                    curvalueL = CutebotPro.readDistance(CutebotProMotors1.M1)
+                    curerrL = Math.abs(expect) - Math.abs(curvalueL - tempL)
+                    Perr = curerrL
+                    Derr = curerrL - prevL
+                    IerrL = curerrL + IerrL
+                    P_Value = P * Perr
+                    if (P_Value >= 27) {
+                        P_Value = 27
+                    }
+                    I_Value = I * IerrL
+                    if (I_Value > 17) {
+                        I_Value = 17
+                    }
+                    D_Value = D * Derr
+                    if (D_Value > 40) {
+                        D_Value = 40
+                    }
+                    valueL = P_Value + (I_Value + D_Value)
+                    prevL = curerrL
                 }
-                D_Value = D * Derr
-                if (D_Value > 40) {
-                    D_Value = 40
-                }
-                value = P_Value + (I_Value + D_Value)
-                if (curerr <= 0) {
-                    CutebotPro.pwmCruiseControl(0, 0)
-                    value = 0
-                    break;
-                }
-                if (value > 40) {
-                    value = 40
-                }
-                if (value < 10) {
-                    value = 0
-                }
-                CutebotPro.pwmCruiseControl(-value, value)
 
-                prev = curerr
-                basic.pause(10)
+                if (valueR > 40) {
+                    valueR = 40
+                }
+                if (valueR < 10) {
+                    valueR = 0
+                }
+                if (valueL > 40) {
+                    valueL = 40
+                }
+                if (valueL < 10) {
+                    valueL = 0
+                }
+
+                if (curerrL <= 0) {
+                    valueL = 0
+                    flagL = 1
+                }
+                if (curerrR <= 0) {
+                    valueR = 0
+                    flagR = 1
+                }
+
+                if (curerrL <= 0 && curerrR <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    break
+                }
+                else{
+                    CutebotPro.pwmCruiseControl(-valueL, valueR)
+                    basic.pause(10)
+                }
             }
-            CutebotPro.pwmCruiseControl(0, 0)
         }
         else if (turn == CutebotProTurn.RightInPlace) {
-            expect = ((angle + 1) * 76)
-            curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
-            temp = curvalue
+            expect = (angle + 1) * 75
+            curvalueL = CutebotPro.readDistance(CutebotProMotors1.M1)
+            curvalueR = CutebotPro.readDistance(CutebotProMotors1.M2)
+            tempL = curvalueL
+            tempR = curvalueR
             while (true) {
-                curvalue = CutebotPro.readDistance(CutebotProMotors1.M2)
-                curerr = Math.abs(expect) - Math.abs(curvalue - temp)
-                Perr = curerr
-                Derr = curerr - prev
-                Ierr = curerr + Ierr
-                P_Value = P * Perr
-                if (P_Value >= 25) {
-                    P_Value = 25
+                if (flagR == 0) {
+                    curvalueR = CutebotPro.readDistance(CutebotProMotors1.M2)
+                    curerrR = Math.abs(expect) - Math.abs(curvalueR - tempR)
+                    Perr = curerrR
+                    Derr = curerrR - prevR
+                    IerrR = curerrR + IerrR
+                    P_Value = P * Perr
+                    if (P_Value >= 27) {
+                        P_Value = 27
+                    }
+                    I_Value = I * IerrR
+                    if (I_Value > 17) {
+                        I_Value = 17
+                    }
+                    D_Value = D * Derr
+                    if (D_Value > 40) {
+                        D_Value = 40
+                    }
+                    valueR = P_Value + (I_Value + D_Value)
+                    prevR = curerrR
                 }
-                I_Value = I * Ierr
-                if (I_Value > 18) {
-                    I_Value = 18
+                if (flagL == 0) {
+                    curvalueL = CutebotPro.readDistance(CutebotProMotors1.M1)
+                    curerrL = Math.abs(expect) - Math.abs(curvalueL - tempL)
+                    Perr = curerrL
+                    Derr = curerrL - prevL
+                    IerrL = curerrL + IerrL
+                    P_Value = P * Perr
+                    if (P_Value >= 27) {
+                        P_Value = 27
+                    }
+                    I_Value = I * IerrL
+                    if (I_Value > 17) {
+                        I_Value = 17
+                    }
+                    D_Value = D * Derr
+                    if (D_Value > 40) {
+                        D_Value = 40
+                    }
+                    valueL = P_Value + (I_Value + D_Value)
+                    prevL = curerrL
                 }
-                D_Value = D * Derr
-                if (D_Value > 40) {
-                    D_Value = 40
-                }
-                value = P_Value + (I_Value + D_Value)
-                if (curerr <= 0) {
-                    CutebotPro.pwmCruiseControl(0, 0)
-                    value = 0
-                    break;
-                }
-                if (value > 40) {
-                    value = 40
-                }
-                if (value < 10) {
-                    value = 0
-                }
-                CutebotPro.pwmCruiseControl(value, -value)
 
-                prev = curerr
-                basic.pause(10)
+                if (valueR > 40) {
+                    valueR = 40
+                }
+                if (valueR < 10) {
+                    valueR = 0
+                }
+                if (valueL > 40) {
+                    valueL = 40
+                }
+                if (valueL < 10) {
+                    valueL = 0
+                }
+
+                if (curerrL <= 0) {
+                    valueL = 0
+                    flagL = 1
+                }
+                if (curerrR <= 0) {
+                    valueR = 0
+                    flagR = 1
+                }
+
+                if (curerrL <= 0 && curerrR <= 0) {
+                    CutebotPro.pwmCruiseControl(0, 0)
+                    break
+                }
+                else {
+                    CutebotPro.pwmCruiseControl(valueL, -valueR)
+                    basic.pause(10)
+                }
             }
-            CutebotPro.pwmCruiseControl(0, 0)
         }
 
         /*temp = radius * 2 * 1400 * (angle + 1) / (8 * 51)
