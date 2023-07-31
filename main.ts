@@ -518,9 +518,11 @@ namespace CutebotPro {
         let cylinderNumber: number;
         pulseNumber()
         if (motor == 1)
-            return Math.floor( pulseCntL * 360 / 1400 );
+            //return pulseCntL;
+            return Math.floor( pulseCntL * 360 / 1428 + 0.5);
         else
-            return Math.floor(pulseCntR * 360 / 1400);
+            //return pulseCntR;
+            return Math.floor(pulseCntR * 360 / 1428 + 0.5);
     }
 
     
@@ -801,28 +803,20 @@ namespace CutebotPro {
 
         if (speedL > 50)
             speedL = 50;
-        else if (speedL != 0 && speedL < 20)
-            speedL = 20;
+//        else if (speedL != 0 && speedL < 20)
+//            speedL = 20;
 
         if (speedR > 50)
             speedR = 50;
-        else if (speedR != 0 && speedR < 20)
-            speedR = 20;
+//        else if (speedR != 0 && speedR < 20)
+//            speedR = 20;
 
         buf[0] = 0x99;
         buf[1] = 0x02;
-        buf[2] = CutebotProWheel.LeftWheel;
+        buf[2] = orientationL;
         buf[3] = speedL;
-        buf[4] = orientationL;
-        buf[5] = 0x00;
-        buf[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, buf)
-        buf[0] = 0x99;
-        buf[1] = 0x02;
-        buf[2] = CutebotProWheel.RightWheel;
-        buf[3] = speedR;
         buf[4] = orientationR;
-        buf[5] = 0x00;
+        buf[5] = speedR;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
         basic.pause(110)
@@ -873,7 +867,31 @@ namespace CutebotPro {
     //% weight=200
     //% block="set %CutebotProWheel rotation %angle %CutebotProAngleUnits"
     export function angleRunning(orientation: CutebotProWheel, angle: number, angleUnits: CutebotProAngleUnits): void {
-        let D_Value = 0
+        let buf = pins.createBuffer(7)
+        let curtime = 0
+        let oldtime = 0
+        let tempangle = 0
+
+        if (angleUnits == CutebotProAngleUnits.Angle)
+            tempangle = angle;
+        else if (angleUnits == CutebotProAngleUnits.Circle)
+            tempangle = angle * 360;
+        if (tempangle < 0)
+            tempangle = -tempangle
+
+        buf[0] = 0x99;
+        buf[1] = 0x04;
+        buf[2] = orientation;
+        buf[3] = (tempangle >> 8) & 0xff;
+        buf[4] = (tempangle >> 0) & 0xff;
+        if (angle < 0)
+            buf[5] = 0x00;
+        else
+            buf[5] = 0x01;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+       
+       /* let D_Value = 0
         let I_Value = 0
         let P_Value = 0
         let temp = 0
@@ -1014,10 +1032,10 @@ namespace CutebotPro {
             CutebotPro.pwmCruiseControl(0, 0)
 
         }
-        
-       
-
         return
+       */
+
+        
     }
 
     /**
@@ -1049,7 +1067,45 @@ namespace CutebotPro {
     //% weight=190
     //% block="set car %CutebotProTurn for angle %CutebotProAngle"
     export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
-        let D_Value = 0
+        let buf = pins.createBuffer(7)
+        let curtime = 0
+        let oldtime = 0
+        let tempangle = 0
+        let orientation = 0
+        let cmd = 0
+
+        if (turn == CutebotProTurn.Left){
+            orientation = CutebotProWheel.RightWheel
+            cmd = 0x04
+        }
+        else if (turn == CutebotProTurn.Right){
+            orientation = CutebotProWheel.LeftWheel
+            cmd = 0x04
+        }
+        else{
+            orientation = CutebotProWheel.AllWheel
+            cmd = 23
+        }
+        
+        if (angle == CutebotProAngle.Angle45)
+            tempangle = 148
+        else if (angle == CutebotProAngle.Angle90)
+            tempangle = 296
+        else if (angle == CutebotProAngle.Angle135)
+            tempangle = 442
+        else
+            tempangle = 590
+        
+        
+        buf[0] = 0x99;
+        buf[1] = cmd;
+        buf[2] = orientation;
+        buf[3] = (tempangle >> 8) & 0xff;
+        buf[4] = (tempangle >> 0) & 0xff;
+        buf[5] = 0x01;
+        buf[6] = 0x88;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+        /*let D_Value = 0
         let I_Value = 0
         let P_Value = 0
         let tempL = 0
@@ -1259,9 +1315,9 @@ namespace CutebotPro {
                     basic.pause(10)
                 }
             }
-        }
+        }*/
 
-        /*temp = radius * 2 * 1400 * (angle + 1) / (8 * 51)
+        /*temp = radius * 2 * 1428 * (angle + 1) / (8 * 51)
 
         pwmCruiseControl(0, 0)
         if (turn == 3){
