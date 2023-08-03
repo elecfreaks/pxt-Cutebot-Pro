@@ -1102,7 +1102,10 @@ namespace CutebotPro {
         buf[2] = orientation;
         buf[3] = (tempangle >> 8) & 0xff;
         buf[4] = (tempangle >> 0) & 0xff;
-        buf[5] = 0x01;
+        if (turn == CutebotProTurn.RightInPlace)
+            buf[5] = 0x00;
+        else
+            buf[5] = 0x01;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
         /*let D_Value = 0
