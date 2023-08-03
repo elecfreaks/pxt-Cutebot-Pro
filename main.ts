@@ -26,9 +26,9 @@ enum CutebotProWheel {
 
 enum CutebotProMotors {
     //% block="left wheel"
-    M1 = 0,
+    M1 = 1,
     //% block="right wheel"
-    M2 = 1,
+    M2 = 2,
     //% block="all wheel"
     ALL = 3
 }
