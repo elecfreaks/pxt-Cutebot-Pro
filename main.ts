@@ -890,7 +890,15 @@ namespace CutebotPro {
             buf[5] = 0x01;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-       
+        basic.pause(1000)
+        while (1) {
+            if (readSpeed(CutebotProMotors1.M1, CutebotProSpeedUnits.Cms) == 0 && readSpeed(CutebotProMotors1.M2, CutebotProSpeedUnits.Cms) == 0) {
+                basic.pause(1000)
+                if (readSpeed(CutebotProMotors1.M1, CutebotProSpeedUnits.Cms) == 0 && readSpeed(CutebotProMotors1.M2, CutebotProSpeedUnits.Cms) == 0)
+                    break
+            }
+
+        }
        /* let D_Value = 0
         let I_Value = 0
         let P_Value = 0
@@ -1108,6 +1116,17 @@ namespace CutebotPro {
             buf[5] = 0x01;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
+        basic.pause(1000)
+        while(1)
+        {
+            if (readSpeed(CutebotProMotors1.M1, CutebotProSpeedUnits.Cms) == 0 && readSpeed(CutebotProMotors1.M2, CutebotProSpeedUnits.Cms) == 0)
+            {
+                basic.pause(1000)
+                if (readSpeed(CutebotProMotors1.M1, CutebotProSpeedUnits.Cms) == 0 && readSpeed(CutebotProMotors1.M2, CutebotProSpeedUnits.Cms) == 0)
+                    break
+            }
+               
+        }
         /*let D_Value = 0
         let I_Value = 0
         let P_Value = 0
