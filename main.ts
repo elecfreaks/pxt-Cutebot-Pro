@@ -819,7 +819,7 @@ namespace CutebotPro {
         buf[5] = speedR;
         buf[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, buf)
-        basic.pause(110)
+        //basic.pause(110)
     }
 
     /**
@@ -1094,7 +1094,7 @@ namespace CutebotPro {
         else if (angle == CutebotProAngle.Angle135)
             tempangle = 442
         else
-            tempangle = 590
+            tempangle = 630
         
         
         buf[0] = 0x99;
