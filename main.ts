@@ -833,7 +833,7 @@ namespace CutebotPro {
         let curtime = 0
         let oldtime = 0
         let tempdistance = 0
-
+        CutebotPro.pwmCruiseControl(0, 0)
         if (distanceUnits == CutebotProDistanceUnits.Cm)
             tempdistance = distance;
         else if (distanceUnits == CutebotProDistanceUnits.Ft)
@@ -871,7 +871,7 @@ namespace CutebotPro {
         let curtime = 0
         let oldtime = 0
         let tempangle = 0
-
+        CutebotPro.pwmCruiseControl(0, 0)
         if (angleUnits == CutebotProAngleUnits.Angle)
             tempangle = angle;
         else if (angleUnits == CutebotProAngleUnits.Circle)
@@ -1081,7 +1081,7 @@ namespace CutebotPro {
         let tempangle = 0
         let orientation = 0
         let cmd = 0
-
+        CutebotPro.pwmCruiseControl(0, 0)
         if (turn == CutebotProTurn.Left){
             orientation = CutebotProWheel.RightWheel
             cmd = 0x04
@@ -1556,7 +1556,9 @@ namespace CutebotPro {
         i2cBuffer[6] = 0x88;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         cutebotProVersionsInteger = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
-        return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal/10) + "." + convertToText(cutebotProVersionsDecimal%10))
-        
+        if (cutebotProVersionsDecimal / 10 > 1)
+            return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal/10) + "." + convertToText(cutebotProVersionsDecimal%10))
+        else
+            return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(0) + "." + convertToText(cutebotProVersionsDecimal % 10))
     }
 }
