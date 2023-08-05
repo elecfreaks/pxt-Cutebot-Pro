@@ -1104,7 +1104,7 @@ namespace CutebotPro {
         else {
             orientation = CutebotProWheel.AllWheel
             cmd = 23
-            tempangle = tempangle + 5
+            tempangle = tempangle + 4
         }
         
         buf[0] = 0x99;
