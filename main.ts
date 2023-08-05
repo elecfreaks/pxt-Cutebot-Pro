@@ -1082,28 +1082,30 @@ namespace CutebotPro {
         let orientation = 0
         let cmd = 0
         CutebotPro.pwmCruiseControl(0, 0)
-        if (turn == CutebotProTurn.Left){
-            orientation = CutebotProWheel.RightWheel
-            cmd = 0x04
-        }
-        else if (turn == CutebotProTurn.Right){
-            orientation = CutebotProWheel.LeftWheel
-            cmd = 0x04
-        }
-        else{
-            orientation = CutebotProWheel.AllWheel
-            cmd = 23
-        }
+        basic.pause(1000)
         
         if (angle == CutebotProAngle.Angle45)
-            tempangle = 148
+            tempangle = 150
         else if (angle == CutebotProAngle.Angle90)
-            tempangle = 296
+            tempangle = 316
         else if (angle == CutebotProAngle.Angle135)
-            tempangle = 442
+            tempangle = 450
         else
             tempangle = 630
         
+        if (turn == CutebotProTurn.Left) {
+            orientation = CutebotProWheel.RightWheel
+            cmd = 0x04
+        }
+        else if (turn == CutebotProTurn.Right) {
+            orientation = CutebotProWheel.LeftWheel
+            cmd = 0x04
+        }
+        else {
+            orientation = CutebotProWheel.AllWheel
+            cmd = 23
+            tempangle = tempangle + 5
+        }
         
         buf[0] = 0x99;
         buf[1] = cmd;
@@ -1127,6 +1129,7 @@ namespace CutebotPro {
             }
                
         }
+        basic.pause(1000)
         /*let D_Value = 0
         let I_Value = 0
         let P_Value = 0
