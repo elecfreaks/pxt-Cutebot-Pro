@@ -1425,7 +1425,7 @@ namespace CutebotPro {
      * get IR value
      */
     //% group="Infrared sensor"
-    //% block="IR button %Button is pressed"
+    //% block="IR button %CutbotProIRButtons is pressed"
     //% weight=150
     export function irButton(Button: CutbotProIRButtons): boolean {
         return (IR_Val & 0x00ff) == Button
