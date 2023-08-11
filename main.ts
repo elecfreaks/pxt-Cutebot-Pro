@@ -833,11 +833,18 @@ namespace CutebotPro {
         let curtime = 0
         let oldtime = 0
         let tempdistance = 0
+        let temp = 0
         CutebotPro.pwmCruiseControl(0, 0)
         if (distanceUnits == CutebotProDistanceUnits.Cm)
             tempdistance = distance;
         else if (distanceUnits == CutebotProDistanceUnits.Ft)
             tempdistance = distance * 0.3937;
+
+        if (tempdistance > 10)
+        {
+            temp = Math.floor(tempdistance / 50) + 1
+            tempdistance = tempdistance - temp
+        }
 
         buf[0] = 0x99;
         buf[1] = 0x03;
