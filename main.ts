@@ -840,7 +840,7 @@ namespace CutebotPro {
         else if (distanceUnits == CutebotProDistanceUnits.Ft)
             tempdistance = distance * 0.3937;
 
-        if (tempdistance > 10)
+        if (tempdistance > 3)
         {
             temp = Math.floor(tempdistance / 50) + 1
             tempdistance = tempdistance - temp
