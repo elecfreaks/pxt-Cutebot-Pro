@@ -1065,7 +1065,7 @@ namespace CutebotPro {
     }
 
     /**
-    * run a specific number of blcok
+    * run a specific number of block
     */
     //% group="PID Control"
     //% weight=170
