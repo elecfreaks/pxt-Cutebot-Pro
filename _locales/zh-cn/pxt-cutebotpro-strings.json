@@ -65,12 +65,13 @@
     "CutebotPro.setBlockCnt|block": "设置方格边长为%length %CutebotProDistanceUnits",
     "CutebotPro.runBlockCnt|block": "设置小车向前行驶 %cnt 方格",
     "CutebotPro.trackbitStateValue|block": "获取一个四路红外巡线传感器的状态值",
-    "{id:group}Basic control ": "基础控制",
+    "{id:group}Basic control": "基础控制",
     "{id:group}LED headlights": "LED车头灯",
     "{id:group}Tracking sensor": "四路巡线传感器",
     "{id:group}Sonar sensor": "超声波传感器",
     "{id:group}PID Control": "PID控制",
     "{id:group}Infrared sensor": "红外线传感器",
     "{id:group}Expansion port": "扩展接口",
-    "{id:group}Others": "其他"
+    "{id:group}Others": "其他",
+    "CutebotPro|block": "酷霸小车"
 }
