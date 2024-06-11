@@ -1,6 +1,6 @@
 {
     "name": "pxt-cutebotpro",
-    "version": "1.0.55",
+    "version": "1.0.56",
     "description": "ELECFREAKS cutebotpro car",
     "license": "MIT",
     "dependencies": {
@@ -13,7 +13,9 @@
         "IR.cpp",
         "shims.d.ts",
         "enums.d.ts",
-        "_locales/zh-cn/pxt-cutebotpro-strings.json"
+        "_locales/zh-cn/pxt-cutebotpro-strings.json",
+        "_locales/cs/pxt-cutebotpro-strings.json",
+        "_locales/cs/pxt-cutebotpro-jsdoc-strings.json"
     ],
     "testFiles": [
         "test.ts"
