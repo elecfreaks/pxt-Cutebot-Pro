@@ -61,7 +61,7 @@
   "CutebotPro.angleRunning|block": "otoč %CutebotProWheel kolo o %angle %CutebotProAngleUnits",
   "CutebotPro.irButton|block": "IR tlačítko %CutbotProIRButtons stisknuto",
   "CutebotPro.irCallback|block": "při IR příjmu",
-  "CutebotPro.ultrasonic|block": "vzdálenost od překážky v jednotce %SonarUnit",
+  "CutebotPro.ultrasonic|block": "vzdálenost od překážky v %SonarUnit",
   "CutebotPro.setBlockCnt|block": "nastav délku strany čtverce na %length %CutebotProDistanceUnits",
   "CutebotPro.runBlockCnt|block": "jeď vpřed %cnt čtverců",
   "CutebotPro.trackbitStateValue|block": "načti stav 4 kanálů snímače čáry",
