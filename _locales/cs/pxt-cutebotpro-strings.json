@@ -67,7 +67,7 @@
   "CutebotPro.trackbitStateValue|block": "načti stav 4 kanálů snímače čáry",
   "{id:group}Basic control": "Základní ovládání",
   "{id:group}LED headlights": "RGB LED světlomety",
-  "{id:group}Tracking sensor": "4kanálový snímač čáry",
+  "{id:group}Tracking sensor": "4 kanálový snímač čáry",
   "{id:group}Sonar sensor": "Snímač překážek - sonar",
   "{id:group}PID Control": "Řízení PID",
   "{id:group}Infrared sensor": "IR přijímač",
