@@ -14,6 +14,7 @@
         "shims.d.ts",
         "enums.d.ts",
         "_locales/zh-cn/pxt-cutebotpro-strings.json"
+        "_locales/cs/pxt-cutebotpro-strings.json"
     ],
     "testFiles": [
         "test.ts"
