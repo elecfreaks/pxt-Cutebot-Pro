@@ -56,7 +56,7 @@
   "CutebotPro.trackbitChannelState|block": "kanál %TrackbitChannel stav snímače %TrackbitType",
   "CutebotPro.trackbitgetGray|block": "kanál %TrackbitChannel hodnota stupnice šedi",
   "CutebotPro.getGrayscaleSensorState|block": "stav 4kanálového snímače čáry je %TrackbitStateType",
-  "CutebotPro.getOffset|block": "stav posunu sledování čáry senzoru",
+  "CutebotPro.getOffset|block": "stav posunu snímače čáry",
   "CutebotPro.distanceRunning|block": "jeď %CutebotProOrientation vzdálenost %distance %CutebotProDistanceUnits",
   "CutebotPro.angleRunning|block": "otoč %CutebotProWheel kolo o %angle %CutebotProAngleUnits",
   "CutebotPro.irButton|block": "IR tlačítko %CutbotProIRButtons stisknuto",
