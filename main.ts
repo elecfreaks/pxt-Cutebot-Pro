@@ -437,7 +437,7 @@ namespace CutebotPro {
             if (speedUnits == CutebotProSpeedUnits.Cms)
                 return speed;
             else
-                return speed * 0.3937;
+                return speed / 0.3937;
         }
         else{
             buf[0] = 0x99;
@@ -453,7 +453,7 @@ namespace CutebotPro {
             if (speedUnits == CutebotProSpeedUnits.Cms)
                 return speed;
             else
-                return speed * 0.3937;
+                return speed / 0.3937;
         }
     }
 
@@ -783,8 +783,8 @@ namespace CutebotPro {
             speedR = speedR;
         }
         else{
-            speedL = speedL * 0.3937;
-            speedR = speedR * 0.3937;
+            speedL = speedL / 0.3937;
+            speedR = speedR / 0.3937;
         }
             
         if(speedL < 0){
@@ -838,7 +838,7 @@ namespace CutebotPro {
         if (distanceUnits == CutebotProDistanceUnits.Cm)
             tempdistance = distance;
         else if (distanceUnits == CutebotProDistanceUnits.Ft)
-            tempdistance = distance * 0.3937;
+            tempdistance = distance / 0.3937;
 
         if (tempdistance > 3)
         {
