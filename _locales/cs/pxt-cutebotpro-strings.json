@@ -49,7 +49,7 @@
   "CutebotPro.fullAstern|block": "couvej plnou rychlostí",
   "CutebotPro.stopImmediately|block": "zastav okamžitě %CutebotProMotors kolo",
   "CutebotPro.cruiseControl|block": "nastav rychlost levého kola na %speedL, rychlost pravého kola na %speedR %CutebotProSpeedUnits",
-  "CutebotPro.pwmCruiseControl|block": "nastav rychlost levého kola na %speedL\\%, rychlost pravého kola na %speedR\\%.",
+  "CutebotPro.pwmCruiseControl|block": "nastav rychlost levého kola na %speedL\\%, rychlost pravého kola na %speedR\\%",
   "CutebotPro.trolleySteering|block": "natoč auto %CutebotProTurn o úhel %CutebotProAngle",
   "CutebotPro.turnOffAllHeadlights|block": "vypni oba světlomety",
   "CutebotPro.colorLight|block": "nastav světlomet %CutebotProRGBLight na barvu $color",
