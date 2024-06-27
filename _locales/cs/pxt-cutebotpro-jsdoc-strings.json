@@ -1,0 +1,12 @@
+{
+    "Cutebot_Pro.I2CInit": "inicializace I2C",
+    "Cutebot_Pro.PID": "modul ovládání PID",
+    "Cutebot_Pro.motorRun": "modul ovládání motoru",
+    "Cutebot_Pro.mototRun": "modul ovládání motoru",
+    "Cutebot_Pro.mototStop": "modul zastavení motoru",
+    "Cutebot_Pro.readPatrol": "stav senzoru detekce čáry",
+    "Cutebot_Pro.readSpeed": "načtení rychlosti motoru",
+    "Cutebot_Pro.readeDistance": "vrátí délku ujetou kolem",
+    "Cutebot_Pro.servoRun": "modul řízení serva",
+    "Cutebot_Pro.setRGBLight": "nastavení barvy RGB LED"
+  }
