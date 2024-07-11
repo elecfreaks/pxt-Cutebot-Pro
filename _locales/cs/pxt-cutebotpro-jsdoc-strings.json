@@ -1,12 +1,12 @@
 {
-  "Cutebot_Pro.I2CInit": "Init I2C until success",
-  "Cutebot_Pro.PID": "PID control module",
-  "Cutebot_Pro.motorRun": "MOTOR control module",
-  "Cutebot_Pro.mototRun": "Motor control module",
-  "Cutebot_Pro.mototStop": "Motor stop module",
-  "Cutebot_Pro.readPatrol": "Read line-tracking sensor status",
-  "Cutebot_Pro.readSpeed": "Read motor speed",
-  "Cutebot_Pro.readeDistance": "get the revolutions of wheel",
-  "Cutebot_Pro.servoRun": "Servo control module",
-  "Cutebot_Pro.setRGBLight": "Control the color of RGB LED"
+  "Cutebot_Pro.I2CInit": "Provedení inicializace I2C modulu.",
+  "Cutebot_Pro.PID": "Modul ovládání PID",
+  "Cutebot_Pro.motorRun": "Modul ovládání MOTORŮ",
+  "Cutebot_Pro.mototRun": "Modul ovládání motorů",
+  "Cutebot_Pro.mototStop": "Modul zastavení motorů stop",
+  "Cutebot_Pro.readPatrol": "Stav sledování čáry",
+  "Cutebot_Pro.readSpeed": "Načtení rychlosti motorů",
+  "Cutebot_Pro.readeDistance": "Získání otáček motorů",
+  "Cutebot_Pro.servoRun": "Modul ovládání serv",
+  "Cutebot_Pro.setRGBLight": "Ovládání RGB LED"
 }
