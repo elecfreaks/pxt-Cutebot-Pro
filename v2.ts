@@ -67,7 +67,55 @@ namespace cutebotProV2 {
     */
     export function turnOffAllHeadlights(): void {
         i2cCommandSend(0x20, [2, 0, 0, 0]);
-        i2cCommandSend(0x20, [2, 0, 0, 0]);
+    }
+
+    /**
+     * motor control module
+     */
+    export function extendMotorControl(speed: number): void {
+        let direction: number = 0;
+
+        if (speed < 0) {
+            direction |= 0x01;
+        }
+        i2cCommandSend(0x30, [Math.abs(speed),direction]);
+    }
+
+    /**
+     * extend motor stop
+     */
+    export function extendMotorStop(): void {
+        i2cCommandSend(0x30, [0,0]);
+    }
+
+    /**
+     * servo control module
+     * servotype:0-servo180,1-servo270,2-servo360
+     * index:0-M1,1-M2,2-M3,3-M4
+     */
+    export function extendServoControl(servotype: number, index: number, angle: number): void {
+        let angleMap: number
+        if (servotype == 1) {
+            angleMap = Math.map(angle, 0, 180, 0, 180);
+        }
+
+        if (servotype == 2) {
+            angleMap = Math.map(angle, 0, 270, 0, 180);
+        }
+
+        if (servotype == 3) {
+            angleMap = Math.map(angle, 0, 360, 0, 180);
+        }
+
+        i2cCommandSend(0x40, [index,angleMap]);
+    }
+
+    /**
+     * continuous servo control
+     */
+    export function continuousServoControl(index: number, speed: number): void {
+        speed = Math.map(speed, -100, 100, 0, 180)
+        extendServoControl(1, index, speed)
     }
 
 }

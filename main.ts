@@ -680,7 +680,7 @@ namespace CutebotPro {
     //% block="set %ServoType servo %CutebotProServoIndex angel to %angle°"
     export function extendServoControl(servotype: ServoType, index: CutebotProServoIndex, angle: number): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.extendServoControl(servotype, index, angle);
         } else {
             cutebotProV1.extendServoControl(servotype, index, angle);
         }
@@ -694,7 +694,7 @@ namespace CutebotPro {
     //% block="set continuous servo %CutebotProServoIndex speed to %speed\\%"
     export function continuousServoControl(index: CutebotProServoIndex, speed: number): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.continuousServoControl(index, speed);
         } else {
             cutebotProV1.continuousServoControl(index, speed);
         }
@@ -711,7 +711,7 @@ namespace CutebotPro {
     //% speed.min=-100  speed.max=100
     export function extendMotorControl(speed: number): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.extendMotorControl(speed); 
         } else {
             cutebotProV1.extendMotorControl(speed);
         }
@@ -726,7 +726,7 @@ namespace CutebotPro {
     //% block="stop motor"
     export function extendMotorStop(): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.extendMotorStop();
         } else {
             cutebotProV1.extendMotorStop();
         }
