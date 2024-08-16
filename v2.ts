@@ -39,4 +39,34 @@ namespace cutebotProV2 {
 
     }
 
+    /**
+    * set LED headlights.
+    * wheel:0-liftlight，1-rightlight，2-alllight
+    */
+    export function colorLight(light: number, color: number) {
+        let r: number, g: number, b: number = 0
+        r = color >> 16
+        g = (color >> 8) & 0xFF
+        b = color & 0xFF
+
+        i2cCommandSend(0x20, [light, Math.abs(r), Math.abs(g), Math.abs(b)]);
+    }
+
+    /**
+    * select a headlights and set the RGB color.
+    * @param R R color value of RGB color, eg: 0
+    * @param G G color value of RGB color, eg: 128
+    * @param B B color value of RGB color, eg: 255
+    */
+    export function singleHeadlights(light: number, r: number, g: number, b: number): void {
+        i2cCommandSend(0x20, [light, Math.abs(r), Math.abs(g), Math.abs(b)]);
+    }
+
+    /**
+    * turn off all the LED lights
+    */
+    export function turnOffAllHeadlights(): void {
+        i2cCommandSend(0x20, [2, 0, 0, 0]);
+    }
+
 }

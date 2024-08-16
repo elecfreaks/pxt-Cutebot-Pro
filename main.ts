@@ -430,7 +430,13 @@ namespace CutebotPro {
     //% weight=280
     export function singleHeadlights(light: CutebotProRGBLight, r: number, g: number, b: number): void {
         if (readHardVersion() == 2) {
-            // TODO
+            let light = 0
+            switch (light) {
+                case CutebotProRGBLight.RGBL: light = 0; break;
+                case CutebotProRGBLight.RGBR: light = 1; break;
+                case CutebotProRGBLight.RGBA: light = 2; break;
+            }
+            cutebotProV2.singleHeadlights(light, r, g, b)
         } else {
             cutebotProV1.singleHeadlights(light, r, g, b);
         }
@@ -446,7 +452,13 @@ namespace CutebotPro {
     //% weight=290
     export function colorLight(light: CutebotProRGBLight, color: number) {
         if (readHardVersion() == 2) {
-            // TODO
+            let light = 0
+            switch (light) {
+                case CutebotProRGBLight.RGBL: light = 0; break;
+                case CutebotProRGBLight.RGBR: light = 1; break;
+                case CutebotProRGBLight.RGBA: light = 2; break;
+            }
+            cutebotProV2.colorLight(light, color)
         } else {
             cutebotProV1.colorLight(light, color);
         }
@@ -460,7 +472,7 @@ namespace CutebotPro {
     //% weight=270
     export function turnOffAllHeadlights(): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.turnOffAllHeadlights();
         } else {
             cutebotProV1.turnOffAllHeadlights();
         }
