@@ -67,6 +67,7 @@ namespace cutebotProV2 {
     */
     export function turnOffAllHeadlights(): void {
         i2cCommandSend(0x20, [2, 0, 0, 0]);
+        i2cCommandSend(0x20, [2, 0, 0, 0]);
     }
 
 }
