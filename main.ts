@@ -353,6 +353,7 @@ namespace CutebotPro {
     export function readSpeed(motor: CutebotProMotors1, speedUnits: CutebotProSpeedUnits): number {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.readSpeed(motor, speedUnits);
         } else {
             return cutebotProV1.readSpeed(motor, speedUnits);
         }
@@ -375,6 +376,7 @@ namespace CutebotPro {
     export function readPulsenumberTest(motor: CutebotProMotors1): number {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.readPulsenumberTest(motor);
         } else {
             return cutebotProV1.readPulsenumberTest(motor);
         }
@@ -389,6 +391,7 @@ namespace CutebotPro {
     export function readDistance(motor: CutebotProMotors1): number {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.readDistance(motor);
         } else {
             return cutebotProV1.readDistance(motor);
         }
@@ -486,6 +489,7 @@ namespace CutebotPro {
     export function getOffset(): number {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.getOffset();
         } else {
             return cutebotProV1.getOffset();
         }
@@ -500,6 +504,7 @@ namespace CutebotPro {
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.getGrayscaleSensorState(state);
         } else {
             return cutebotProV1.getGrayscaleSensorState(state);
         }
@@ -514,6 +519,7 @@ namespace CutebotPro {
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.trackbitChannelState(channel, state);
         } else {
             return cutebotProV1.trackbitChannelState(channel, state);
         }
@@ -528,6 +534,7 @@ namespace CutebotPro {
     export function trackbitgetGray(channel: TrackbitChannel): number {
         if (readHardVersion() == 2) {
             // TODO
+            return cutebotProV1.trackbitgetGray(channel);
         } else {
             return cutebotProV1.trackbitgetGray(channel);
         }
@@ -543,6 +550,7 @@ namespace CutebotPro {
     export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
         if (readHardVersion() == 2) {
             // TODO 这个两版本一致
+            return cutebotProV1.ultrasonic(unit, maxCmDistance);
         } else {
             return cutebotProV1.ultrasonic(unit, maxCmDistance);
         }
@@ -660,6 +668,7 @@ namespace CutebotPro {
     export function irButton(Button: CutbotProIRButtons): boolean {
         if (readHardVersion() == 2) {
             // TODO 
+            return cutebotProV1.irButton(Button);
         } else {
             return cutebotProV1.irButton(Button);
         }
@@ -734,6 +743,7 @@ namespace CutebotPro {
     export function readVersions(): string {
         if (readHardVersion() == 2) {
             // TODO 读取软件版本号
+            return cutebotProV1.readVersions();
         } else {
             return cutebotProV1.readVersions();
         }
