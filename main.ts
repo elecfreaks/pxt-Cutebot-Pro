@@ -650,11 +650,7 @@ namespace CutebotPro {
     //% weight=160
     //% block="on IR receiving"
     export function irCallback(handler: () => void) {
-        if (readHardVersion() == 2) {
-            // TODO 
-        } else {
-            cutebotProV1.irCallback(handler);
-        }
+        cutebotProV1.irCallback(handler);
     }
 
     /**
@@ -664,12 +660,7 @@ namespace CutebotPro {
     //% block="IR button %CutbotProIRButtons is pressed"
     //% weight=150
     export function irButton(Button: CutbotProIRButtons): boolean {
-        if (readHardVersion() == 2) {
-            // TODO 
-            return cutebotProV1.irButton(Button);
-        } else {
-            return cutebotProV1.irButton(Button);
-        }
+        return cutebotProV1.irButton(Button);
     }
 
     /**
