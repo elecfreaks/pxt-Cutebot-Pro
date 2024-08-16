@@ -2,15 +2,6 @@ namespace cutebotProV2 {
 
     const cutebotProAddr = 0x10
 
-    enum WheelEnum {
-        //% block="Left"
-        Left = 0,
-        //% block="Right"
-        Right = 1,
-        //% block="Both"
-        Both = 2
-    }
-
     /******************************************************************************************************
      * 工具函数
      ******************************************************************************************************/
@@ -28,8 +19,11 @@ namespace cutebotProV2 {
 
     /**
      * motorControl
+     * wheel:0-liftwheel，1-rightwheel，2-allwheel
+     * leftSpeed:[-100, 100]
+     * rightSpeed:[-100, 100]
      */
-    export function motorControl(wheel: WheelEnum, leftSpeed: number, rightSpeed: number): void {
+    export function motorControl(wheel: number, leftSpeed: number, rightSpeed: number): void {
 
         let direction: number = 0;
 

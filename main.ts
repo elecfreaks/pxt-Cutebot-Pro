@@ -293,7 +293,7 @@ namespace CutebotPro {
     //% weight=340
     export function pwmCruiseControl(speedL: number, speedR: number): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.motorControl(2, speedL, speedR);
         } else {
             cutebotProV1.pwmCruiseControl(speedL, speedR);
         }
@@ -307,7 +307,7 @@ namespace CutebotPro {
     //%block="go forward at full speed"
     export function fullSpeedAhead(): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.motorControl(2, 100, 100)
         } else {
             cutebotProV1.fullSpeedAhead();
         }
@@ -321,7 +321,7 @@ namespace CutebotPro {
     //%block="go reverse at full speed"
     export function fullAstern(): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.motorControl(2, -100, -100)
         } else {
             cutebotProV1.fullAstern();
         }
@@ -335,7 +335,7 @@ namespace CutebotPro {
     //%block="set %CutebotProMotors to stop immediately"
     export function stopImmediately(wheel: CutebotProMotors): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.motorControl(wheel-1, 0, 0);
         } else {
             cutebotProV1.stopImmediately(wheel);
         }
