@@ -430,13 +430,9 @@ namespace CutebotPro {
     //% weight=280
     export function singleHeadlights(light: CutebotProRGBLight, r: number, g: number, b: number): void {
         if (readHardVersion() == 2) {
-            let light = 0
-            switch (light) {
-                case CutebotProRGBLight.RGBL: light = 0; break;
-                case CutebotProRGBLight.RGBR: light = 1; break;
-                case CutebotProRGBLight.RGBA: light = 2; break;
-            }
-            cutebotProV2.singleHeadlights(light, r, g, b)
+     
+            let arr = [ 1, 0, 2]
+            cutebotProV2.singleHeadlights(arr[light - 1], r, g, b)
         } else {
             cutebotProV1.singleHeadlights(light, r, g, b);
         }
@@ -452,13 +448,8 @@ namespace CutebotPro {
     //% weight=290
     export function colorLight(light: CutebotProRGBLight, color: number) {
         if (readHardVersion() == 2) {
-            let light = 0
-            switch (light) {
-                case CutebotProRGBLight.RGBL: light = 0; break;
-                case CutebotProRGBLight.RGBR: light = 1; break;
-                case CutebotProRGBLight.RGBA: light = 2; break;
-            }
-            cutebotProV2.colorLight(light, color)
+            let arr = [ 1, 0, 2]
+            cutebotProV2.colorLight(arr[light - 1], color)
         } else {
             cutebotProV1.colorLight(light, color);
         }
@@ -560,12 +551,7 @@ namespace CutebotPro {
     //% blockId=ultrasonic block="sonar sensor unit %SonarUnit"
     //% weight=220
     export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
-        if (readHardVersion() == 2) {
-            // TODO 这个两版本一致
-            return cutebotProV1.ultrasonic(unit, maxCmDistance);
-        } else {
-            return cutebotProV1.ultrasonic(unit, maxCmDistance);
-        }
+        return cutebotProV1.ultrasonic(unit, maxCmDistance);
     }
 
     /**
