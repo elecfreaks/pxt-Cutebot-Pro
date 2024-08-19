@@ -123,8 +123,7 @@ namespace cutebotProV2 {
     */
     export function readVersions(): string {
         i2cCommandSend(0xA0, [0x00])
-        // let versions = pins.i2cReadBuffer(cutebotProAddr, 2)
-        let version = [2,0]
+        let version = pins.i2cReadBuffer(cutebotProAddr, 2)
         // if (cutebotProVersionsDecimal / 10 > 1)
         //     return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal / 10) + "." + convertToText(cutebotProVersionsDecimal % 10))
         // else
