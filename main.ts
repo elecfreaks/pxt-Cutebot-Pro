@@ -731,8 +731,7 @@ namespace CutebotPro {
     //% block="version number"
     export function readVersions(): string {
         if (readHardVersion() == 2) {
-            // TODO 读取软件版本号
-            return cutebotProV1.readVersions();
+            return cutebotProV2.readVersions();
         } else {
             return cutebotProV1.readVersions();
         }

@@ -118,4 +118,18 @@ namespace cutebotProV2 {
         extendServoControl(1, index, speed)
     }
 
+    /**
+    * read version number
+    */
+    export function readVersions(): string {
+        i2cCommandSend(0xA0, [0x00])
+        // let versions = pins.i2cReadBuffer(cutebotProAddr, 2)
+        let version = [2,0]
+        // if (cutebotProVersionsDecimal / 10 > 1)
+        //     return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal / 10) + "." + convertToText(cutebotProVersionsDecimal % 10))
+        // else
+        //     return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(0) + "." + convertToText(cutebotProVersionsDecimal % 10))
+        return `V ${version[0]}.${version[1]}`;
+    }
+
 }
