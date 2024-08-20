@@ -119,16 +119,54 @@ namespace cutebotProV2 {
     }
 
     /**
+     * read motor speed
+     * motor:0-M1,1-M2
+     * speedUnits:0-cms,1-inch
+     */
+    export function readSpeed(motor: number, speedUnits: number): number {
+        i2cCommandSend(0xA0, [motor+1])
+        let speed = pins.i2cReadBuffer(cutebotProAddr, 1)
+
+        if (speedUnits == 0)
+            return speed;
+        else
+            return speed / 0.3937;
+    }
+
+    /**
+    * get the rotation degrees of wheel
+    * motor:0-M1,1-M2
+    */
+    export function readDistance(motor: number): number {
+            i2cCommandSend(0xA0, [motor+3])
+            let distance = pins.i2cReadBuffer(cutebotProAddr, 4)
+            return distance <<24 || distance[1] << 16 || distance[2]<<8||distance[3];
+    }
+
+    /**
+     * clear the rotation degrees of wheel
+     * motor:0-M1,1-M2
+     */
+    export function clearWheelTurn(motor: number): void {
+        pins.i2cWriteBuffer(0x50, [motor]);
+    }
+
+    /**
     * read version number
     */
     export function readVersions(): string {
         i2cCommandSend(0xA0, [0x00])
         let version = pins.i2cReadBuffer(cutebotProAddr, 2)
-        // if (cutebotProVersionsDecimal / 10 > 1)
-        //     return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(cutebotProVersionsDecimal / 10) + "." + convertToText(cutebotProVersionsDecimal % 10))
-        // else
-        //     return ("V" + convertToText(cutebotProVersionsInteger) + "." + convertToText(0) + "." + convertToText(cutebotProVersionsDecimal % 10))
         return `V ${version[0]}.${version[1]}`;
+    }
+
+    /**
+    * read version number
+    */
+    export function readVersion(): number {
+        i2cCommandSend(0xA0, [0x00])
+        let version = pins.i2cReadBuffer(cutebotProAddr, 2)
+        return version[0];
     }
 
 }

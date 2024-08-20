@@ -352,8 +352,7 @@ namespace CutebotPro {
     //%block="get speed of %CutebotProMotors1 %CutebotProSpeedUnits"
     export function readSpeed(motor: CutebotProMotors1, speedUnits: CutebotProSpeedUnits): number {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.readSpeed(motor, speedUnits);
+            return cutebotProV2.readSpeed(motor-1, speedUnits);
         } else {
             return cutebotProV1.readSpeed(motor, speedUnits);
         }
@@ -363,23 +362,14 @@ namespace CutebotPro {
     * 获取编码电机的脉冲数
     */
     export function pulseNumber(): void {
-        if (readHardVersion() == 2) {
-            // TODO
-        } else {
-            cutebotProV1.pulseNumber();
-        }
+        cutebotProV1.pulseNumber();
     }
 
     /**    
      * obtain the number of pulses produced by the coded motor on both sides of the wheel
     */
     export function readPulsenumberTest(motor: CutebotProMotors1): number {
-        if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.readPulsenumberTest(motor);
-        } else {
-            return cutebotProV1.readPulsenumberTest(motor);
-        }
+        return cutebotProV1.readPulsenumberTest(motor);
     }
 
     /**
@@ -390,8 +380,7 @@ namespace CutebotPro {
     //%block="get rotation degrees of %CutebotProMotors1"
     export function readDistance(motor: CutebotProMotors1): number {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.readDistance(motor);
+            return cutebotProV2.readDistance(motor-1);
         } else {
             return cutebotProV1.readDistance(motor);
         }
@@ -408,7 +397,7 @@ namespace CutebotPro {
     //%block="clear rotation degrees of %CutebotProMotors1"
     export function clearWheelTurn(motor: CutebotProMotors1): void {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.clearWheelTurn(motor-1);
         } else {
             cutebotProV1.clearWheelTurn(motor);
         }
@@ -738,7 +727,7 @@ namespace CutebotPro {
     }
 
     export function readHardVersion(): number {
-        // TODO 读取硬件版本号
+        // return cutebotProV2.readVersion();
         return 2;
     }
 }
