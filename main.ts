@@ -727,7 +727,7 @@ namespace CutebotPro {
     }
 
     export function readHardVersion(): number {
-        // return cutebotProV2.readVersion();
-        return 2;
+        return cutebotProV2.readVersion();
+        // return 2;
     }
 }
