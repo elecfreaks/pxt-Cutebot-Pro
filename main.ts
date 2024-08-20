@@ -593,7 +593,7 @@ namespace CutebotPro {
     //% block="set length of the squares as %length %CutebotProDistanceUnits"
     export function setBlockCnt(length: number, distanceUnits: CutebotProDistanceUnits): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidBlockSet(length, distanceUnits);
         } else {
             cutebotProV1.setBlockCnt(length, distanceUnits);
         }
@@ -607,7 +607,7 @@ namespace CutebotPro {
     //% block="go forward %cnt squares"
     export function runBlockCnt(cnt: number): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidRunBlock(cnt);
         } else {
             cutebotProV1.runBlockCnt(cnt);
         }
@@ -622,7 +622,7 @@ namespace CutebotPro {
     //% block="set car %CutebotProTurn for angle %CutebotProAngle"
     export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidRunSteering(turn, (angle+1)*45);
         } else {
             cutebotProV1.trolleySteering(turn, angle);
         }

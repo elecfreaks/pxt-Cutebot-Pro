@@ -248,6 +248,64 @@ namespace cutebotProV2 {
     }
 
     /**
+     * set the trolley to rotate at a specific Angle
+     * @TurnUnit 0-Leftsteering,1-Rightsteering,2-Stay_Leftsteering,3-Stay_Rightsteering
+     * @TurnAngleUnit 0-Angle,1-Circle
+     */
+    export function pidRunSteering(turn: number, angle: number): void {
+        let l_angle_h = 0;
+        let l_angle_l = 0;
+        let r_angle_h = 0;
+        let r_angle_l = 0;
+        let direction = 0;
+
+        if (turn == 0) {
+            angle *= 2;
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+        } else if (turn == 1) {
+            angle *= 2;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+        } else if (turn == 2) {
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+            direction = 1;
+        } else if (turn == 3) {
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+            direction = 2;
+        }
+        i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
+        basic.pause(angle * 2 + 200)
+    }
+
+    let blockLength: number = 0;
+    let blockUnit = 0;//DistanceUnit.Cm
+
+    /**
+    * set block length
+    * @length set the length of each block
+    * @DistanceUnit 0-Cm,1-Inch
+    */
+    export function pidBlockSet(length: number, distanceUnit: number): void {
+        blockLength = length
+        blockUnit = distanceUnit
+    }
+
+    /**
+    * run a specific number of block
+    * @cnt set the number of block
+    */
+    export function pidRunBlock(cnt: number): void {
+        pidRunDistance(0, blockLength * cnt, blockUnit)
+    }
+
+    /**
     * read version number
     */
     export function readVersions(): string {
