@@ -264,29 +264,29 @@ let distanceUnitsFlag = 0
 let fourWayStateValue = 0
 let pulseCntL = 0
 let pulseCntR = 0
-//% weight=100 color=#008C8C block="Cutebot Pro" blockId="Cutebot Pro" icon="\uf48b"
+//// % weight=100 color=#008C8C block="Cutebot Pro" blockId="Cutebot Pro" icon="\uf48b"
 namespace CutebotPro {
 
-    /**
-    * PID ON or OFF
-    */
-    //% block="PID %PID"
-    //% weight=201
-    /*export function PIDSwitch(pid: PID): void {
-        let buf = pins.createBuffer(7);
-        buf[0] = 0x99;
-        buf[1] = 0x00;
-        buf[2] = pid;
-        buf[3] = 0x00;
-        buf[4] = 0x00;
-        buf[5] = 0x00;
-        buf[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, buf);
-    }*/
+    // /**
+    // * PID ON or OFF
+    // */
+    // //% block="PID %PID"
+    // //% weight=201
+    // /*export function PIDSwitch(pid: PID): void {
+    //     let buf = pins.createBuffer(7);
+    //     buf[0] = 0x99;
+    //     buf[1] = 0x00;
+    //     buf[2] = pid;
+    //     buf[3] = 0x00;
+    //     buf[4] = 0x00;
+    //     buf[5] = 0x00;
+    //     buf[6] = 0x88;
+    //     pins.i2cWriteBuffer(i2cAddr, buf);
+    // }*/
 
     /**
-         * PWM control the car to travel at a specific speed
-         */
+    * PWM control the car to travel at a specific speed
+    */
     //% group="Basic control"
     //% block="set left wheel speed %speedL\\%, right wheel speed %speedR\\%"
     //% speed.min=-100 speed.max=100
@@ -335,7 +335,7 @@ namespace CutebotPro {
     //%block="set %CutebotProMotors to stop immediately"
     export function stopImmediately(wheel: CutebotProMotors): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.motorControl(wheel-1, 0, 0);
+            cutebotProV2.motorControl(wheel - 1, 0, 0);
         } else {
             cutebotProV1.stopImmediately(wheel);
         }
@@ -352,7 +352,7 @@ namespace CutebotPro {
     //%block="get speed of %CutebotProMotors1 %CutebotProSpeedUnits"
     export function readSpeed(motor: CutebotProMotors1, speedUnits: CutebotProSpeedUnits): number {
         if (readHardVersion() == 2) {
-            return cutebotProV2.readSpeed(motor-1, speedUnits);
+            return cutebotProV2.readSpeed(motor - 1, speedUnits);
         } else {
             return cutebotProV1.readSpeed(motor, speedUnits);
         }
@@ -380,7 +380,7 @@ namespace CutebotPro {
     //%block="get rotation degrees of %CutebotProMotors1"
     export function readDistance(motor: CutebotProMotors1): number {
         if (readHardVersion() == 2) {
-            return cutebotProV2.readDistance(motor-1);
+            return cutebotProV2.readDistance(motor - 1);
         } else {
             return cutebotProV1.readDistance(motor);
         }
@@ -397,7 +397,7 @@ namespace CutebotPro {
     //%block="clear rotation degrees of %CutebotProMotors1"
     export function clearWheelTurn(motor: CutebotProMotors1): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.clearWheelTurn(motor-1);
+            cutebotProV2.clearWheelTurn(motor - 1);
         } else {
             cutebotProV1.clearWheelTurn(motor);
         }
@@ -419,8 +419,8 @@ namespace CutebotPro {
     //% weight=280
     export function singleHeadlights(light: CutebotProRGBLight, r: number, g: number, b: number): void {
         if (readHardVersion() == 2) {
-     
-            let arr = [ 1, 0, 2]
+
+            let arr = [1, 0, 2]
             cutebotProV2.singleHeadlights(arr[light - 1], r, g, b)
         } else {
             cutebotProV1.singleHeadlights(light, r, g, b);
@@ -437,7 +437,7 @@ namespace CutebotPro {
     //% weight=290
     export function colorLight(light: CutebotProRGBLight, color: number) {
         if (readHardVersion() == 2) {
-            let arr = [ 1, 0, 2]
+            let arr = [1, 0, 2]
             cutebotProV2.colorLight(arr[light - 1], color)
         } else {
             cutebotProV1.colorLight(light, color);
@@ -565,7 +565,7 @@ namespace CutebotPro {
     //% block="go %CutebotProOrientation %distance %CutebotProDistanceUnits"
     export function distanceRunning(orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidRunDistance(orientation?0:1, distance, distanceUnits)
+            cutebotProV2.pidRunDistance(orientation ? 0 : 1, distance, distanceUnits)
         } else {
             cutebotProV1.distanceRunning(orientation, distance, distanceUnits);
         }
@@ -579,7 +579,7 @@ namespace CutebotPro {
     //% block="set %CutebotProWheel rotation %angle %CutebotProAngleUnits"
     export function angleRunning(orientation: CutebotProWheel, angle: number, angleUnits: CutebotProAngleUnits): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidRunAngle(orientation-1, angle, angleUnits);
+            cutebotProV2.pidRunAngle(orientation - 1, angle, angleUnits);
         } else {
             cutebotProV1.angleRunning(orientation, angle, angleUnits);
         }
@@ -622,7 +622,7 @@ namespace CutebotPro {
     //% block="set car %CutebotProTurn for angle %CutebotProAngle"
     export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidRunSteering(turn, (angle+1)*45);
+            cutebotProV2.pidRunSteering(turn, (angle + 1) * 45);
         } else {
             cutebotProV1.trolleySteering(turn, angle);
         }
@@ -691,7 +691,7 @@ namespace CutebotPro {
     //% speed.min=-100  speed.max=100
     export function extendMotorControl(speed: number): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.extendMotorControl(speed); 
+            cutebotProV2.extendMotorControl(speed);
         } else {
             cutebotProV1.extendMotorControl(speed);
         }
