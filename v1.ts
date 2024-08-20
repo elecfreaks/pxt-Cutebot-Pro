@@ -18,22 +18,22 @@ namespace cutebotProV1 {
     }
 
 
-    /**
-    * PID ON or OFF
-    */
-    //% block="PID %PID"
-    //% weight=201
-    /*export function PIDSwitch(pid: PID): void {
-        let buf = pins.createBuffer(7);
-        buf[0] = 0x99;
-        buf[1] = 0x00;
-        buf[2] = pid;
-        buf[3] = 0x00;
-        buf[4] = 0x00;
-        buf[5] = 0x00;
-        buf[6] = 0x88;
-        pins.i2cWriteBuffer(i2cAddr, buf);
-    }*/
+    // /**
+    // * PID ON or OFF
+    // */
+    // //% block="PID %PID"
+    // //% weight=201
+    // /*export function PIDSwitch(pid: PID): void {
+    //     let buf = pins.createBuffer(7);
+    //     buf[0] = 0x99;
+    //     buf[1] = 0x00;
+    //     buf[2] = pid;
+    //     buf[3] = 0x00;
+    //     buf[4] = 0x00;
+    //     buf[5] = 0x00;
+    //     buf[6] = 0x88;
+    //     pins.i2cWriteBuffer(i2cAddr, buf);
+    // }*/
 
     /**
      * PWM control the car to travel at a specific speed
