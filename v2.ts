@@ -200,7 +200,7 @@ namespace cutebotProV2 {
         let rspeed_h = rspeed >> 8;
         let rspeed_l = rspeed & 0xFF;
 
-        i2cCommandSend(0x60, [lspeed_h, lspeed_l, rspeed_h, rspeed_l, direction]);
+        i2cCommandSend(0x80, [lspeed_h, lspeed_l, rspeed_h, rspeed_l, direction]);
 
     }
 
@@ -215,7 +215,7 @@ namespace cutebotProV2 {
         let distance_h = distance >> 8;
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
-        i2cCommandSend(0x61, [distance_h, distance_l, direction_flag]);
+        i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
         basic.pause(distance * 2 + 200) // 小车以500mm/s速度运行
     }
 
@@ -243,7 +243,7 @@ namespace cutebotProV2 {
             r_angle_h = angle >> 8;
         }
 
-        i2cCommandSend(0x62, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
+        i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
         basic.pause(angle * 2 + 200)
     }
 
