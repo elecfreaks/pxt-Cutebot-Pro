@@ -148,7 +148,7 @@ namespace cutebotProV2 {
      * motor:0-M1,1-M2
      */
     export function clearWheelTurn(motor: number): void {
-        pins.i2cWriteBuffer(0x50, [motor]);
+        i2cCommandSend(0x50, [motor]);
     }
 
     /**
