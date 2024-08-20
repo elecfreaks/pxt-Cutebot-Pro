@@ -264,7 +264,7 @@ let distanceUnitsFlag = 0
 let fourWayStateValue = 0
 let pulseCntL = 0
 let pulseCntR = 0
-// % weight=100 color=#008C8C block="Cutebot Pro" blockId="Cutebot Pro" icon="\uf48b"
+//% weight=100 color=#008C8C block="Cutebot Pro" blockId="Cutebot Pro" icon="\uf48b"
 namespace CutebotPro {
 
     /**
