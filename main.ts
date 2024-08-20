@@ -551,7 +551,7 @@ namespace CutebotPro {
     //% weight=210
     export function cruiseControl(speedL: number, speedR: number, speedUnits: CutebotProSpeedUnits): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidSpeedControl(speedL, speedR, speedUnits);
         } else {
             cutebotProV1.cruiseControl(speedL, speedR, speedUnits);
         }
@@ -565,7 +565,7 @@ namespace CutebotPro {
     //% block="go %CutebotProOrientation %distance %CutebotProDistanceUnits"
     export function distanceRunning(orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidRunDistance(orientation?0:1, distance, distanceUnits)
         } else {
             cutebotProV1.distanceRunning(orientation, distance, distanceUnits);
         }
@@ -579,7 +579,7 @@ namespace CutebotPro {
     //% block="set %CutebotProWheel rotation %angle %CutebotProAngleUnits"
     export function angleRunning(orientation: CutebotProWheel, angle: number, angleUnits: CutebotProAngleUnits): void {
         if (readHardVersion() == 2) {
-            // TODO 
+            cutebotProV2.pidRunAngle(orientation-1, angle, angleUnits);
         } else {
             cutebotProV1.angleRunning(orientation, angle, angleUnits);
         }

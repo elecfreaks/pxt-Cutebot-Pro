@@ -151,6 +151,102 @@ namespace cutebotProV2 {
         i2cCommandSend(0x50, [motor]);
     }
 
+    /***********************************************************************************************
+     * PID控制
+     ***********************************************************************************************/
+    //
+    /**
+     * control the car to travel at a specific speed (speed.min=20cm/s speed.max=50cm/s)
+     * @lspeed set the lspeed
+     * @rspeed set the rspeed
+     * @unit 0-cms,1-inch
+     */
+    export function pidSpeedControl(lspeed: number, rspeed: number, unit: number): void {
+
+        let direction: number = 0;
+        if (lspeed < 0) {
+            direction |= 0x01;
+        }
+
+        if (rspeed < 0) {
+            direction |= 0x2;
+        }
+
+        switch (unit) {
+            case 0:
+                lspeed *= 10;
+                rspeed *= 10;
+                break;
+            case 1:
+                lspeed *= 25.4;
+                rspeed *= 25.4;
+                break;
+        }
+
+        if(lspeed != 0){
+            lspeed = Math.abs(lspeed);
+            lspeed = Math.min(lspeed, 500);
+            lspeed = Math.max(lspeed, 200);
+        }
+
+        if(rspeed != 0){
+            rspeed = Math.abs(rspeed);
+            rspeed = Math.min(rspeed, 500);
+            rspeed = Math.max(rspeed, 200);
+        }
+
+        let lspeed_h = lspeed >> 8;
+        let lspeed_l = lspeed & 0xFF;
+        let rspeed_h = rspeed >> 8;
+        let rspeed_l = rspeed & 0xFF;
+
+        i2cCommandSend(0x60, [lspeed_h, lspeed_l, rspeed_h, rspeed_l, direction]);
+
+    }
+
+    /**
+     * set the car to travel a specific distance(distance.max=6000cm, distance.min=0cm)
+     * @Direction 0-forward,1-backward
+     * @distance set the distance eg: 0
+     * @DistanceUnit 0-cms,1-inch
+     */
+    export function pidRunDistance(direction: number, distance: number, unit: number): void {
+        distance *= (unit == 0 ? 10 : 25.4)
+        let distance_h = distance >> 8;
+        let distance_l = distance & 0xFF;
+        let direction_flag = (direction == 0 ? 0 : 3);
+        i2cCommandSend(0x61, [distance_h, distance_l, direction_flag]);
+        basic.pause(distance * 2 + 200) // 小车以500mm/s速度运行
+    }
+
+    /**
+     * Select the wheel and set the Angle or number of turns you want to turn
+     * @Wheel 0-WheelLeft,1-WheelRight,2-WheelALL
+     * @angle set the angle or number of turns eg: 0
+     * @angleUnits 0-Angle,1-Circle
+     */
+    export function pidRunAngle(wheel: number, angle: number, angleUnits: number): void {
+        let l_angle_h = 0;
+        let l_angle_l = 0;
+        let r_angle_h = 0;
+        let r_angle_l = 0;
+        let direction = 0;
+        if (angleUnits == 1) angle *= 360;
+        if (angle < 0) direction = 3;
+        angle *= 2;
+        if (wheel == 0 || wheel == 2) {
+            l_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+        }
+        if (wheel == 1 || wheel == 2) {
+            r_angle_l = angle & 0xFF;
+            r_angle_h = angle >> 8;
+        }
+
+        i2cCommandSend(0x62, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
+        basic.pause(angle * 2 + 200)
+    }
+
     /**
     * read version number
     */
