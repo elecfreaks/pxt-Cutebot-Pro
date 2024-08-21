@@ -243,7 +243,7 @@ namespace cutebotProV2 {
             r_angle_h = angle >> 8;
         }
 
-        i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
+        i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
         basic.pause(angle * 2 + 200)
     }
 
@@ -280,7 +280,7 @@ namespace cutebotProV2 {
             l_angle_l = angle & 0xFF;
             direction = 2;
         }
-        i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
+        i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
         basic.pause(angle * 2 + 200)
     }
 
