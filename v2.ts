@@ -310,7 +310,7 @@ namespace cutebotProV2 {
     */
     export function readVersions(): string {
         i2cCommandSend(0xA0, [0x00])
-        let version = pins.i2cReadBuffer(cutebotProAddr, 2)
-        return `V ${version[0]}.${version[1]}`;
+        let version = pins.i2cReadBuffer(cutebotProAddr, 3)
+        return `V ${version[0]}.${version[1]}.${version[2]}`;
     }
 }
