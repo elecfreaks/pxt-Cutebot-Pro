@@ -728,20 +728,20 @@ namespace CutebotPro {
 
     let version = -1;
     export function readHardVersion(): number {
-        if (version == -1) {
-            cutebotProV2.i2cCommandSend(0xA0, [0x00])
-            let i2cBuffer = pins.createBuffer(7);
-            i2cBuffer[0] = 0x99;
-            i2cBuffer[1] = 0x15;
-            i2cBuffer[2] = 0x00;
-            i2cBuffer[3] = 0x00;
-            i2cBuffer[4] = 0x00;
-            i2cBuffer[5] = 0x00;
-            i2cBuffer[6] = 0x88;
-            pins.i2cWriteBuffer(0x10, i2cBuffer)
-            version = pins.i2cReadNumber(0x10, NumberFormat.UInt8LE, false);
-        }
-        return version;
-        // return 2;
+        // if (version == -1) {
+        //     cutebotProV2.i2cCommandSend(0xA0, [0x00])
+        //     let i2cBuffer = pins.createBuffer(7);
+        //     i2cBuffer[0] = 0x99;
+        //     i2cBuffer[1] = 0x15;
+        //     i2cBuffer[2] = 0x00;
+        //     i2cBuffer[3] = 0x00;
+        //     i2cBuffer[4] = 0x00;
+        //     i2cBuffer[5] = 0x00;
+        //     i2cBuffer[6] = 0x88;
+        //     pins.i2cWriteBuffer(0x10, i2cBuffer)
+        //     version = pins.i2cReadNumber(0x10, NumberFormat.UInt8LE, false);
+        // }
+        // return version;
+        return 2;
     }
 }
