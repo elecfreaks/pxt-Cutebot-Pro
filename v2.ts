@@ -1,6 +1,7 @@
 namespace cutebotProV2 {
 
     const cutebotProAddr = 0x10
+    let fourWayStateValue = 0
 
     /******************************************************************************************************
      * 工具函数
@@ -149,6 +150,64 @@ namespace cutebotProV2 {
      */
     export function clearWheelTurn(motor: number): void {
         i2cCommandSend(0x50, [motor]);
+    }
+
+    /**
+    * get a status value of the 4-way line following sensor
+    */
+    export function trackbitStateValue(): void {
+        i2cCommandSend(0x60, [0x00])
+        fourWayStateValue = pins.i2cReadBuffer(cutebotProAddr, 1)
+    }
+
+    /**
+    * 4-way line following sensor offset
+    */
+    export function getOffset(): number {
+        i2cCommandSend(0x60, [0x01])
+
+        let offset = pins.i2cReadBuffer(cutebotProAddr, 2)
+        offset = Math.map(offset, 0, 6000, -3000, 3000);
+        return offset;
+    }
+
+    /**
+    * get Grayscale Sensor State
+    * state 0~15状态值
+    */
+    export function getGrayscaleSensorState(state: number): boolean {
+        return fourWayStateValue == state
+    }
+
+    /**
+    * check whether the channel is online
+    * channel：0~4
+    * state:0-hollow circle,1-solid circle
+    */
+    export function trackbitChannelState(channel: number, state: number): boolean {
+        if (state == 1)
+            if (fourWayStateValue & (1 << (channel))) {
+                return true
+            }
+            else {
+                return false
+            }
+        else {
+            if (fourWayStateValue & (1 << (channel))) {
+                return false
+            }
+            else {
+                return true
+            }
+        }
+    }
+
+    /**
+    * get gray value.The range is from 0 to 255.
+    */
+    export function trackbitgetGray(channel: number): number {
+        i2cCommandSend(0x60, [0x02,channel])
+        return pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
     }
 
     /***********************************************************************************************

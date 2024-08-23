@@ -466,7 +466,7 @@ namespace CutebotPro {
     //% block="get a tracking sensor state value"
     export function trackbitStateValue() {
         if (readHardVersion() == 2) {
-            // TODO
+            cutebotProV2.trackbitStateValue();
         } else {
             cutebotProV1.trackbitStateValue();
         }
@@ -480,8 +480,7 @@ namespace CutebotPro {
     //%block="fused offset value"
     export function getOffset(): number {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.getOffset();
+            return cutebotProV2.getOffset();
         } else {
             return cutebotProV1.getOffset();
         }
@@ -495,8 +494,7 @@ namespace CutebotPro {
     //%block="tracking sensor state is %TrackbitStateType"
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.getGrayscaleSensorState(state);
+            return cutebotProV2.getGrayscaleSensorState(state);
         } else {
             return cutebotProV1.getGrayscaleSensorState(state);
         }
@@ -510,8 +508,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor %TrackbitType"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.trackbitChannelState(channel, state);
+            return cutebotProV2.trackbitChannelState(channel-1, state);
         } else {
             return cutebotProV1.trackbitChannelState(channel, state);
         }
@@ -525,8 +522,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor gray value"
     export function trackbitgetGray(channel: TrackbitChannel): number {
         if (readHardVersion() == 2) {
-            // TODO
-            return cutebotProV1.trackbitgetGray(channel);
+            return cutebotProV2.trackbitgetGray(channel-1);
         } else {
             return cutebotProV1.trackbitgetGray(channel);
         }
