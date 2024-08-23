@@ -157,7 +157,8 @@ namespace cutebotProV2 {
     */
     export function trackbitStateValue(): void {
         i2cCommandSend(0x60, [0x00])
-        fourWayStateValue = pins.i2cReadBuffer(cutebotProAddr, 1)
+        let states = pins.i2cReadBuffer(cutebotProAddr, 1)
+        fourWayStateValue = states[0];
     }
 
     /**
@@ -166,7 +167,8 @@ namespace cutebotProV2 {
     export function getOffset(): number {
         i2cCommandSend(0x60, [0x01])
 
-        let offset = pins.i2cReadBuffer(cutebotProAddr, 2)
+        let value = pins.i2cReadBuffer(cutebotProAddr, 2)
+        let offset = value[0] << 8 || value[1];
         offset = Math.map(offset, 0, 6000, -3000, 3000);
         return offset;
     }
@@ -207,7 +209,7 @@ namespace cutebotProV2 {
     */
     export function trackbitgetGray(channel: number): number {
         i2cCommandSend(0x60, [0x02,channel])
-        return pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false)
+        return pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false)
     }
 
     /***********************************************************************************************
