@@ -168,7 +168,7 @@ namespace cutebotProV2 {
         i2cCommandSend(0x60, [0x01])
 
         let value = pins.i2cReadBuffer(cutebotProAddr, 2)
-        let offset = value[0] << 8 || value[1];
+        let offset = value[0] << 8 | value[1];
         offset = Math.map(offset, 0, 6000, -3000, 3000);
         return offset;
     }
