@@ -140,8 +140,7 @@ namespace cutebotProV2 {
     */
     export function readDistance(motor: number): number {
             i2cCommandSend(0xA0, [motor+3])
-            let distance = pins.i2cReadBuffer(cutebotProAddr, 4)
-            return distance[0] <<24 || distance[1] << 16 || distance[2]<<8||distance[3];
+            return pins.i2cReadNumber(cutebotProAddr, NumberFormat.Int32LE, false)
     }
 
     /**
