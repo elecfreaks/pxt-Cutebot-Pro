@@ -293,7 +293,7 @@ namespace cutebotProV2 {
         let direction = 0;
         if (angleUnits == 1) angle *= 360;
         if (angle < 0) direction = 3;
-        angle *= 2;
+        angle *= 10;
         if (wheel == 0 || wheel == 2) {
             l_angle_l = angle & 0xFF;
             l_angle_h = angle >> 8;
