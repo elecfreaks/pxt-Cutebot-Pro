@@ -276,7 +276,7 @@ namespace cutebotProV2 {
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        basic.pause(distance * 5.5 + 400) // 小车以500mm/s速度运行
+        basic.pause(distance * 6.5 + 400) // 小车以500mm/s速度运行
     }
 
     /**
