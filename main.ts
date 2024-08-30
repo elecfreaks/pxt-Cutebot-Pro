@@ -723,7 +723,7 @@ namespace CutebotPro {
 
     }
 
-    let version = 0;
+    let version = -1;
     export function readHardVersion(): number {
         if (version == -1) {
             
