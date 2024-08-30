@@ -304,7 +304,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 2 + 200)
+        basic.pause(angle * 0.3 + 500)
     }
 
     /**
@@ -341,7 +341,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 2 + 200)
+        basic.pause(angle * 7 + 300)
     }
 
     let blockLength: number = 0;
