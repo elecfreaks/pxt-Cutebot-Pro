@@ -720,6 +720,7 @@ namespace CutebotPro {
         } else {
             return cutebotProV1.readVersions();
         }
+        
     }
 
     let version = -1;
