@@ -736,8 +736,11 @@ namespace CutebotPro {
             i2cBuffer[5] = 0x00;
             i2cBuffer[6] = 0x88;
             pins.i2cWriteBuffer(0x10, i2cBuffer)
-            cutebotProV2.i2cCommandSend(0xA0, [0x00])
+            //cutebotProV2.i2cCommandSend(0xA0, [0x00])
             version = pins.i2cReadNumber(0x10, NumberFormat.UInt8LE, false);
+            if (version != 1) {
+                version = 2;
+            }
         }
         return version;
         // return 2;
