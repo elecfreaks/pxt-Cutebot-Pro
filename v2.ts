@@ -2,6 +2,7 @@ namespace cutebotProV2 {
 
     const cutebotProAddr = 0x10
     let fourWayStateValue = 0
+    let timeDelay = 0
 
     /******************************************************************************************************
      * 工具函数
@@ -16,6 +17,13 @@ namespace cutebotProV2 {
             buff[i + 4] = params[i];
         }
         pins.i2cWriteBuffer(cutebotProAddr, buff);
+    }
+
+    /******************************************************************************************************
+     * 工具函数
+     ******************************************************************************************************/
+    export function setbause(bause: number) {
+        timeDelay = bause;
     }
 
     /**
@@ -276,7 +284,7 @@ namespace cutebotProV2 {
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        basic.pause(distance * 6.5 + 400) // 小车以500mm/s速度运行
+        basic.pause(distance * 7.0 + 400 +timeDelay) // 小车以500mm/s速度运行
     }
 
     /**
@@ -304,7 +312,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 0.3 + 500)
+        basic.pause(angle * 0.5 + 500+timeDelay)
     }
 
     /**
@@ -341,7 +349,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 7 + 300)
+        basic.pause(angle * 7 + 300+timeDelay)
     }
 
     let blockLength: number = 0;
