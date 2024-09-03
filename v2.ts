@@ -352,7 +352,7 @@ namespace cutebotProV2 {
         basic.pause(angle * 8 + 500+timeDelay)
     }
 
-    let blockLength: number = 0;
+    let blockLength: number = 0; 
     let blockUnit = 0;//DistanceUnit.Cm
 
     /**
