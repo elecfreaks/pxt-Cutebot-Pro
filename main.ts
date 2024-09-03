@@ -708,7 +708,7 @@ namespace CutebotPro {
         }
     }
 
-    /**
+    /** 
     * read version number
     */
     //% group="Others"
