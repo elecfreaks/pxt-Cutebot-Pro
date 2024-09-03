@@ -166,7 +166,7 @@ namespace cutebotProV2 {
         i2cCommandSend(0x60, [0x00])
         let states = pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false)
         fourWayStateValue = states;
-    }
+    } 
 
     /**
     * 4-way line following sensor offset
