@@ -2,7 +2,7 @@ namespace cutebotProV2 {
 
     const cutebotProAddr = 0x10
     let fourWayStateValue = 0
-    let timeDelay = 0
+    let timeDelay = 500
 
     /******************************************************************************************************
      * 工具函数
