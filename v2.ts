@@ -26,6 +26,23 @@ namespace cutebotProV2 {
         timeDelay = bause;
     }
 
+    /******************************************************************************************************
+     * 工具函数
+     ******************************************************************************************************/
+    export function pidPause(ms: number) {
+        let time = control.millis()+ms
+        while(1)
+        {
+            i2cCommandSend(0xA0, [0x05])
+            if (pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false) || control.millis()>= time)
+            {
+                basic.pause(300)
+                break
+            }
+            basic.pause(1)
+        }
+    }
+
     /**
      * motorControl
      * wheel:0-liftwheel，1-rightwheel，2-allwheel
@@ -284,7 +301,8 @@ namespace cutebotProV2 {
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        basic.pause(distance * 7.0 + 400 +timeDelay) // 小车以500mm/s速度运行
+        basic.pause(distance * 7.0 + 400) // 小车以500mm/s速度运行
+        pidPause(5000)
     }
 
     /**
@@ -312,7 +330,8 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 0.5 + 500+timeDelay)
+        basic.pause(angle * 0.5 + 500)
+        pidPause(5000)
     }
 
     /**
@@ -349,9 +368,8 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 8 + 500+timeDelay)
-        if(turn == 3 || turn == 2)
-            basic.pause(800)
+        basic.pause(angle * 8 + 500)
+        pidPause(5000)
     }
 
     let blockLength: number = 0; 
