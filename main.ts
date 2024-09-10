@@ -1452,7 +1452,7 @@ namespace CutebotPro {
      */
     //% group="Expansion port"
     //% weight=120
-    //% block="set %ServoType servo %CutebotProServoIndex angel to %angle°"
+    //% block="set %ServoType servo %CutebotProServoIndex angle to %angle°"
     export function extendServoControl(servotype: ServoType, index: CutebotProServoIndex, angle: number): void {
         let angleMap: number
         if (servotype == 1) {
