@@ -36,7 +36,7 @@ namespace cutebotProV2 {
             i2cCommandSend(0xA0, [0x05])
             if (pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false) || control.millis()>= time)
             {
-                basic.pause(300)
+                basic.pause(800)
                 break
             }
             basic.pause(1)
