@@ -612,10 +612,12 @@ namespace CutebotPro {
 
     /**
      * set the trolley to rotate at a specific Angle
+     * @param angle set the angle unit eg: 180
      */
     //% group="PID Control"
     //% weight=190
     //% block="set car %CutebotProTurn for angle %angle"
+    //% angle.min=0 angle.max=360
     export function trolleySteering(turn: CutebotProTurn, angle: number): void {
         if (readHardVersion() == 2) {
             cutebotProV2.pidRunSteering(turn, angle);
