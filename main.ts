@@ -609,7 +609,6 @@ namespace CutebotPro {
         }
     }
 
-
     /**
      * set the trolley to rotate at a specific Angle
      * @param angle set the angle unit eg: 180
@@ -625,8 +624,6 @@ namespace CutebotPro {
             cutebotProV1.trolleySteering(turn, angle);
         }
     }
-
-
 
     //% shim=IRV2::irCode
     function irCode(): number {

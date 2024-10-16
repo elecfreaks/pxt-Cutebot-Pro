@@ -754,7 +754,7 @@ namespace cutebotProV1 {
             tempangle = 630
         else
         {
-            tempangle = 3.42 * angle
+            tempangle = 3.52 * angle
         }
         if (turn == CutebotProTurn.Left) {
             orientation = CutebotProWheel.RightWheel
