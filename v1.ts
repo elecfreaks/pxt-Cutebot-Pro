@@ -758,7 +758,7 @@ namespace cutebotProV1 {
         }
         else 
         {
-            tempangle = 3.50 * angle
+            tempangle = 3.48 * angle
         }
 
         if (turn == CutebotProTurn.Left) {
