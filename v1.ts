@@ -754,7 +754,7 @@ namespace cutebotProV1 {
             tempangle = 630
         else if( angle < 180)
         {
-            tempangle = 3.52 * angle
+            tempangle = 3.51 * angle
         }
         else 
         {
