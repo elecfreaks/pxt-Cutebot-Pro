@@ -611,7 +611,7 @@ namespace CutebotPro {
 
     /**
      * set the trolley to rotate at a specific Angle
-     * @param angle set the angle unit eg: 180
+     * @param angle set the angle unit
      */
     //% group="PID Control"
     //% weight=190
