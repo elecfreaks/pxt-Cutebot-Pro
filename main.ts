@@ -406,9 +406,9 @@ namespace CutebotPro {
 
     /**
     * select a headlights and set the RGB color.
-    * @param R R color value of RGB color, eg: 0
-    * @param G G color value of RGB color, eg: 128
-    * @param B B color value of RGB color, eg: 255
+    * @param R R color value of RGB color
+    * @param G G color value of RGB color
+    * @param B B color value of RGB color
     */
     //% group="LED headlights"
     //% inlineInputMode=inline
@@ -530,7 +530,7 @@ namespace CutebotPro {
 
     /**
       * cars can extend the ultrasonic function to prevent collisions and other functions..
-      * @param Sonarunit two states of ultrasonic module, eg: Centimeters
+      * @param Sonarunit two states of ultrasonic module
       */
     //% group="Sonar sensor"
     //% blockId=ultrasonic block="sonar sensor unit %SonarUnit"
