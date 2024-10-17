@@ -133,13 +133,13 @@ enum CutebotProTurn {
 
 enum CutebotProAngle {
     //%block="45°"
-    Angle45 = 0,
+    Angle45 = 45,
     //%block="90°"
-    Angle90 = 1,
+    Angle90 = 90,
     //%block="135°"
-    Angle135 = 2,
+    Angle135 = 135,
     //%block="180°"
-    Angle180 = 3
+    Angle180 = 180
 }
 
 
@@ -609,22 +609,21 @@ namespace CutebotPro {
         }
     }
 
-
     /**
      * set the trolley to rotate at a specific Angle
+     * @param angle set the angle unit eg: 180
      */
     //% group="PID Control"
     //% weight=190
-    //% block="set car %CutebotProTurn for angle %CutebotProAngle"
-    export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
+    //% block="set car %CutebotProTurn for angle %angle"
+    //% angle.min=0 angle.max=360
+    export function trolleySteering(turn: CutebotProTurn, angle: number): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidRunSteering(turn, (angle + 1) * 45);
+            cutebotProV2.pidRunSteering(turn, angle);
         } else {
             cutebotProV1.trolleySteering(turn, angle);
         }
     }
-
-
 
     //% shim=IRV2::irCode
     function irCode(): number {

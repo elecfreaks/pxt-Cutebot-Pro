@@ -734,7 +734,7 @@ namespace cutebotProV1 {
     /**
      * set the trolley to rotate at a specific Angle
      */
-    export function trolleySteering(turn: CutebotProTurn, angle: CutebotProAngle): void {
+    export function trolleySteering(turn: CutebotProTurn, angle: number): void {
         let buf = pins.createBuffer(7)
         let curtime = 0
         let oldtime = 0
@@ -750,8 +750,16 @@ namespace cutebotProV1 {
             tempangle = 316
         else if (angle == CutebotProAngle.Angle135)
             tempangle = 450
-        else
+        else if (angle == CutebotProAngle.Angle180)
             tempangle = 630
+        else if( angle < 180)
+        {
+            tempangle = 3.51 * angle
+        }
+        else 
+        {
+            tempangle = 3.45 * angle
+        }
 
         if (turn == CutebotProTurn.Left) {
             orientation = CutebotProWheel.RightWheel
