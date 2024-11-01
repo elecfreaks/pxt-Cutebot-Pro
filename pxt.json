@@ -1,15 +1,17 @@
 {
     "name": "pxt-cutebotpro",
-    "version": "1.0.60",
+    "version": "2.0.0",
     "description": "ELECFREAKS cutebotpro car",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:elecfreaks/pxt-neopixel#v0.6.18"
+        "neopixel": "github:elecfreaks/pxt-neopixel#0.6.20"
     },
     "files": [
         "README.md",
         "main.ts",
+        "v1.ts",
+        "v2.ts",
         "IR.cpp",
         "shims.d.ts",
         "enums.d.ts",
