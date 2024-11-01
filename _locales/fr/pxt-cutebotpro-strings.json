@@ -48,7 +48,7 @@
     "CutebotPro.fullSpeedAhead|block": "avancer à pleine vitesse",
     "CutebotPro.fullAstern|block": "reculer à pleine vitesse",
     "CutebotPro.stopImmediately|block": "régler %CutebotProMotors pour un arrêt immédiat",
-    "CutebotPro.cruiseControl|block": "régler la vitesse de la roue gauche à % %speedL, la vitesse de la roue droite à %speedR %CutebotProSpeedUnits",
+    "CutebotPro.cruiseControl|block": "régler la vitesse de la roue gauche à %speedL, la vitesse de la roue droite à %speedR %CutebotProSpeedUnits",
     "CutebotPro.pwmCruiseControl|block": "régler la vitesse de la roue gauche à %speedL\\%, la vitesse de la roue droite à %speedR\\%",
     "CutebotPro.trolleySteering|block": "régler voiture %CutebotProTurn avec angle %CutebotProAngle",
     "CutebotPro.turnOffAllHeadlights|block": "éteindre toutes les LEDs",
