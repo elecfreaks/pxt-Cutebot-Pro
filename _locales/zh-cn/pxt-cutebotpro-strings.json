@@ -50,7 +50,7 @@
     "CutebotPro.stopImmediately|block": "设置 %CutebotProMotors 立即停止",
     "CutebotPro.cruiseControl|block": "设置左轮速度为 %speedL, 设置右轮速度为 %speedR %CutebotProSpeedUnits",
     "CutebotPro.pwmCruiseControl|block": "设置左轮速度为 %speedL\\%, 设置右轮速度为 %speedR\\%",
-    "CutebotPro.trolleySteering|block": "设置小车 %CutebotProTurn 角度 %CutebotProAngle",
+    "CutebotPro.trolleySteering|block": "设置小车 %CutebotProTurn 角度 %angle",
     "CutebotPro.turnOffAllHeadlights|block": "关闭所有LED车头灯",
     "CutebotPro.colorLight|block": "设置%CutebotProRGBLight 颜色为 $color",
     "CutebotPro.trackbitChannelState|block": "四路红外巡线传感器 通道 %TrackbitChannel 识别 %TrackbitType",

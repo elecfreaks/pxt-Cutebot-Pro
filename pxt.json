@@ -10,6 +10,8 @@
     "files": [
         "README.md",
         "main.ts",
+        "v1.ts",
+        "v2.ts",
         "IR.cpp",
         "shims.d.ts",
         "enums.d.ts",
