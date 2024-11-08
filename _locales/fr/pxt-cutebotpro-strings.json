@@ -50,7 +50,7 @@
     "CutebotPro.stopImmediately|block": "régler %CutebotProMotors pour un arrêt immédiat",
     "CutebotPro.cruiseControl|block": "régler la vitesse de la roue gauche à %speedL, la vitesse de la roue droite à %speedR %CutebotProSpeedUnits",
     "CutebotPro.pwmCruiseControl|block": "régler la vitesse de la roue gauche à %speedL\\%, la vitesse de la roue droite à %speedR\\%",
-    "CutebotPro.trolleySteering|block": "%CutebotProTurn avec angle %angle",
+    "CutebotPro.trolleySteering|block": "%CutebotProTurn avec un angle de %angle",
     "CutebotPro.turnOffAllHeadlights|block": "éteindre toutes les LEDs",
     "CutebotPro.colorLight|block": "régler la coulleur des LED %CutebotProRGBLight à $color",
     "CutebotPro.trackbitChannelState|block": "canal %TrackbitChannel capteur de suivi %TrackbitType",
