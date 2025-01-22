@@ -334,7 +334,7 @@ namespace cutebotProV2 {
         pidPause(5000)
     }
 
-    let angleCoefficient = 1.038;
+    let angleCoefficient = 1.020;
     export function setAngleCoefficient(num: number): void {
         angleCoefficient = num;
     }
