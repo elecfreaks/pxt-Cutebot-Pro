@@ -1,6 +1,6 @@
 {
     "name": "pxt-cutebotpro",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "ELECFREAKS cutebotpro car",
     "license": "MIT",
     "dependencies": {
