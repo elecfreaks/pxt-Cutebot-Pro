@@ -216,6 +216,8 @@ enum SonarUnit {
 }
 
 enum CutbotProIRButtons {
+    //% block="power"
+    Power = 1,
     //% block="menu"
     Menu = 2,
     //% block="up"

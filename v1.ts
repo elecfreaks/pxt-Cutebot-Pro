@@ -752,12 +752,10 @@ namespace cutebotProV1 {
             tempangle = 450
         else if (angle == CutebotProAngle.Angle180)
             tempangle = 630
-        else if( angle < 180)
-        {
+        else if (angle < 180) {
             tempangle = 3.51 * angle
         }
-        else 
-        {
+        else {
             tempangle = 3.45 * angle
         }
 
@@ -1070,14 +1068,22 @@ namespace cutebotProV1 {
         return 0;
     }
 
+    let IR_handling_flag = false
     export function irCallback(handler: () => void) {
         pins.setPull(DigitalPin.P16, PinPullMode.PullUp)
-        control.onEvent(98, 3500, handler)
+        control.onEvent(98, 3500, () => {
+            handler()
+            IR_handling_flag = false;
+        })
         control.inBackground(() => {
             while (true) {
-                IR_Val = irCode()
-                if (IR_Val != 0xff00) {
-                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
+                if (!IR_handling_flag) {
+                    IR_Val = irCode()
+                    if (IR_Val == 0xff00 || (IR_Val & 0x00ff) <= 30 && (IR_Val & 0x00ff) != 0) {
+                        IR_handling_flag = true
+                        control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
+                    }
+
                 }
                 basic.pause(20)
             }
@@ -1088,6 +1094,8 @@ namespace cutebotProV1 {
      * get IR value
      */
     export function irButton(Button: CutbotProIRButtons): boolean {
+        if (IR_Val == 0xff00)
+            IR_Val = 0x0001
         return (IR_Val & 0x00ff) == Button
     }
 
