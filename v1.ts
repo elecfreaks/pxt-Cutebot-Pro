@@ -1067,8 +1067,7 @@ namespace cutebotProV1 {
     }
 
     let IR_handling_flag = false
-    //% weight=25
-    //% block="On IR receiving"
+
     export function irCallback(handler: (code: number) => void) {
         pins.setPull(DigitalPin.P16, PinPullMode.PullUp)
         control.onEvent(98, 3500, () => {
@@ -1113,8 +1112,6 @@ namespace cutebotProV1 {
     /**
      * TODO: Get IR value
      */
-    //% block="IR Button %Button is pressed"
-    //% weight=15
     export function irButton(Button: CutbotProIRButtons): boolean {
         if (IR_Val == 0xffff) return false // over time
         return (IR_Val & 0x00ff) == Button

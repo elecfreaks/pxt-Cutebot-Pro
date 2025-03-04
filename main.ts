@@ -679,7 +679,7 @@ namespace CutebotPro {
     //% group="Infrared sensor"
     //% weight=160
     //% block="on IR receiving"
-    export function irCallback(handler: () => void) {
+    export function irCallback(handler: (code:number) => void) {
         cutebotProV1.irCallback(handler);
     }
 
