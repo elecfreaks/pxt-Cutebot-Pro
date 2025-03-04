@@ -570,6 +570,19 @@ namespace CutebotPro {
     }
 
     /**
+     * set the car to travel a specific distance(distance.max=255cm, distance.min=0cm)
+     */
+    //% group="PID V2.1.0"
+    //% weight=200
+    //% block="go %speed %CutebotProSpeedUnits %CutebotProOrientation %distance %CutebotProDistanceUnits"
+    //% speed.min=20 speed.max=50 speed.defl=25
+    export function distanceSpeedRunning(speed:number,unitspeed:CutebotProSpeedUnits,orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunDistance(speed,unitspeed,orientation ? 0 : 1, distance, distanceUnits)
+        }
+    }
+
+    /**
      * 
      */
     //% group="PID Control"
@@ -580,6 +593,19 @@ namespace CutebotPro {
             cutebotProV2.pidRunAngle(orientation - 1, angle, angleUnits);
         } else {
             cutebotProV1.angleRunning(orientation, angle, angleUnits);
+        }
+    }
+
+    /**
+     * 
+     */
+    //% group="PID V2.1.0"
+    //% weight=200
+    //% block="set %CutebotProWheel %speed %CutebotProSpeedUnits rotation %angle %CutebotProAngleUnits"
+    //% speed.min=20 speed.max=50 speed.defl=25
+    export function angleSpeedRunning(orientation: CutebotProWheel, speed:number,unit:CutebotProSpeedUnits,angle: number, angleUnits: CutebotProAngleUnits): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunAngle(speed,unit,orientation - 1, angle, angleUnits);
         }
     }
 
@@ -624,6 +650,21 @@ namespace CutebotPro {
             cutebotProV2.pidRunSteering(turn, angle);
         } else {
             cutebotProV1.trolleySteering(turn, angle);
+        }
+    }
+
+    /**
+     * set the trolley to rotate at a specific Angle
+     * @param angle set the angle unit
+     */
+    //% group="PID V2.1.0"
+    //% weight=190
+    //% block="set car %speed %CutebotProSpeedUnits %CutebotProSpeedUnits %CutebotProTurn for angle %angle"
+    //% speed.min=20 speed.max=50 speed.defl=25
+    //% angle.min=0 angle.max=360
+    export function trolleySpeedSteering(speed:number,unit:CutebotProSpeedUnits,turn: CutebotProTurn, angle: number): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunSteering(speed,unit,turn, angle);
         }
     }
 
