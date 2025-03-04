@@ -328,7 +328,11 @@ namespace cutebotProV2 {
         } else {
             speed *= 10;
         }
-        speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        if(speed <= 0){
+            speed = 0;
+        }else{
+            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        }
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         i2cCommandSend(0x84, [distance_h, distance_l, speed_h, speed_l, direction_flag]);
@@ -382,7 +386,11 @@ namespace cutebotProV2 {
         } else {
             speed *= 10;
         }
-        speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        if (speed <= 0) {
+            speed = 0;
+        } else {
+            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        }
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         if (angleUnits == 1) angle *= 360;
@@ -459,7 +467,11 @@ namespace cutebotProV2 {
         else{
             speed *= 10;
         }
-        speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        if (speed <= 0) {
+            speed = 0;
+        } else {
+            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        }
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
 
