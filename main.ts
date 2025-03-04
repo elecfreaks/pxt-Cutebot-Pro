@@ -216,8 +216,8 @@ enum SonarUnit {
 }
 
 enum CutbotProIRButtons {
-    //% block="power"
-    Power = 1,
+    //% block="off"
+    Off = 1,
     //% block="menu"
     Menu = 2,
     //% block="up"
@@ -510,7 +510,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor %TrackbitType"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (readHardVersion() == 2) {
-            return cutebotProV2.trackbitChannelState(channel-1, state);
+            return cutebotProV2.trackbitChannelState(channel - 1, state);
         } else {
             return cutebotProV1.trackbitChannelState(channel, state);
         }
@@ -524,7 +524,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor gray value"
     export function trackbitgetGray(channel: TrackbitChannel): number {
         if (readHardVersion() == 2) {
-            return cutebotProV2.trackbitgetGray(channel-1);
+            return cutebotProV2.trackbitgetGray(channel - 1);
         } else {
             return cutebotProV1.trackbitgetGray(channel);
         }
@@ -577,9 +577,9 @@ namespace CutebotPro {
     //% block="go %speed %CutebotProSpeedUnits %CutebotProOrientation %distance %CutebotProDistanceUnits"
     //% speed.min=20 speed.max=50 speed.defl=25
     //% inlineInputMode=inline
-    export function distanceSpeedRunning(speed:number,unitspeed:CutebotProSpeedUnits,orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
+    export function distanceSpeedRunning(speed: number, unitspeed: CutebotProSpeedUnits, orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidSpeedRunDistance(speed,unitspeed,orientation ? 0 : 1, distance, distanceUnits)
+            cutebotProV2.pidSpeedRunDistance(speed, unitspeed, orientation ? 0 : 1, distance, distanceUnits)
         }
     }
 
@@ -605,9 +605,9 @@ namespace CutebotPro {
     //% block="set %CutebotProWheel %speed %CutebotProSpeedUnits rotation %angle %CutebotProAngleUnits"
     //% speed.min=20 speed.max=50 speed.defl=25
     //% inlineInputMode=inline
-    export function angleSpeedRunning(orientation: CutebotProWheel, speed:number,unit:CutebotProSpeedUnits,angle: number, angleUnits: CutebotProAngleUnits): void {
+    export function angleSpeedRunning(orientation: CutebotProWheel, speed: number, unit: CutebotProSpeedUnits, angle: number, angleUnits: CutebotProAngleUnits): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidSpeedRunAngle(speed,unit,orientation - 1, angle, angleUnits);
+            cutebotProV2.pidSpeedRunAngle(speed, unit, orientation - 1, angle, angleUnits);
         }
     }
 
@@ -665,9 +665,9 @@ namespace CutebotPro {
     //% speed.min=20 speed.max=50 speed.defl=25
     //% inlineInputMode=inline
     //% angle.min=0 angle.max=360
-    export function trolleySpeedSteering(speed:number,unit:CutebotProSpeedUnits,turn: CutebotProTurn, angle: number): void {
+    export function trolleySpeedSteering(speed: number, unit: CutebotProSpeedUnits, turn: CutebotProTurn, angle: number): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidSpeedRunSteering(speed,unit,turn, angle);
+            cutebotProV2.pidSpeedRunSteering(speed, unit, turn, angle);
         }
     }
 
@@ -771,7 +771,7 @@ namespace CutebotPro {
     let version = -1;
     export function readHardVersion(): number {
         if (version == -1) {
-            
+
             let i2cBuffer = pins.createBuffer(7);
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x15;
