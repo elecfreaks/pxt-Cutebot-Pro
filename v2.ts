@@ -325,6 +325,8 @@ namespace cutebotProV2 {
         let direction_flag = (direction == 0 ? 0 : 3);
         if (unitspeed == 1) {
             speed *= 25.4;
+        } else {
+            speed *= 10;
         }
         speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
         let speed_h = speed >> 8;
@@ -377,6 +379,8 @@ namespace cutebotProV2 {
         let direction = 0;
         if (unit == 1) {
             speed *= 25.4;
+        } else {
+            speed *= 10;
         }
         speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
         let speed_h = speed >> 8;
@@ -451,6 +455,9 @@ namespace cutebotProV2 {
 
         if (unit == 1) {
             speed *= 25.4;
+        }
+        else{
+            speed *= 10;
         }
         speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
         let speed_h = speed >> 8;
