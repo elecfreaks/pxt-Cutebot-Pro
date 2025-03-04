@@ -1066,47 +1066,36 @@ namespace cutebotProV1 {
         return 0;
     }
 
-    let IR_handling_flag = false
-
     export function irCallback(handler: (code: number) => void) {
         pins.setPull(DigitalPin.P16, PinPullMode.PullUp)
-        control.onEvent(98, 3500, () => {
-            handler(IR_Val & 0x00ff)
-            IR_handling_flag = false;
-        })
-        control.inBackground(() => {
-            while (true) {
-                if (!IR_handling_flag) {
-                    IR_Val = irCode()
-                    if ((IR_Val == 0xff00 || (IR_Val & 0x00ff) == CutbotProIRButtons.Eight
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Nine
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Menu
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Up
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Left
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Right
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Down
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.OK
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Plus
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Minus
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Back
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Zero
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.One
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Two
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Three
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Four
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Five
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Six
-                        || (IR_Val & 0x00ff) == CutbotProIRButtons.Seven)
-                        && IR_Val > 0xff
-                    ) {
-                        IR_handling_flag = true
-                        if (IR_Val == 0xff00)
-                            IR_Val = 0x0001
-                        control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
-                    }
-                }
-                basic.pause(20)
+        basic.forever(() => {
+            IR_Val = irCode()
+            if ((IR_Val == 0xff00 || (IR_Val & 0x00ff) == CutbotProIRButtons.Eight
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Nine
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Menu
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Up
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Left
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Right
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Down
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.OK
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Plus
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Minus
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Back
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Zero
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.One
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Two
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Three
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Four
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Five
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Six
+                || (IR_Val & 0x00ff) == CutbotProIRButtons.Seven)
+                && IR_Val > 0xff
+            ) {
+                if (IR_Val == 0xff00)
+                    IR_Val = 0x0001
+                handler(IR_Val & 0x00ff)
             }
+            basic.pause(20)
         })
     }
     /**
