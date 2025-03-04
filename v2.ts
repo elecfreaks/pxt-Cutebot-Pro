@@ -17,6 +17,7 @@ namespace cutebotProV2 {
             buff[i + 4] = params[i];
         }
         pins.i2cWriteBuffer(cutebotProAddr, buff);
+        delay_ms(1);
     }
 
     /******************************************************************************************************
@@ -36,10 +37,17 @@ namespace cutebotProV2 {
             i2cCommandSend(0xA0, [0x05])
             if (pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false) || control.millis()>= time)
             {
-                basic.pause(800)
+                basic.pause(500)
                 break
             }
             basic.pause(1)
+        }
+    }
+
+    function delay_ms(ms:number){
+        let endTime = input.runningTime() + ms;
+        while(endTime > input.runningTime()){
+
         }
     }
 
