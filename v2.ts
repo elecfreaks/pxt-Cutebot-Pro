@@ -38,7 +38,7 @@ namespace cutebotProV2 {
                 basic.pause(500)
                 break
             }
-            basic.pause(1)
+            basic.pause(10)
         }
     }
 
