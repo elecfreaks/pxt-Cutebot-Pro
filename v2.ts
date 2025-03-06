@@ -373,22 +373,18 @@ namespace cutebotProV2 {
      * @angle set the angle or number of turns eg: 0
      * @angleUnits 0-Angle,1-Circle
      */
-    export function pidSpeedRunAngle(speed: number, unit: number, wheel: number, angle: number, angleUnits: number): void {
+    export function pidSpeedRunAngle(speed: number, wheel: number, angle: number, angleUnits: number): void {
         let l_angle_h = 0;
         let l_angle_l = 0;
         let r_angle_h = 0;
         let r_angle_l = 0;
         let direction = 0;
-        if (unit == 1) {
-            speed *= 25.4;
-        } else {
-            speed *= 10;
-        }
-        if (speed <= 0) {
-            speed = 0;
-        } else {
-            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
-        }
+        if (speed == 0)
+            return;
+        if (speed >= 100)
+            speed = 100;
+        speed = Math.round(Math.map(speed, 1, 100, 100, 400))
+        
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         if (angleUnits == 1) angle *= 360;
@@ -450,24 +446,19 @@ namespace cutebotProV2 {
      * @TurnUnit 0-Leftsteering,1-Rightsteering,2-Stay_Leftsteering,3-Stay_Rightsteering
      * @TurnAngleUnit 0-Angle,1-Circle
      */
-    export function pidSpeedRunSteering(speed: number, unit: number, turn: number, angle: number): void {
+    export function pidSpeedRunSteering(speed: number, turn: number, angle: number): void {
         let l_angle_h = 0;
         let l_angle_l = 0;
         let r_angle_h = 0;
         let r_angle_l = 0;
         let direction = 0;
 
-        if (unit == 1) {
-            speed *= 25.4;
-        }
-        else{
-            speed *= 10;
-        }
-        if (speed <= 0) {
-            speed = 0;
-        } else {
-            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
-        }
+        if (speed == 0)
+            return;
+        if (speed >= 100)
+            speed = 100;
+        speed = Math.round(Math.map(speed, 1, 100, 100, 400))
+
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
 

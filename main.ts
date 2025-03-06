@@ -600,14 +600,9 @@ namespace CutebotPro {
     /**
      * 
      */
-    //% group="PID V2.1.0"
-    //% weight=200
-    //% block="set %CutebotProWheel %speed %CutebotProSpeedUnits rotation %angle %CutebotProAngleUnits"
-    //% speed.min=20 speed.max=50 speed.defl=25
-    //% inlineInputMode=inline
-    export function angleSpeedRunning(orientation: CutebotProWheel, speed: number, unit: CutebotProSpeedUnits, angle: number, angleUnits: CutebotProAngleUnits): void {
+    export function angleSpeedRunning(orientation: CutebotProWheel, speed: number, angle: number, angleUnits: CutebotProAngleUnits): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidSpeedRunAngle(speed, unit, orientation - 1, angle, angleUnits);
+            cutebotProV2.pidSpeedRunAngle(speed, orientation - 1, angle, angleUnits);
         }
     }
 
@@ -661,13 +656,13 @@ namespace CutebotPro {
      */
     //% group="PID V2.1.0"
     //% weight=190
-    //% block="set car %speed %CutebotProSpeedUnits %CutebotProTurn for angle %angle"
-    //% speed.min=20 speed.max=50 speed.defl=25
+    //% block="set car speed %speed \\% and %CutebotProTurn for angle %angle"
+    //% speed.min=0 speed.max=100 speed.defl=50
     //% inlineInputMode=inline
     //% angle.min=0 angle.max=360
-    export function trolleySpeedSteering(speed: number, unit: CutebotProSpeedUnits, turn: CutebotProTurn, angle: number): void {
+    export function trolleySpeedSteering(speed: number, turn: CutebotProTurn, angle: number): void {
         if (readHardVersion() == 2) {
-            cutebotProV2.pidSpeedRunSteering(speed, unit, turn, angle);
+            cutebotProV2.pidSpeedRunSteering(speed, turn, angle);
         }
     }
 
