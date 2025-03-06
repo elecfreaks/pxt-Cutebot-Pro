@@ -107,7 +107,7 @@ namespace cutebotProV2 {
     export function extendMotorControl(speed: number): void {
         let direction: number = 0;
 
-        if (speed < 0) {
+        if (speed > 0) {
             direction |= 0x01;
         }
         i2cCommandSend(0x30, [Math.abs(speed), direction]);
