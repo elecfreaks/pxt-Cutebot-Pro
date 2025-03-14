@@ -428,7 +428,7 @@ namespace cutebotProV1 {
         control.waitMicros(10);
         pins.digitalWritePin(DigitalPin.P8, 0);
         // read pulse
-        const d = pins.pulseIn(DigitalPin.P12, PulseValue.High, maxCmDistance * 50);
+        const d = pins.pulseIn(DigitalPin.P12, PulseValue.High, maxCmDistance * 50) / 0.96;
         switch (unit) {
             case SonarUnit.Centimeters:
                 return Math.floor(d * 34 / 2 / 1000);
