@@ -307,7 +307,7 @@ namespace cutebotProV2 {
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     /**
@@ -335,7 +335,7 @@ namespace cutebotProV2 {
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         i2cCommandSend(0x84, [distance_h, distance_l, speed_h, speed_l, direction_flag]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     /**
@@ -363,7 +363,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     /**
@@ -400,7 +400,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x86, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     /**
@@ -437,7 +437,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     /**
@@ -484,7 +484,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x85, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
-        pidPause(5000)
+        pidPause(10000)
     }
 
     let blockLength: number = 0;
