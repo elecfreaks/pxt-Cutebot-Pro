@@ -303,11 +303,12 @@ namespace cutebotProV2 {
      */
     export function pidRunDistance(direction: number, distance: number, unit: number): void {
         distance *= (unit == 0 ? 10 : 25.4)
+        let tempDistance = distance
         let distance_h = distance >> 8;
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        pidPause(10000)
+        pidPause(Math.round(tempDistance * 1.0 / 1000 * 8000 + 3000))
     }
 
     /**
@@ -319,6 +320,7 @@ namespace cutebotProV2 {
      */
     export function pidSpeedRunDistance(speed: number, unitspeed: number, direction: number, distance: number, unit: number): void {
         distance *= (unit == 0 ? 10 : 25.4)
+        let tempDistance = distance
         let distance_h = distance >> 8;
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
@@ -327,15 +329,15 @@ namespace cutebotProV2 {
         } else {
             speed *= 10;
         }
-        if(speed <= 0){
+        if (speed <= 0) {
             speed = 0;
-        }else{
+        } else {
             speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
         }
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         i2cCommandSend(0x84, [distance_h, distance_l, speed_h, speed_l, direction_flag]);
-        pidPause(10000)
+        pidPause(Math.round(tempDistance * 1.0 / 1000 * 8000 + 3000))
     }
 
     /**
@@ -352,6 +354,7 @@ namespace cutebotProV2 {
         let direction = 0;
         if (angleUnits == 1) angle *= 360;
         if (angle < 0) direction = 3;
+        let tempAngle = angle
         angle *= 10;
         if (wheel == 0 || wheel == 2) {
             l_angle_l = angle & 0xFF;
@@ -363,7 +366,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        pidPause(10000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 2000 + 3000))
     }
 
     /**
@@ -384,11 +387,12 @@ namespace cutebotProV2 {
         if (speed >= 100)
             speed = 100;
         speed = Math.round(Math.map(speed, 1, 100, 100, 400))
-        
+
         let speed_h = speed >> 8;
         let speed_l = speed & 0xFF;
         if (angleUnits == 1) angle *= 360;
         if (angle < 0) direction = 3;
+        let tempAngle = angle
         angle *= 10;
         if (wheel == 0 || wheel == 2) {
             l_angle_l = angle & 0xFF;
@@ -400,7 +404,7 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x86, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
-        pidPause(10000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 3000 + 3000))
     }
 
     /**
@@ -414,6 +418,7 @@ namespace cutebotProV2 {
         let r_angle_h = 0;
         let r_angle_l = 0;
         let direction = 0;
+        let tempAngle = angle
 
         if (turn == 0) {
             angle *= 2;
@@ -437,7 +442,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        pidPause(10000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 8000 + 3000))
     }
 
     /**
@@ -452,6 +457,7 @@ namespace cutebotProV2 {
         let r_angle_h = 0;
         let r_angle_l = 0;
         let direction = 0;
+        let tempAngle = angle
 
         if (speed == 0)
             return;
@@ -484,7 +490,7 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x85, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
-        pidPause(10000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 8000 + 3000))
     }
 
     let blockLength: number = 0;
