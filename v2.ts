@@ -31,22 +31,20 @@ namespace cutebotProV2 {
      * 工具函数
      ******************************************************************************************************/
     export function pidPause(ms: number) {
-        let time = control.millis()+ms
-        while(1)
-        {
+        let time = control.millis() + ms
+        while (1) {
             i2cCommandSend(0xA0, [0x05])
-            if (pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false) || control.millis()>= time)
-            {
+            if (pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false) || control.millis() >= time) {
                 basic.pause(500)
                 break
             }
-            basic.pause(1)
+            basic.pause(10)
         }
     }
 
-    function delay_ms(ms:number){
+    function delay_ms(ms: number) {
         let endTime = input.runningTime() + ms;
-        while(endTime > input.runningTime()){
+        while (endTime > input.runningTime()) {
 
         }
     }
@@ -109,17 +107,17 @@ namespace cutebotProV2 {
     export function extendMotorControl(speed: number): void {
         let direction: number = 0;
 
-        if (speed < 0) {
+        if (speed > 0) {
             direction |= 0x01;
         }
-        i2cCommandSend(0x30, [Math.abs(speed),direction]);
+        i2cCommandSend(0x30, [Math.abs(speed), direction]);
     }
 
     /**
      * extend motor stop
      */
     export function extendMotorStop(): void {
-        i2cCommandSend(0x30, [0,0]);
+        i2cCommandSend(0x30, [0, 0]);
     }
 
     /**
@@ -141,7 +139,7 @@ namespace cutebotProV2 {
             angleMap = Math.map(angle, 0, 360, 0, 180);
         }
 
-        i2cCommandSend(0x40, [index,angleMap]);
+        i2cCommandSend(0x40, [index, angleMap]);
     }
 
     /**
@@ -158,7 +156,7 @@ namespace cutebotProV2 {
      * speedUnits:0-cms,1-inch
      */
     export function readSpeed(motor: number, speedUnits: number): number {
-        i2cCommandSend(0xA0, [motor+1])
+        i2cCommandSend(0xA0, [motor + 1])
         let speed = pins.i2cReadBuffer(cutebotProAddr, 1)
 
         if (speedUnits == 0)
@@ -172,8 +170,8 @@ namespace cutebotProV2 {
     * motor:0-M1,1-M2
     */
     export function readDistance(motor: number): number {
-            i2cCommandSend(0xA0, [motor+3])
-            return pins.i2cReadNumber(cutebotProAddr, NumberFormat.Int32LE, false)
+        i2cCommandSend(0xA0, [motor + 3])
+        return pins.i2cReadNumber(cutebotProAddr, NumberFormat.Int32LE, false)
     }
 
     /**
@@ -191,7 +189,7 @@ namespace cutebotProV2 {
         i2cCommandSend(0x60, [0x00])
         let states = pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false)
         fourWayStateValue = states;
-    } 
+    }
 
     /**
     * 4-way line following sensor offset
@@ -240,7 +238,7 @@ namespace cutebotProV2 {
     * get gray value.The range is from 0 to 255.
     */
     export function trackbitgetGray(channel: number): number {
-        i2cCommandSend(0x60, [0x02,channel])
+        i2cCommandSend(0x60, [0x02, channel])
         return pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false)
     }
 
@@ -276,13 +274,13 @@ namespace cutebotProV2 {
                 break;
         }
 
-        if(lspeed != 0){
+        if (lspeed != 0) {
             lspeed = Math.abs(lspeed);
             lspeed = Math.min(lspeed, 500);
             lspeed = Math.max(lspeed, 200);
         }
 
-        if(rspeed != 0){
+        if (rspeed != 0) {
             rspeed = Math.abs(rspeed);
             rspeed = Math.min(rspeed, 500);
             rspeed = Math.max(rspeed, 200);
@@ -305,12 +303,41 @@ namespace cutebotProV2 {
      */
     export function pidRunDistance(direction: number, distance: number, unit: number): void {
         distance *= (unit == 0 ? 10 : 25.4)
+        let tempDistance = distance
         let distance_h = distance >> 8;
         let distance_l = distance & 0xFF;
         let direction_flag = (direction == 0 ? 0 : 3);
         i2cCommandSend(0x81, [distance_h, distance_l, direction_flag]);
-        basic.pause(distance * 7.0 + 400) // 小车以500mm/s速度运行
-        pidPause(5000)
+        pidPause(Math.round(tempDistance * 1.0 / 1000 * 8000 + 3000))
+    }
+
+    /**
+     * set the car to travel a specific distance(distance.max=6000cm, distance.min=0cm)
+     * @speed 20~50 cm/s 
+     * @Direction 0-forward,1-backward
+     * @distance set the distance eg: 0
+     * @DistanceUnit 0-cms,1-inch
+     */
+    export function pidSpeedRunDistance(speed: number, unitspeed: number, direction: number, distance: number, unit: number): void {
+        distance *= (unit == 0 ? 10 : 25.4)
+        let tempDistance = distance
+        let distance_h = distance >> 8;
+        let distance_l = distance & 0xFF;
+        let direction_flag = (direction == 0 ? 0 : 3);
+        if (unitspeed == 1) {
+            speed *= 25.4;
+        } else {
+            speed *= 10;
+        }
+        if (speed <= 0) {
+            speed = 0;
+        } else {
+            speed = (speed > 500 ? 500 : speed) < 200 ? 200 : speed;
+        }
+        let speed_h = speed >> 8;
+        let speed_l = speed & 0xFF;
+        i2cCommandSend(0x84, [distance_h, distance_l, speed_h, speed_l, direction_flag]);
+        pidPause(Math.round(tempDistance * 1.0 / 1000 * 8000 + 3000))
     }
 
     /**
@@ -327,6 +354,7 @@ namespace cutebotProV2 {
         let direction = 0;
         if (angleUnits == 1) angle *= 360;
         if (angle < 0) direction = 3;
+        let tempAngle = angle
         angle *= 10;
         if (wheel == 0 || wheel == 2) {
             l_angle_l = angle & 0xFF;
@@ -338,8 +366,45 @@ namespace cutebotProV2 {
         }
 
         i2cCommandSend(0x83, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 0.5 + 500)
-        pidPause(5000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 2000 + 3000))
+    }
+
+    /**
+     * Select the wheel and set the Angle or number of turns you want to turn
+     * @speed 20~50 cm/s 
+     * @Wheel 0-WheelLeft,1-WheelRight,2-WheelALL
+     * @angle set the angle or number of turns eg: 0
+     * @angleUnits 0-Angle,1-Circle
+     */
+    export function pidSpeedRunAngle(speed: number, wheel: number, angle: number, angleUnits: number): void {
+        let l_angle_h = 0;
+        let l_angle_l = 0;
+        let r_angle_h = 0;
+        let r_angle_l = 0;
+        let direction = 0;
+        if (speed == 0)
+            return;
+        if (speed >= 100)
+            speed = 100;
+        speed = Math.round(Math.map(speed, 1, 100, 100, 400))
+
+        let speed_h = speed >> 8;
+        let speed_l = speed & 0xFF;
+        if (angleUnits == 1) angle *= 360;
+        if (angle < 0) direction = 3;
+        let tempAngle = angle
+        angle *= 10;
+        if (wheel == 0 || wheel == 2) {
+            l_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+        }
+        if (wheel == 1 || wheel == 2) {
+            r_angle_l = angle & 0xFF;
+            r_angle_h = angle >> 8;
+        }
+
+        i2cCommandSend(0x86, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 3000 + 3000))
     }
 
     /**
@@ -353,6 +418,7 @@ namespace cutebotProV2 {
         let r_angle_h = 0;
         let r_angle_l = 0;
         let direction = 0;
+        let tempAngle = angle
 
         if (turn == 0) {
             angle *= 2;
@@ -376,11 +442,58 @@ namespace cutebotProV2 {
             direction = 2;
         }
         i2cCommandSend(0x82, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, direction]);
-        basic.pause(angle * 8 + 500)
-        pidPause(5000)
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 8000 + 3000))
     }
 
-    let blockLength: number = 0; 
+    /**
+     * set the trolley to rotate at a specific Angle
+     * @speed 20~50 cm/s 
+     * @TurnUnit 0-Leftsteering,1-Rightsteering,2-Stay_Leftsteering,3-Stay_Rightsteering
+     * @TurnAngleUnit 0-Angle,1-Circle
+     */
+    export function pidSpeedRunSteering(speed: number, turn: number, angle: number): void {
+        let l_angle_h = 0;
+        let l_angle_l = 0;
+        let r_angle_h = 0;
+        let r_angle_l = 0;
+        let direction = 0;
+        let tempAngle = angle
+
+        if (speed == 0)
+            return;
+        if (speed >= 100)
+            speed = 100;
+        speed = Math.round(Math.map(speed, 1, 100, 100, 400))
+
+        let speed_h = speed >> 8;
+        let speed_l = speed & 0xFF;
+
+        if (turn == 0) {
+            angle *= 2;
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+        } else if (turn == 1) {
+            angle *= 2;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+        } else if (turn == 2) {
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+            direction = 1;
+        } else if (turn == 3) {
+            r_angle_h = angle >> 8;
+            r_angle_l = angle & 0xFF;
+            l_angle_h = angle >> 8;
+            l_angle_l = angle & 0xFF;
+            direction = 2;
+        }
+        i2cCommandSend(0x85, [l_angle_h, l_angle_l, r_angle_h, r_angle_l, speed_h, speed_l, direction]);
+        pidPause(Math.round(tempAngle * 1.0 / 360 * 8000 + 3000))
+    }
+
+    let blockLength: number = 0;
     let blockUnit = 0;//DistanceUnit.Cm
 
     /**
