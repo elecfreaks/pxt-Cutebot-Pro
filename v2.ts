@@ -187,7 +187,7 @@ namespace cutebotProV2 {
     */
     export function trackbitStateValue(): void {
         i2cCommandSend(0x60, [0x00])
-        let states = pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, false)
+        let states = pins.i2cReadNumber(cutebotProAddr, NumberFormat.UInt8LE, true)
         fourWayStateValue = states;
     }
 
