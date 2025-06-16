@@ -407,11 +407,6 @@ namespace cutebotProV2 {
         pidPause(Math.round(tempAngle * 1.0 / 360 * 3000 + 3000))
     }
 
-    let angleCoefficient = 1.020;
-    export function setAngleCoefficient(num: number): void {
-        angleCoefficient = num;
-    }
-
     /**
      * set the trolley to rotate at a specific Angle
      * @TurnUnit 0-Leftsteering,1-Rightsteering,2-Stay_Leftsteering,3-Stay_Rightsteering
@@ -424,8 +419,6 @@ namespace cutebotProV2 {
         let r_angle_l = 0;
         let direction = 0;
         let tempAngle = angle
-
-        angle *= angleCoefficient;
 
         if (turn == 0) {
             angle *= 2;
