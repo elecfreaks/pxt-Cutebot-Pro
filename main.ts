@@ -216,6 +216,8 @@ enum SonarUnit {
 }
 
 enum CutbotProIRButtons {
+    //% block="off"
+    Off = 1,
     //% block="menu"
     Menu = 2,
     //% block="up"
@@ -508,7 +510,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor %TrackbitType"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (readHardVersion() == 2) {
-            return cutebotProV2.trackbitChannelState(channel-1, state);
+            return cutebotProV2.trackbitChannelState(channel - 1, state);
         } else {
             return cutebotProV1.trackbitChannelState(channel, state);
         }
@@ -522,7 +524,7 @@ namespace CutebotPro {
     //% block="channel %TrackbitChannel tracking sensor gray value"
     export function trackbitgetGray(channel: TrackbitChannel): number {
         if (readHardVersion() == 2) {
-            return cutebotProV2.trackbitgetGray(channel-1);
+            return cutebotProV2.trackbitgetGray(channel - 1);
         } else {
             return cutebotProV1.trackbitgetGray(channel);
         }
@@ -568,6 +570,20 @@ namespace CutebotPro {
     }
 
     /**
+     * set the car to travel a specific distance(distance.max=255cm, distance.min=0cm)
+     */
+    //% group="PID V2.1.0"
+    //% weight=200
+    //% block="go %speed %CutebotProSpeedUnits %CutebotProOrientation %distance %CutebotProDistanceUnits"
+    //% speed.min=20 speed.max=50 speed.defl=25
+    //% inlineInputMode=inline
+    export function distanceSpeedRunning(speed: number, unitspeed: CutebotProSpeedUnits, orientation: CutebotProOrientation, distance: number, distanceUnits: CutebotProDistanceUnits): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunDistance(speed, unitspeed, orientation ? 0 : 1, distance, distanceUnits)
+        }
+    }
+
+    /**
      * 
      */
     //% group="PID Control"
@@ -578,6 +594,15 @@ namespace CutebotPro {
             cutebotProV2.pidRunAngle(orientation - 1, angle, angleUnits);
         } else {
             cutebotProV1.angleRunning(orientation, angle, angleUnits);
+        }
+    }
+
+    /**
+     * 
+     */
+    export function angleSpeedRunning(orientation: CutebotProWheel, speed: number, angle: number, angleUnits: CutebotProAngleUnits): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunAngle(speed, orientation - 1, angle, angleUnits);
         }
     }
 
@@ -625,6 +650,22 @@ namespace CutebotPro {
         }
     }
 
+    /**
+     * set the trolley to rotate at a specific Angle
+     * @param angle set the angle unit
+     */
+    //% group="PID V2.1.0"
+    //% weight=190
+    //% block="set car speed %speed \\% and %CutebotProTurn for angle %angle"
+    //% speed.min=0 speed.max=100 speed.defl=50
+    //% inlineInputMode=inline
+    //% angle.min=0 angle.max=360
+    export function trolleySpeedSteering(speed: number, turn: CutebotProTurn, angle: number): void {
+        if (readHardVersion() == 2) {
+            cutebotProV2.pidSpeedRunSteering(speed, turn, angle);
+        }
+    }
+
     //% shim=IRV2::irCode
     function irCode(): number {
         return 0;
@@ -633,7 +674,7 @@ namespace CutebotPro {
     //% group="Infrared sensor"
     //% weight=160
     //% block="on IR receiving"
-    export function irCallback(handler: () => void) {
+    export function irCallback(handler: (code:number) => void) {
         cutebotProV1.irCallback(handler);
     }
 
@@ -725,7 +766,7 @@ namespace CutebotPro {
     let version = -1;
     export function readHardVersion(): number {
         if (version == -1) {
-            
+
             let i2cBuffer = pins.createBuffer(7);
             i2cBuffer[0] = 0x99;
             i2cBuffer[1] = 0x15;
